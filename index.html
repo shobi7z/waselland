@@ -998,11 +998,13 @@
         });
     }
 
-    function calculatePricePerKg(weight) {
-        if (weight <= 6) return 6000;
-        if (weight <= 12) return 5500;
-        return 4500;
-    }
+function calculatePricePerKg(weight) {
+    if (weight >= 1 && weight <= 10) return 5000;
+    if (weight >= 11 && weight <= 15) return 4000;
+    if (weight >= 16 && weight <= 20) return 3000;
+    if (weight >= 21) return 2500;
+    return 0; // في حال كان الوزن غير صالح أو صفر
+}
 
     function showDashboard() {
         document.getElementById('loginContainer').style.display = 'none';
