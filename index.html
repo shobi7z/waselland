@@ -935,8 +935,7 @@
         Object.entries(shipments).forEach(([id, shipment]) => {
             const row = document.createElement('tr');
             const weight = parseFloat(shipment.weight) || 0;
-            const pricePerKg = calculatePricePerKg(weight);
-            const totalPrice = (weight * pricePerKg).toLocaleString('ar-IQ') + ' د.ع';
+            const totalPrice = calculatePrice(weight).toLocaleString('ar-IQ') + ' د.ع';
             const date = shipment.createdAt ? new Date(shipment.createdAt) : new Date();
 
             row.innerHTML = `
@@ -966,8 +965,7 @@
             const shipmentCard = document.createElement('div');
             shipmentCard.className = 'shipment-card';
             const weight = parseFloat(shipment.weight) || 0;
-            const pricePerKg = calculatePricePerKg(weight);
-            const totalPrice = (weight * pricePerKg).toLocaleString('ar-IQ') + ' دينار عراقي';
+            const totalPrice = calculatePrice(weight).toLocaleString('ar-IQ') + ' دينار عراقي';
             const date = shipment.createdAt ? new Date(shipment.createdAt) : new Date();
 
             shipmentCard.innerHTML = `
@@ -998,13 +996,15 @@
         });
     }
 
-function calculatePricePerKg(weight) {
-    if (weight >= 1 && weight <= 10) return 5000;
-    if (weight >= 11 && weight <= 15) return 4000;
-    if (weight >= 16 && weight <= 20) return 3000;
-    if (weight >= 21) return 2500;
-    return 0; // في حال كان الوزن غير صالح أو صفر
-}
+    function calculatePrice(weight) {
+        if (weight >= 1 && weight <= 9) {
+            return weight * 5000;
+        } else if (weight >= 10) {
+            return 55000;
+        } else {
+            return 0; // في حال الوزن أقل من 1 أو غير صالح
+        }
+    }
 
     function showDashboard() {
         document.getElementById('loginContainer').style.display = 'none';
@@ -1019,7 +1019,6 @@ function calculatePricePerKg(weight) {
             .find(item => item.getAttribute('onclick').includes(sectionId));
         if (activeNav) activeNav.classList.add('active');
         
-        // إغلاق القائمة الجانبية على الأجهزة المحمولة بعد اختيار قسم
         if (window.innerWidth <= 992) {
             document.getElementById('sidebar').classList.remove('active');
         }
@@ -1036,6 +1035,7 @@ function calculatePricePerKg(weight) {
         btn.innerHTML = '<i class="bx bx-log-in"></i> دخول';
         btn.disabled = false;
     }
+
     function showError(message, btn) {
         alert(message);
         btn.innerHTML = '<i class="bx bx-log-in"></i> دخول';
@@ -1049,13 +1049,11 @@ function calculatePricePerKg(weight) {
         btn.disabled = false;
     }
 
-    // وظائف القائمة الجانبية
     function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
         sidebar.classList.toggle('active');
     }
 
-    // Close sidebar when clicking outside
     document.addEventListener('click', function(event) {
         const sidebar = document.getElementById('sidebar');
         const menuToggle = event.target.closest('.menu-toggle');
@@ -1065,13 +1063,10 @@ function calculatePricePerKg(weight) {
         }
     });
 
-    // Handle window resize
     window.addEventListener('resize', function() {
         const sidebar = document.getElementById('sidebar');
         if (window.innerWidth > 992) {
             sidebar.classList.remove('active');
         }
     });
-    </script>
-</body>
-</html>
+</script>
