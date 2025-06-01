@@ -804,18 +804,18 @@
                     <div class="shipment-card">
                         <div class="detail-item">
                             <div class="detail-label">من 1 كيلو إلى 9 كيلو</div>
-                            <div class="detail-value">5,500 دينار عراقي للكيلو</div>
+                            <div class="detail-value">5,000 دينار عراقي للكيلو</div>
                         </div>
                         <div class="detail-item">
                             <div class="detail-label">من 10 كيلو فما فوق </div>
-                            <div class="detail-value">55,000 دينار عراقي وتوصيل مجاني</div>
+                            <div class="detail-value">50,000 دينار عراقي</div>
                         </div>
                         <div class="detail-item">
                             <div class="detail-label">اسعار التوصيل : </div>
-                            <div class="detail-value"> سعر التوصيل (للطلبات الاقل من 10 كيلو ) لجميع المحافظات : 5,000 دينار عراقي </div>
+                            <div class="detail-value"> سعر التوصيل لجميع المحافظات : 5,000 دينار عراقي </div>
                         </div>
                                                 <div class="detail-item">
-                            <div class="detail-value">توصيل مجاني للطلبات الاكثر من 10 كيلو </div>
+                            <div class="detail-value"> </div>
                         </div>
                     </div>
                 </div>
@@ -997,9 +997,9 @@
 
 function calculatePrice(weight) {
     if (weight >= 1 && weight <= 9) {
-        return weight * 5500;
+        return weight * 5000;
     } else if (weight >= 10) {
-        return 55000; // توصيل مجاني
+        return 50000; // توصيل مجاني
     } else {
         return 0; // وزن غير صالح
     }
