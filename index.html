@@ -803,19 +803,39 @@
                     </div>
                     <div class="shipment-card">
                         <div class="detail-item">
-                            <div class="detail-label">من 1 كيلو إلى 9 كيلو</div>
+                            <div class="detail-label">من 1 كيلو إلى 5 كيلو</div>
+                            <div class="detail-value">5,500 دينار عراقي للكيلو</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">من 6 كيلو إلى 11 كيلو</div>
                             <div class="detail-value">5,000 دينار عراقي للكيلو</div>
                         </div>
                         <div class="detail-item">
-                            <div class="detail-label">من 10 كيلو فما فوق  </div>
-                            <div class="detail-value">سعر ثابت 55,000 دينار عراقي والتوصيل مجاني لجميع المحافظات  </div>
+                            <div class="detail-label">من 12 كيلو إلى 14 كيلو</div>
+                            <div class="detail-value">4,000 دينار عراقي للكيلو</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">من 15 كيلو إلى 16 كيلو</div>
+                            <div class="detail-value">3,500 دينار عراقي للكيلو</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">من 17 كيلو إلى 19 كيلو</div>
+                            <div class="detail-value">3,000 دينار عراقي للكيلو</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">من 20 كيلو إلى 24 كيلو</div>
+                            <div class="detail-value">2,500 دينار عراقي للكيلو</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">من 25 كيلو فما فوق  </div>
+                            <div class="detail-value">2,000 دينار عراقي للكيلو  </div>
                         </div>
                         <div class="detail-item">
                             <div class="detail-label">ملاحظة مهمة : </div>
                             <div class="detail-value">سعر التوصيل لجميع المحافظات : 5,000 دينار عراقي </div>
                         </div>
                                                 <div class="detail-item">
-                            <div class="detail-value">اما الطلبات من 10 كيلو فما فوق : فالتوصيل مجاني</div>
+                            <div class="detail-value"></div>
                         </div>
                     </div>
                 </div>
@@ -995,15 +1015,26 @@
         });
     }
 
-    function calculatePrice(weight) {
-        if (weight >= 1 && weight <= 9) {
-            return weight * 5000;
-        } else if (weight >= 10) {
-            return 55000;
-        } else {
-            return 0; // في حال الوزن أقل من 1 أو غير صالح
-        }
+function calculatePrice(weight) {
+    if (weight >= 1 && weight <= 5) {
+        return weight * 5500;
+    } else if (weight >= 6 && weight <= 11) {
+        return weight * 5000;
+    } else if (weight >= 12 && weight <= 14) {
+        return weight * 4000;
+    } else if (weight >= 15 && weight <= 16) {
+        return weight * 3500;
+    } else if (weight >= 17 && weight <= 19) {
+        return weight * 3000;
+    } else if (weight >= 20 && weight <= 24) {
+        return weight * 2500;
+    } else if (weight >= 25 && weight <= 100) {
+        return weight * 2000;
+    } else {
+        return 0; // في حال الوزن أقل من 1 أو غير صالح
     }
+}
+
 
     function showDashboard() {
         document.getElementById('loginContainer').style.display = 'none';
