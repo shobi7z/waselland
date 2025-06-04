@@ -198,6 +198,16 @@
             transform: translateY(-2px);
         }
 
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #3a9db9;
+            transform: translateY(-2px);
+        }
+
         .dashboard {
             display: none;
             min-height: 100vh;
@@ -480,6 +490,11 @@
             background: rgba(67, 97, 238, 0.1);
             color: var(--primary);
         }
+        
+        .status-badge.pending {
+            background: rgba(248, 150, 30, 0.1);
+            color: #f8961e;
+        }
 
         .alert {
             padding: 1rem;
@@ -494,6 +509,18 @@
             background: rgba(76, 201, 240, 0.1);
             color: var(--success);
             border-left: 4px solid var(--success);
+        }
+        
+        .alert-info {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .alert-warning {
+            background: rgba(248, 150, 30, 0.1);
+            color: var(--warning);
+            border-left: 4px solid var(--warning);
         }
 
         .copyable {
@@ -517,6 +544,59 @@
 
         .copyable:hover .copy-icon {
             color: var(--primary);
+        }
+        
+        .add-shipment-form {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: var(--success);
+            color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            z-index: 10000;
+            transform: translateX(150%);
+            transition: transform 0.5s ease;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
         }
 
         @media (max-width: 992px) {
@@ -588,6 +668,10 @@
             <div class="nav-item" onclick="showSection('profile')">
                 <i class='bx bxs-user'></i>
                 <span>الملف الشخصي</span>
+            </div>
+            <div class="nav-item" onclick="showSection('add-shipment')">
+                <i class='bx bx-plus-circle'></i>
+                <span>أضافة شحنة جديدة</span>
             </div>
             <div class="nav-item" onclick="showSection('shipments')">
                 <i class='bx bxs-package'></i>
@@ -678,6 +762,46 @@
                                 <div class="detail-value" id="profileProvince">الجابرية</div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- إضافة قسم جديد لإضافة الشحنات -->
+            <div id="add-shipment" class="section" style="display: none;">
+                <div class="header">
+                    <div class="menu-toggle" onclick="toggleSidebar()">
+                        <i class='bx bx-menu'></i>
+                    </div>
+                    <h2 class="page-title">إضافة شحنة جديدة</h2>
+                    <div class="user-profile">
+                        <div class="user-avatar" id="addShipmentAvatar">م</div>
+                        <span class="user-name" id="addShipmentName">محمد أحمد</span>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info">
+                    <i class='bx bx-info-circle'></i>
+                    <span>أدخل رقم الشحنة التي قمت بشرائها وسنقوم بحساب وزنها وكافة التفاصيل عند وصولها الى مخازننا.</span>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class='bx bx-package'></i>
+                            بيانات الشحنة الجديدة
+                        </h3>
+                    </div>
+                    
+                    <div class="add-shipment-form">
+                        <div class="form-group">
+                            <label for="orderNumber" class="form-label">رقم الشحنة</label>
+                            <input type="text" id="orderNumber" class="form-control" placeholder="أدخل رقم الشحنة" required>
+                        </div>
+                        
+                        <button type="button" class="btn-success" onclick="addNewShipment()">
+                            <i class='bx bx-plus'></i>
+                            إضافة الشحنة
+                        </button>
                     </div>
                 </div>
             </div>
@@ -822,6 +946,11 @@
             </div>
         </div>
     </div>
+    
+    <div class="notification" id="notification">
+        <i class='bx bx-check-circle'></i>
+        <span id="notificationText"></span>
+    </div>
 <script>
     const firebaseConfig = {
         apiKey: "AIzaSyCKIaGp7rycn2Si88mc5VXfn0iQazvLT_c",
@@ -881,7 +1010,7 @@
             item.addEventListener('click', (e) => {
                 const text = e.currentTarget.querySelector('.detail-value').textContent;
                 navigator.clipboard.writeText(text).then(() => {
-                    alert('تم نسخ النص: ' + text);
+                    showNotification('تم نسخ النص: ' + text);
                 });
             });
         });
@@ -934,14 +1063,20 @@
         Object.entries(shipments).forEach(([id, shipment]) => {
             const row = document.createElement('tr');
             const weight = parseFloat(shipment.weight) || 0;
-            const totalPrice = calculatePrice(weight).toLocaleString('ar-IQ') + ' د.ع';
+            const totalPrice = shipment.price === 0 ? '0 د.ع' : calculatePrice(weight).toLocaleString('ar-IQ') + ' د.ع';
             const date = shipment.createdAt ? new Date(shipment.createdAt) : new Date();
+            
+            // تحديد كلاس الحالة حسب حالة الشحنة
+            let statusClass = '';
+            if (shipment.status === 'بانتظار وصول الشحنة الى مخازننا') {
+                statusClass = 'pending';
+            }
 
             row.innerHTML = `
                 <td>${shipment.number || id}</td>
                 <td>${weight} كجم</td>
                 <td>${totalPrice}</td>
-                <td><span class="status-badge">${shipment.status || 'تم الاستلام في الكويت'}</span></td>
+                <td><span class="status-badge ${statusClass}">${shipment.status || 'تم الاستلام في الكويت'}</span></td>
                 <td>${date.toLocaleDateString('ar-EG')}</td>
             `;
             shipmentsList.appendChild(row);
@@ -964,7 +1099,7 @@
             const shipmentCard = document.createElement('div');
             shipmentCard.className = 'shipment-card';
             const weight = parseFloat(shipment.weight) || 0;
-            const totalPrice = calculatePrice(weight).toLocaleString('ar-IQ') + ' دينار عراقي';
+            const totalPrice = shipment.price === 0 ? '0 د.ع' : calculatePrice(weight).toLocaleString('ar-IQ') + ' دينار عراقي';
             const date = shipment.createdAt ? new Date(shipment.createdAt) : new Date();
 
             shipmentCard.innerHTML = `
@@ -995,18 +1130,17 @@
         });
     }
 
-function calculatePrice(weight) {
-    if (weight >= 1 && weight <= 4) {
-        return 20000;
-    } else if (weight >= 5 && weight <= 9) {
-        return 40000;
-    } else if (weight >= 10 && weight <= 30) {
-        return 55000;
-    } else {
-        return 0; // وزن غير صالح
+    function calculatePrice(weight) {
+        if (weight >= 1 && weight <= 4) {
+            return 20000;
+        } else if (weight >= 5 && weight <= 9) {
+            return 40000;
+        } else if (weight >= 10 && weight <= 30) {
+            return 55000;
+        } else {
+            return 0; // وزن غير صالح
+        }
     }
-}
-
 
     function showDashboard() {
         document.getElementById('loginContainer').style.display = 'none';
@@ -1071,4 +1205,58 @@ function calculatePrice(weight) {
             sidebar.classList.remove('active');
         }
     });
+    
+    // وظيفة إضافة شحنة جديدة
+    function addNewShipment() {
+        const orderNumber = document.getElementById('orderNumber').value.trim();
+        
+        if (!orderNumber) {
+            showNotification('الرجاء إدخال رقم الطلب');
+            return;
+        }
+        
+        if (!currentUser) {
+            showNotification('يجب تسجيل الدخول أولاً');
+            return;
+        }
+        
+        const newShipment = {
+            number: orderNumber,
+            weight: 0,
+            price: 0,
+            status: 'بانتظار وصول الشحنة الى مخازننا',
+            userId: currentUser.id,
+            createdAt: new Date().toISOString()
+        };
+        
+        // إضافة الشحنة إلى قاعدة البيانات
+        const shipmentsRef = database.ref('shipments');
+        shipmentsRef.push(newShipment)
+            .then(() => {
+                showNotification('تم إضافة الشحنة بنجاح!');
+                document.getElementById('orderNumber').value = '';
+                
+                // إظهار قسم الشحنات بعد الإضافة
+                showSection('shipments');
+            })
+            .catch(error => {
+                console.error('Error adding shipment:', error);
+                showNotification('حدث خطأ أثناء إضافة الشحنة');
+            });
+    }
+    
+    // وظيفة لعرض الإشعارات
+    function showNotification(message) {
+        const notification = document.getElementById('notification');
+        const notificationText = document.getElementById('notificationText');
+        
+        notificationText.textContent = message;
+        notification.classList.add('show');
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 3000);
+    }
 </script>
+</body>
+</html>
