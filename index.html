@@ -923,16 +923,16 @@
                     </div>
                     <div class="shipment-card">
                         <div class="detail-item">
-                            <div class="detail-label">الشحنات الصغيرة من 1 كيلو الى 5 كيلو</div>
-                            <div class="detail-value">بسعر 6,000 دينار عراقي لكل كيلو والتوصيل مجاني</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">الشحنات الصغيرة من 6 كيلو الى 10 كيلو</div>
-                            <div class="detail-value">بسعر 5,000 دينار عراقي لكل كيلو والتوصيل مجاني</div>
+                            <div class="detail-label">الشحنات الصغيرة من 1 كيلو الى 10 كيلو</div>
+                            <div class="detail-value">بسعر 5,000 دينار عراقي لكل كيلو </div>
                         </div>
                         <div class="detail-item">
                             <div class="detail-label">الشحنات الكبيرة من 10 كيلو الى 30 كيلو : </div>
-                            <div class="detail-value"> سعر ثابت للشحنة هو 55,000 دينار عراقي والتوصيل مجاني</div>
+                            <div class="detail-value"> سعر ثابت للشحنة هو 45,000 دينار عراقي </div>
+                        </div>
+                          <div class="detail-item">
+                            <div class="detail-label">أسعار التوصيل : </div>
+                            <div class="detail-value">  التوصيل لجميع المحافظات : 5,000 دينار عراقي</div>
                         </div>
                                                 <div class="detail-item">
                             <div class="detail-value"> </div>
@@ -1127,12 +1127,10 @@
     }
 
     function calculatePrice(weight) {
-    if (weight >= 1 && weight <= 5) {
-        return weight * 6000; // 6000 لكل كيلو من 1 إلى 5 كغم
-} else if (weight >= 6 && weight <= 9) {
-        return weight * 6000; // 6000 لكل كيلو من 1 إلى 5 كغم
+    if (weight >= 1 && weight <= 9) {
+        return weight * 5000; // 6000 لكل كيلو من 1 إلى 5 كغم
     } else if (weight >= 10 && weight <= 30) {
-        return 55000; // سعر ثابت من 10 إلى 30 كغم
+        return 45000; // سعر ثابت من 10 إلى 30 كغم
     } else {
         return 0; // وزن غير صالح
     }
