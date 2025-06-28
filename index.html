@@ -1,97 +1,622 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الموقع غير موجود</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
-        
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: #333;
-        }
-        
-        .container {
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            max-width: 600px;
-            width: 90%;
-            animation: fadeIn 0.8s ease-in-out;
-        }
-        
-        h1 {
-            color: #d9534f;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-        
-        p {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
-        
-        .icon {
-            font-size: 5rem;
-            color: #d9534f;
-            margin-bottom: 20px;
-            animation: bounce 2s infinite;
-        }
-        
-        .btn {
-            display: inline-block;
-            background-color: #5bc0de;
-            color: white;
-            padding: 12px 30px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(91, 192, 222, 0.3);
-        }
-        
-        .btn:hover {
-            background-color: #4aa8c4;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(91, 192, 222, 0.4);
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-20px); }
-            60% { transform: translateY(-10px); }
-        }
-        
-        .contact {
-            margin-top: 30px;
-            font-size: 0.9rem;
-            color: #666;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>توصيل الطلبات | صفحة المستخدم</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <!-- SweetAlert2 -->
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(120deg, #4f8cff 0%, #c5cae9 100%);
+      min-height: 100vh;
+      font-family: 'Tajawal', 'Cairo', Arial, sans-serif;
+    }
+    .main-card {
+      box-shadow: 0 10px 40px rgba(0,0,0,.08);
+      border-radius: 2rem;
+      background: #fff;
+      transition: box-shadow 0.2s;
+      border: none;
+    }
+    .main-card:hover {
+      box-shadow: 0 8px 48px rgba(79,140,255,0.15);
+    }
+    .stat-box {
+      border-radius: 1.2rem;
+      background: linear-gradient(90deg, #f3f7fa 60%, #e8f0fe 100%);
+      padding: 1.1rem 1rem;
+      text-align: center;
+      box-shadow: 0 2px 8px #c5cae9b3;
+      transition: background 0.3s;
+      min-height: 110px;
+    }
+    .stat-title {
+      font-size: 1.1rem;
+      color: #7b8fa6;
+      margin-bottom: 10px;
+    }
+    .stat-value {
+      font-size: 2.1rem;
+      font-weight: bold;
+      color: #2467d7;
+    }
+    .nav-pills .nav-link.active {
+      background: linear-gradient(90deg, #4f8cff 60%, #2467d7 100%) !important;
+      color: #fff !important;
+      box-shadow: 0 2px 12px #4f8cff33;
+    }
+    .order-status-badge {
+      font-size: .97rem;
+      border-radius: 12px;
+      padding: 0.45em 0.95em;
+      display: inline-block;
+      color: #fff;
+    }
+    .order-status-wait { background: #ffc107; color: #333; }
+    .order-status-received { background: #1976d2; }
+    .order-status-delivery { background: #43a047; }
+    .order-status-returned { background: #d32f2f; }
+    .order-actions button { margin-inline-end: .4rem; }
+    .table > :not(:last-child) > :last-child > * {
+      border-bottom-color: #e3eafd;
+    }
+    .support-box {
+      background: #e3f1ff;
+      border-radius: 1.5rem;
+      padding: 2rem 1.3rem;
+      box-shadow: 0 5px 24px #c5cae922;
+    }
+    .modal-content {
+      border-radius: 1.5rem;
+    }
+    .input-group-text {
+      background: #e8f0fe;
+      border-radius: 8px 0 0 8px;
+      border: none;
+    }
+    .fade-in {
+      animation: fadein 0.6s;
+    }
+    @keyframes fadein {
+      from { opacity: 0; transform: translateY(25px);}
+      to   { opacity: 1; transform: translateY(0);}
+    }
+    .brand-gradient {
+      background: linear-gradient(90deg, #4f8cff 30%, #2467d7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .btn-primary {
+      background: linear-gradient(90deg, #4f8cff 60%, #2467d7 100%);
+      border: none;
+    }
+    .btn-primary:hover, .btn-primary:focus {
+      background: linear-gradient(90deg, #2467d7 60%, #4f8cff 100%);
+    }
+    .btn-outline-secondary {
+      border: 2px solid #4f8cff;
+      color: #4f8cff;
+      background: #fff;
+    }
+    .btn-outline-secondary:hover, .btn-outline-secondary:focus {
+      background: #4f8cff;
+      color: #fff;
+    }
+    .paid-label {
+      display: inline-block;
+      background: #00bcd4;
+      color: #fff;
+      border-radius: 8px;
+      padding: 0.2em 0.8em;
+      font-size: 1rem;
+      margin-inline-end: 0.2em;
+      margin-bottom: 2px;
+      letter-spacing: 1px;
+    }
+  </style>
+  <!-- Google Fonts Tajawal/Cairo (for Arabic) -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <div class="icon">⚠️</div>
-        <h1>للأسف، الموقع غير موجود</h1>
-        <p>نعتذر عن هذا الإزعاج، يبدو أن الصفحة التي تبحث عنها غير متوفرة حالياً. قد يكون الرابط خاطئاً أو أن الصفحة قد تم نقلها.</p>
-        <div class="contact">
+  <div class="container py-5">
+    <!-- Login Section -->
+    <div id="loginSection" class="row justify-content-center align-items-center fade-in" style="min-height:80vh;">
+      <div class="col-md-6 col-lg-4">
+        <div class="main-card p-4">
+          <div class="text-center mb-4">
+            <i class="bi bi-box-seam" style="font-size:2.6rem;color:#4f8cff;"></i>
+            <h3 class="fw-bold mt-2 brand-gradient">تسجيل الدخول</h3>
+          </div>
+          <form id="loginForm" autocomplete="off">
+            <div class="mb-3">
+              <label class="form-label">اسم المستخدم</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                <input type="text" class="form-control" id="loginUsername" required>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">كلمة المرور</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                <input type="password" class="form-control" id="loginPassword" required>
+              </div>
+            </div>
+            <div class="d-grid mb-2">
+              <button type="submit" class="btn btn-primary">دخول</button>
+            </div>
+            <div class="text-center mt-3">
+              <a href="https://www.canva.com/" target="_blank" class="btn btn-outline-secondary w-100"><i class="bi bi-people"></i> انضم معنا</a>
+            </div>
+          </form>
         </div>
+      </div>
     </div>
+    <!-- Main App Section -->
+    <div id="mainAppSection" style="display:none;">
+      <nav class="navbar navbar-expand-lg navbar-light bg-white rounded shadow mb-4 px-3 fade-in">
+        <a class="navbar-brand fw-bold brand-gradient" href="#" style="font-size:1.5rem;"><i class="bi bi-box-seam"></i> توصيل الطلبات</a>
+        <button class="btn btn-outline-danger ms-auto" id="logoutBtn">تسجيل الخروج</button>
+      </nav>
+      <!-- Main Stats -->
+      <div class="row mb-4 g-3 fade-in">
+        <div class="col-6 col-md-3">
+          <div class="stat-box">
+            <div class="stat-title"><i class="bi bi-list-task"></i> عدد الطلبات الكلي</div>
+            <div class="stat-value" id="statTotalOrders">0</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-box">
+            <div class="stat-title"><i class="bi bi-bag-check"></i> عدد الطلبات المستلمة</div>
+            <div class="stat-value" id="statReceivedOrders">0</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-box">
+            <div class="stat-title"><i class="bi bi-cash-stack"></i> الأرباح</div>
+            <div class="stat-value" id="statProfits">0 د.ع</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-box">
+            <div class="stat-title"><i class="bi bi-arrow-repeat"></i> الطلبات الراجعة</div>
+            <div class="stat-value" id="statReturnedOrders">0</div>
+          </div>
+        </div>
+      </div>
+      <!-- Tabs -->
+      <ul class="nav nav-pills mb-4 fade-in" id="mainTabs">
+        <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#ordersTab"><i class="bi bi-clipboard-data"></i> الطلبات</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#profitsTab"><i class="bi bi-wallet2"></i> سحب الأرباح</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#supportTab"><i class="bi bi-life-preserver"></i> الدعم</button></li>
+      </ul>
+      <div class="tab-content">
+        <!-- Orders Tab -->
+        <div class="tab-pane fade show active" id="ordersTab">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold mb-0 brand-gradient"><i class="bi bi-list-task"></i> قائمة الطلبات</h5>
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addOrderModal"><i class="bi bi-plus-circle"></i> إضافة طلب جديد</button>
+          </div>
+          <div class="table-responsive fade-in">
+            <table class="table align-middle table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th>رقم الطلب</th>
+                  <th>عنوان الزبون</th>
+                  <th>الهاتف 1</th>
+                  <th>الهاتف 2</th>
+                  <th>المبلغ (د.ع)</th>
+                  <th>الحالة</th>
+                  <th>إجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <!-- Profits Tab -->
+        <div class="tab-pane fade" id="profitsTab">
+          <div class="row fade-in">
+            <div class="col-md-6">
+              <div class="main-card p-3 mb-3">
+                <h5 class="fw-bold mb-3 brand-gradient"><i class="bi bi-wallet2"></i> سحب الأرباح</h5>
+                <form id="withdrawForm">
+                  <div class="mb-3">
+                    <label class="form-label fw-bold">اختر طريقة السحب</label>
+                    <select class="form-select" id="withdrawMethod" required>
+                      <option value="">اختر...</option>
+                      <option value="delivery">عن طريق المندوب (خصم 1000 د.ع)</option>
+                      <option value="bank">عن طريق مصرف الرافدين (خصم 500 د.ع)</option>
+                    </select>
+                  </div>
+                  <div class="mb-3" id="bankAccountDiv" style="display:none;">
+                    <label class="form-label">رقم حساب مصرف الرافدين</label>
+                    <input type="text" class="form-control" id="rafidainAccount">
+                  </div>
+                  <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">سحب الأرباح</button>
+                  </div>
+                </form>
+              </div>
+              <div class="main-card p-3">
+                <h6 class="fw-bold brand-gradient"><i class="bi bi-clock-history"></i> عمليات السحب</h6>
+                <table class="table table-sm align-middle">
+                  <thead>
+                    <tr>
+                      <th>الطريقة</th>
+                      <th>المبلغ</th>
+                      <th>الحالة</th>
+                    </tr>
+                  </thead>
+                  <tbody id="withdrawalsTable"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Support Tab -->
+        <div class="tab-pane fade" id="supportTab">
+          <div class="support-box mt-4 fade-in">
+            <h5 class="mb-2 fw-bold brand-gradient"><i class="bi bi-life-preserver"></i> الدعم الفني</h5>
+            <p>في حالة واجهت أي مشكلة أو لديك أي استفسار لا تنسى مراسلتنا على هذا الرقم:</p>
+            <h4 class="text-primary fw-bold">07700000000</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Order Modal -->
+  <div class="modal fade" id="addOrderModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <form class="modal-content" id="orderForm">
+        <div class="modal-header">
+          <h5 class="modal-title" id="orderModalTitle">إضافة طلب جديد</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="editOrderId">
+          <div class="mb-3">
+            <label class="form-label">عنوان الزبون</label>
+            <input type="text" class="form-control" id="orderAddress" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">رقم الهاتف الأول</label>
+            <input type="text" class="form-control" id="orderPhone1" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">رقم الهاتف الثاني</label>
+            <input type="text" class="form-control" id="orderPhone2">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">المبلغ الكلي بدون التوصيل (د.ع)</label>
+            <input type="number" class="form-control" id="orderAmount" required min="0">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">حفظ</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5, Bootstrap Icons, SweetAlert2, Firebase SDKs -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script type="module">
+    // Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getDatabase, ref, set, push, get, update, remove, onValue } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
+    import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+    // Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyBKh3zoKYEbm7aGNH6GRzA5SQx4DYhM7gc",
+      authDomain: "arpon11-a4ead.firebaseapp.com",
+      databaseURL: "https://arpon11-a4ead-default-rtdb.firebaseio.com",
+      projectId: "arpon11-a4ead",
+      storageBucket: "arpon11-a4ead.firebasestorage.app",
+      messagingSenderId: "231633090493",
+      appId: "1:231633090493:web:d0c1973bd13b58f7b044d4",
+      measurementId: "G-8YJ5394ZP8"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const auth = getAuth(app);
+
+    // Cached DOM
+    const loginSection = document.getElementById('loginSection');
+    const mainAppSection = document.getElementById('mainAppSection');
+    const loginForm = document.getElementById('loginForm');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const statTotalOrders = document.getElementById('statTotalOrders');
+    const statReceivedOrders = document.getElementById('statReceivedOrders');
+    const statProfits = document.getElementById('statProfits');
+    const statReturnedOrders = document.getElementById('statReturnedOrders');
+    const ordersTableBody = document.getElementById('ordersTableBody');
+    const withdrawalsTable = document.getElementById('withdrawalsTable');
+    const withdrawForm = document.getElementById('withdrawForm');
+    const withdrawMethod = document.getElementById('withdrawMethod');
+    const bankAccountDiv = document.getElementById('bankAccountDiv');
+    const rafidainAccount = document.getElementById('rafidainAccount');
+    const orderForm = document.getElementById('orderForm');
+    const orderModalTitle = document.getElementById('orderModalTitle');
+    const editOrderId = document.getElementById('editOrderId');
+    const orderAddress = document.getElementById('orderAddress');
+    const orderPhone1 = document.getElementById('orderPhone1');
+    const orderPhone2 = document.getElementById('orderPhone2');
+    const orderAmount = document.getElementById('orderAmount');
+    let currentUserId = null, currentUserData = null;
+    let ordersArr = [], withdrawalsArr = [];
+    // لكل طلب: رقم الطلب => true إذا تم دفعه
+    let paidOrdersMap = {};
+
+    function usernameToEmail(username) {
+      return username.trim().replace(/\s+/g,'_') + "@arpon11.com";
+    }
+
+    loginForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const email = usernameToEmail(username);
+      try {
+        const userCred = await signInWithEmailAndPassword(auth, email, password);
+        handleLogin(userCred.user.uid);
+      } catch (err) {
+        Swal.fire({ icon: 'error', title: 'فشل الدخول', text: 'اسم المستخدم أو كلمة المرور غير صحيحة!' });
+      }
+    };
+
+    logoutBtn.onclick = async () => {
+      await signOut(auth);
+      location.reload();
+    };
+
+    auth.onAuthStateChanged(async user => {
+      if (user) {
+        handleLogin(user.uid);
+      }
+    });
+
+    async function handleLogin(uid) {
+      const userSnap = await get(ref(db, "users/" + uid));
+      if (!userSnap.exists()) {
+        Swal.fire({ icon: 'error', title: 'حساب غير موجود!', text: 'يرجى التواصل مع الدعم.' });
+        await signOut(auth);
+        return;
+      }
+      currentUserId = uid;
+      currentUserData = userSnap.val();
+      loginSection.style.display = 'none';
+      mainAppSection.style.display = '';
+      loadWithdrawals(); // يجب تحميل السحوبات أولا ثم الطلبات لأنها تؤثر على حالة الطلبات المدفوعة
+    }
+
+    async function generateOrderNumber() {
+      const userCode = currentUserId.slice(-4).padStart(4, "0");
+      const userOrdersSnap = await get(ref(db, `orders/${currentUserId}`));
+      const n = userOrdersSnap.exists() ? Object.keys(userOrdersSnap.val()).length : 0;
+      const next = (n + 1).toString().padStart(4, "0");
+      return userCode + next;
+    }
+
+    function getDeliveryFee(idx) {
+      return idx < 3 ? 1500 : 2000;
+    }
+
+    // حساب الطلبات المدفوعة: أي طلب شارك في أي سحب بحالة "تم الاستلام"
+    function updatePaidOrdersMap() {
+      paidOrdersMap = {};
+      withdrawalsArr.forEach(w => {
+        if (w.status === "تم الاستلام" && Array.isArray(w.successOrders)) {
+          w.successOrders.forEach(num => {
+            paidOrdersMap[num] = true;
+          });
+        }
+      });
+    }
+
+    function loadOrders() {
+      onValue(ref(db, `orders/${currentUserId}`), snap => {
+        ordersArr = [];
+        ordersTableBody.innerHTML = '';
+        let total = 0, received = 0, returned = 0, profits = 0;
+        let deliveredOrderNumbers = [];
+        if (snap.exists()) {
+          ordersArr = Object.entries(snap.val()).map(([id, order]) => ({...order, orderId: id}));
+          ordersArr.forEach((order, idx) => {
+            total++;
+            const isDelivered = order.status === 'تم التسليم بنجاح';
+            if (isDelivered) {
+              received++;
+              deliveredOrderNumbers.push(order.number);
+              // الربح فقط للطلبات التي تم تسليمها ولم يتم دفعها في أي سحب أرباح ناجح سابق
+              if (!paidOrdersMap[order.number]) {
+                let deliveryFee = getDeliveryFee(idx);
+                let orderAmountInt = parseInt(order.amount) || 0;
+                profits += orderAmountInt;
+                profits -= deliveryFee;
+              }
+            }
+            if (order.status === 'راجعة') returned++;
+          });
+        }
+        statTotalOrders.textContent = total;
+        statReceivedOrders.textContent = received;
+        statReturnedOrders.textContent = returned;
+        statProfits.textContent = profits > 0 ? profits + " د.ع" : "0 د.ع";
+
+        // رسم جدول الطلبات مع عبارة "تم الدفع" للطلبات التي شاركت في أي سحب ناجح
+        ordersTableBody.innerHTML = '';
+        ordersArr.forEach((order, idx) => {
+          let statusClass =
+            order.status === 'بأنتظار وصول المندوب اليك' ? 'order-status-wait' :
+            order.status === 'تم الاستلام من قبل المندوب' ? 'order-status-delivery' :
+            order.status === 'راجعة' ? 'order-status-returned' :
+            order.status === 'تم التسليم بنجاح' ? 'order-status-received' : 'order-status-wait';
+
+          let paidLabel = paidOrdersMap[order.number] ? `<span class="paid-label">تم الدفع</span>` : '';
+          let actions = order.status === 'بأنتظار وصول المندوب اليك' ?
+            `<button class="btn btn-sm btn-primary" onclick="editOrder('${order.orderId}')"><i class="bi bi-pencil-square"></i></button>
+             <button class="btn btn-sm btn-danger" onclick="deleteOrder('${order.orderId}')"><i class="bi bi-trash"></i></button>` : '';
+          ordersTableBody.innerHTML += `
+            <tr>
+              <td>${order.number}</td>
+              <td>${order.address}</td>
+              <td>${order.phone1}</td>
+              <td>${order.phone2 || '-'}</td>
+              <td>${parseInt(order.amount) + getDeliveryFee(idx)}</td>
+              <td>
+                <span class="order-status-badge ${statusClass}">
+                  ${order.status}
+                </span>
+              </td>
+              <td class="order-actions">
+                ${paidLabel}
+                ${actions}
+              </td>
+            </tr>
+          `;
+        });
+      });
+    }
+
+    // تحميل السحوبات ثم حساب الطلبات المدفوعة ثم تحميل الطلبات
+    function loadWithdrawals() {
+      onValue(ref(db, `withdrawals/${currentUserId}`), snap => {
+        withdrawalsArr = [];
+        withdrawalsTable.innerHTML = '';
+        if (snap.exists()) {
+          withdrawalsArr = Object.entries(snap.val()).map(([id, w]) => ({...w, id}));
+          withdrawalsArr.forEach(w => {
+            withdrawalsTable.innerHTML += `
+              <tr>
+                <td>${w.method === 'delivery' ? 'مندوب' : 'مصرف الرافدين'}</td>
+                <td>${w.amount} د.ع</td>
+                <td>
+                  <span class="badge bg-${w.status === 'قيد المعالجة' ? 'warning' : w.status === 'تم الاستلام' ? 'success' : 'secondary'}">
+                    ${w.status}
+                  </span>
+                </td>
+              </tr>
+            `;
+          });
+        }
+        updatePaidOrdersMap();
+        loadOrders();
+      });
+    }
+
+    // عند السحب: ترسل فقط الطلبات "تم التسليم بنجاح" ولم يتم دفعها سابقاً
+    withdrawForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const method = withdrawMethod.value;
+      let profitValue = parseInt(statProfits.textContent.replace(/\D/g,''));
+      if (isNaN(profitValue) || profitValue <= 0) {
+        Swal.fire({icon:'error',title:'لا توجد أرباح كافية!'});
+        return;
+      }
+      let fee = method === 'delivery' ? 1000 : 500;
+      if (method === 'bank' && !rafidainAccount.value.trim()) {
+        Swal.fire({icon:'error',title:'يرجى إدخال رقم حساب مصرف الرافدين'});
+        return;
+      }
+      // حساب جميع الطلبات التي حالتها "تم التسليم بنجاح" ولم يتم دفعها في أي سحب أرباح ناجح سابق
+      let deliveredOrders = [];
+      ordersArr.forEach((order, idx) => {
+        if (
+          order.status === "تم التسليم بنجاح" &&
+          !paidOrdersMap[order.number]
+        ) {
+          deliveredOrders.push(order.number);
+        }
+      });
+      await push(ref(db, `withdrawals/${currentUserId}`), {
+        method,
+        amount: profitValue - fee,
+        status: 'قيد المعالجة',
+        bankAccount: method === 'bank' ? rafidainAccount.value.trim() : "",
+        createdAt: Date.now(),
+        successOrders: deliveredOrders // الطلبات المشاركة في السحب الحالي فقط
+      });
+      Swal.fire({icon:'success',title:'تم إرسال طلب السحب!'});
+      withdrawForm.reset();
+      bankAccountDiv.style.display = 'none';
+    };
+
+    window.editOrder = async (id) => {
+      const order = ordersArr.find(o => o.orderId === id);
+      if (!order) return;
+      editOrderId.value = id;
+      orderModalTitle.textContent = "تعديل الطلب";
+      orderAddress.value = order.address;
+      orderPhone1.value = order.phone1;
+      orderPhone2.value = order.phone2;
+      orderAmount.value = order.amount;
+      new bootstrap.Modal(document.getElementById('addOrderModal')).show();
+    };
+
+    window.deleteOrder = async (id) => {
+      Swal.fire({
+        title: 'تأكيد الحذف',
+        text: 'هل أنت متأكد من حذف الطلب؟',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'نعم، احذف',
+        cancelButtonText: 'إلغاء'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await remove(ref(db, `orders/${currentUserId}/${id}`));
+        }
+      });
+    };
+
+    orderForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const isEdit = !!editOrderId.value;
+      const address = orderAddress.value.trim();
+      const phone1 = orderPhone1.value.trim();
+      const phone2 = orderPhone2.value.trim();
+      const amount = parseInt(orderAmount.value,10);
+      if (!address || !phone1 || isNaN(amount)) return;
+      if (isEdit) {
+        await update(ref(db, `orders/${currentUserId}/${editOrderId.value}`), {
+          address, phone1, phone2, amount
+        });
+      } else {
+        const number = await generateOrderNumber();
+        await push(ref(db, `orders/${currentUserId}`), {
+          number, address, phone1, phone2, amount, status: 'بأنتظار وصول المندوب اليك', createdAt: Date.now()
+        });
+      }
+      editOrderId.value = "";
+      orderForm.reset();
+      bootstrap.Modal.getInstance(document.getElementById('addOrderModal')).hide();
+    };
+
+    withdrawMethod.onchange = function() {
+      bankAccountDiv.style.display = this.value === 'bank' ? '' : 'none';
+    };
+
+    orderForm.addEventListener('keydown', function(e){
+      if (e.key === 'Enter') e.preventDefault();
+    });
+
+    document.getElementById('addOrderModal').addEventListener('show.bs.modal', ()=>{
+      orderForm.reset();
+      editOrderId.value = "";
+      orderModalTitle.textContent = "إضافة طلب جديد";
+    });
+
+    window.editOrder = window.editOrder;
+    window.deleteOrder = window.deleteOrder;
+  </script>
 </body>
 </html>
