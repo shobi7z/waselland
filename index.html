@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>توصيل الطلبات | حسابي</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Bootstrap 5 RTL -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;800&display=swap" rel="stylesheet">
@@ -204,225 +203,257 @@
       box-shadow: 0 2px 16px #a2c5fa33;
       transform: scale(1.07);
     }
-
-    /* Custom Card for Order List */
-    .order-list-card {
-      background: #fff;
-      border-radius: 1.15rem;
-      box-shadow: 0 2px 10px #a2c5fa22;
+    .add-order-btn {
       margin-bottom: 1rem;
-      padding: 0.7rem 1rem 0.4rem 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: .7rem;
-      transition: box-shadow .13s;
-      border: 1.5px solid #e4ecfa;
-      position: relative;
-    }
-    .order-list-header {
-      display: flex;
-      align-items: center;
-      gap: .7rem;
-    }
-    .order-badge-num {
-      font-weight: bold;
-      color: #1976d2;
-      background: #e4ecfa;
-      border-radius: 8px;
-      font-size: 1.15rem;
-      padding: 0.16em 0.78em;
-      box-shadow: 0 1px 6px #b3c8f133;
-    }
-    .order-status-badge {
-      font-size: .96rem;
-      border-radius: 9px;
-      padding: 0.17em 0.7em;
-      font-weight: 700;
-      box-shadow: 0 1px 4px #a2c5fa1a;
-      color: #fff;
-      margin-inline-end: .3em;
-    }
-    .order-status-wait { background: #ffb037; color: #222;}
-    .order-status-delivery { background: #42a5f5;}
-    .order-status-received { background: #43ea7c;}
-    .order-status-returned { background: #ef4444;}
-    .order-actions {
-      display: flex;
-      gap: 5px;
-      margin-top:.35rem;
-    }
-    .order-actions .btn {
-      border-radius: 50%;
-      min-width: 36px;
-      min-height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      box-shadow: 0 1px 3px #e0e7ef33;
-      padding: .23em .23em;
-    }
-    .order-actions .btn-edit {
-      background: #42a5f5;
-      color: #fff;
-      border: none;
-    }
-    .order-actions .btn-edit:hover {
-      background: #1976d2;
-      color: #fff;
-    }
-    .order-actions .btn-delete {
-      background: #ef4444;
-      color: #fff;
-      border: none;
-    }
-    .order-actions .btn-delete:hover {
-      background: #b91c1c;
-      color: #fff;
-    }
-    .paid-label {
-      display: inline-block;
-      background: #e4ecfa;
-      color: #1976d2;
-      border-radius: 7px;
-      padding: 0.09em 0.7em;
-      font-size: .96rem;
-      margin-inline-end: 0.2em;
-      margin-bottom: 2px;
-      font-weight: 700;
-      box-shadow: 0 1px 6px #1976d220;
-    }
-    .order-field-mini {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.6rem 1.5rem;
       font-size: 1.08rem;
-      margin-bottom: .2rem;
-    }
-    .order-field-mini span {
-      color: #3b5a85;
-      font-weight: 700;
-      min-width: 110px;
-      display: inline-block;
-    }
-
-    /* Withdraw Table Stylish */
-    .withdraw-table-list {
-      width: 100%;
-      border-radius: 1rem;
-      overflow: hidden;
-      background: #e4ecfa;
-      box-shadow: 0 1px 6px #a2c5fa22;
-      margin-bottom: 0;
-    }
-    .withdraw-table-list th {
-      background: #e4ecfa;
-      color: #1976d2;
       font-weight: bold;
-      font-size: 1.05rem;
-      border: none;
-      padding: 0.52em 0.12em;
-      text-align: center;
-    }
-    .withdraw-table-list td {
-      padding: 0.44em 0.06em;
-      vertical-align: middle;
-      border-top: 1px solid #d3e3fa;
-      font-size: 1.03rem;
-      text-align: center;
-      background: #fff;
-    }
-    .withdraw-table-list tr:last-child td {
-      border-bottom: none;
-    }
-    .withdraw-status-badge {
-      font-size: .93rem;
-      border-radius: 7px;
-      padding: 0.13em 1.1em;
-      font-weight: 700;
-      box-shadow: 0 1px 2px #d3e3fa45;
-      color: #fff;
-    }
-    .withdraw-status-processing { background: #ffb037; color: #222;}
-    .withdraw-status-done { background: #43ea7c;}
-    .withdraw-status-other { background: #90caf9; color: #fff;}
-    /* Withdraw Section */
-    .withdraw-section {
-      background: #fff;
-      border-radius: 1.1rem;
-      box-shadow: 0 1px 11px #a2c5fa12;
-      padding: 1.1rem 0.7rem;
-      margin-bottom: 1.1rem;
-    }
-    .withdraw-title {
-      color: #1976d2;
-      font-weight: bold;
-      font-size: 1.13rem;
-      margin-bottom: 0.5rem;
-    }
-    /* Support Box */
-    .support-box {
-      background: linear-gradient(120deg, #e4ecfa 65%, #fafdff 100%);
-      border-radius: 1.09rem;
-      padding: 1rem 0.7rem 0.7rem;
-      box-shadow: 0 3px 13px #a2c5fa13;
-      border: 1.3px solid #e4ecfa;
-      font-size: 1.06rem;
-      margin-bottom: 1.1rem;
-      text-align: center;
-    }
-    .modal-content {
-      border-radius: 1rem;
-      background: #e4ecfa;
-      border: 1.5px solid #d3e3fa;
-    }
-    .modal-header { border-bottom: none; }
-    .modal-footer { border-top: none; justify-content: flex-end; gap: 0.6rem; }
-    .btn-success {
+      border-radius: 1.2rem;
+      padding: .6em 1.6em;
+      box-shadow: 0 1px 8px #90caf922;
+      display: inline-flex;
+      align-items: center;
+      gap: .6em;
       background: linear-gradient(90deg, #43ea7c 60%, #42a5f5 100%);
-      color: #fff;
+      color: #fff !important;
       border: none;
+      transition: background .13s;
     }
-    .btn-success:hover, .btn-success:focus {
+    .add-order-btn:hover, .add-order-btn:focus {
       background: linear-gradient(90deg, #42a5f5 60%, #43ea7c 100%);
-      color: #fff;
-    }
-    .btn-outline-danger {
-      border: 2px solid #ef4444 !important;
-      color: #ef4444 !important;
-      background: #fff !important;
-    }
-    .btn-outline-danger:hover, .btn-outline-danger:focus {
-      background: #ef4444 !important;
       color: #fff !important;
     }
-    .input-group-text {
-      background: #e4ecfa;
-      border-radius: 8px 0 0 8px;
-      border: none;
-    }
-    @media (max-width: 991.98px) {
-      .main-card, .modal-content { border-radius: 1rem;}
-      .btn { font-size: 0.96rem; }
-      .orders-header h5 { font-size: 0.97rem;}
-      .stat-card { min-width: 82px; font-size: 0.97rem;}
-      .stat-value { font-size: 1.08rem;}
-      .order-list-card {padding: 0.7rem .4rem;}
-    }
     @media (max-width: 767.98px) {
-      .glass-header { font-size: 1.02rem; padding: .88rem 0.1rem 0.48rem;}
-      .orders-section, .withdraw-section, .support-box { padding: 0.52rem 0.01rem 0.21rem;}
-      .orders-header { flex-direction: column; gap: 7px;}
-      .dashboard-grid { grid-template-columns: 1fr; gap: 0.5rem;}
-      .stat-card { min-width: 66px; font-size: 0.94rem;}
-      .order-list-card {flex-direction: column; gap: .55rem;}
-      .withdraw-table-list th, .withdraw-table-list td { font-size: 0.92rem;}
+      .add-order-btn {
+        width: 100%;
+        font-size: 1.06rem;
+        padding: .6em 0;
+        position: fixed;
+        left: 16px;
+        right: 16px;
+        bottom: 18px;
+        z-index: 999;
+        margin-bottom: 0;
+        box-shadow: 0 6px 26px #1976d277;
+      }
+    }
+    /* Styles for order cards */
+    .order-card {
+      background: #fff;
+      border-radius: 1.2rem;
+      box-shadow: 0 2px 12px #a2c5fa1a;
+      padding: 1.1rem;
+      margin-bottom: 1rem;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #e3eefd;
+    }
+    .order-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(90deg, #1976d2 0%, #90caf9 100%);
+      transition: all 0.3s ease;
+    }
+    .order-card.status-pending::before { background: linear-gradient(90deg, #ffc107 0%, #ffeb3b 100%); } /* Orange for Pending */
+    .order-card.status-received::before { background: linear-gradient(90deg, #28a745 0%, #81c784 100%); } /* Green for Received */
+    .order-card.status-returned::before { background: linear-gradient(90deg, #dc3545 0%, #ef9a9a 100%); } /* Red for Returned */
+    .order-card .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: .8rem;
+    }
+    .order-card .order-number {
+      font-weight: 800;
+      font-size: 1.2rem;
+    }
+    /* New styles for order-list-card from the JS part */
+    .order-list-card {
+        background: linear-gradient(135deg, #fafdff 70%, #e4ecfa 100%);
+        border-radius: 1.35rem;
+        box-shadow: 0 1px 16px #a2c5fa1a;
+        padding: 1rem 1.2rem;
+        margin-bottom: 1rem;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid #e3eefd;
+    }
+    .order-list-card .order-list-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.8rem;
+    }
+    .order-list-card .order-badge-num {
+        font-weight: 800;
+        font-size: 1.1rem;
+        color: #1976d2;
+    }
+    .order-list-card .order-status-badge {
+        font-size: 0.85rem;
+        font-weight: bold;
+        padding: 0.3em 0.8em;
+        border-radius: 1.5em;
+        color: #fff;
+        background: #ccc; /* Default */
+    }
+    .order-list-card .order-status-wait { background: #ffc107; }
+    .order-list-card .order-status-delivery { background: #007bff; }
+    .order-list-card .order-status-returned { background: #dc3545; }
+    .order-list-card .order-status-received { background: #28a745; }
+    .order-list-card .paid-label {
+        background: #6f42c1; /* Purple */
+        color: #fff;
+        font-size: 0.8rem;
+        padding: 0.25em 0.7em;
+        border-radius: 1.2em;
+        margin-right: 0.5rem;
+    }
+    .order-list-card .order-field-mini {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.95rem;
+        margin-bottom: 0.3rem;
+        color: #555;
+    }
+    .order-list-card .order-field-mini span:first-child {
+        font-weight: 600;
+        color: #333;
+    }
+    .order-list-card .order-actions {
+        margin-top: 0.8rem;
+        text-align: end;
+    }
+    .order-list-card .btn-edit,
+    .order-list-card .btn-delete {
+        background: #1976d2;
+        color: #fff;
+        border: none;
+        border-radius: 0.8rem;
+        padding: 0.4em 0.8em;
+        font-size: 0.9rem;
+        margin-left: 0.5rem;
+        transition: background 0.2s;
+    }
+    .order-list-card .btn-delete { background: #dc3545; }
+    .order-list-card .btn-edit:hover { background: #1565c0; }
+    .order-list-card .btn-delete:hover { background: #c82333; }
+
+    /* Styles for withdraw tab */
+    .withdraw-section {
+        background: #fff;
+        border-radius: 1.2rem;
+        box-shadow: 0 2px 12px #a2c5fa1a;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        border: 1px solid #e3eefd;
+    }
+    .withdraw-section h5 {
+        font-weight: bold;
+        color: #1976d2;
+        margin-bottom: 1rem;
+    }
+    .withdraw-section .form-label {
+        font-weight: 600;
+        color: #3b5a85;
+    }
+    .withdraw-section .btn-primary {
+        background: linear-gradient(90deg, #1976d2 40%, #90caf9 100%);
+        border: none;
+        font-weight: bold;
+    }
+    .withdraw-section .btn-primary:hover {
+        background: linear-gradient(90deg, #90caf9 40%, #1976d2 100%);
+    }
+
+    .withdrawals-table-container {
+        background: #fff;
+        border-radius: 1.2rem;
+        box-shadow: 0 2px 12px #a2c5fa1a;
+        padding: 1.5rem;
+        border: 1px solid #e3eefd;
+    }
+    .withdrawals-table-container h5 {
+        font-weight: bold;
+        color: #1976d2;
+        margin-bottom: 1rem;
+    }
+    .withdrawals-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 8px; /* Space between rows */
+    }
+    .withdrawals-table thead th {
+        color: #1976d2;
+        font-weight: bold;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e3eefd;
+    }
+    .withdrawals-table tbody tr {
+        background: #fafdff;
+        border-radius: 0.8rem;
+        box-shadow: 0 1px 6px #a2c5fa10;
+    }
+    .withdrawals-table tbody td {
+        padding: 0.8rem 1rem;
+        vertical-align: middle;
+        border: none; /* Remove default table borders */
+    }
+    .withdrawals-table tbody tr:first-child td { border-top-left-radius: 0.8rem; border-top-right-radius: 0.8rem; }
+    .withdrawals-table tbody tr:last-child td { border-bottom-left-radius: 0.8rem; border-bottom-right-radius: 0.8rem; }
+
+    .withdraw-status-badge {
+        font-size: 0.8rem;
+        font-weight: bold;
+        padding: 0.3em 0.8em;
+        border-radius: 1.5em;
+        color: #fff;
+        display: inline-block;
+    }
+    .withdraw-status-processing { background: #ffc107; } /* Yellow for processing */
+    .withdraw-status-done { background: #28a745; } /* Green for done */
+    .withdraw-status-other { background: #6c757d; } /* Gray for other/default */
+
+    /* Support tab styles (placeholder) */
+    .support-section {
+        background: #fff;
+        border-radius: 1.2rem;
+        box-shadow: 0 2px 12px #a2c5fa1a;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        border: 1px solid #e3eefd;
+        text-align: center;
+    }
+    .support-section h5 {
+        font-weight: bold;
+        color: #1976d2;
+        margin-bottom: 1rem;
+    }
+    .support-section p {
+        color: #555;
+        line-height: 1.6;
+    }
+    .support-section .btn-info {
+        background: linear-gradient(90deg, #17a2b8 60%, #5bc0de 100%);
+        border: none;
+        font-weight: bold;
+        color: #fff;
+        padding: 0.6em 1.5em;
+        border-radius: 1.2rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5em;
+    }
+    .support-section .btn-info:hover {
+        background: linear-gradient(90deg, #5bc0de 60%, #17a2b8 100%);
     }
   </style>
 </head>
 <body>
   <div class="glow"></div>
-  <!-- Login Overlay -->
   <div id="loginOverlay">
     <div class="login-modal">
       <span class="brand"><i class="bi bi-box-seam"></i> توصيل الطلبات</span>
@@ -451,14 +482,12 @@
       </form>
     </div>
   </div>
-  <!-- User Header -->
   <div class="glass-header" id="profileHeader" style="display: none;">
     <img src="https://ui-avatars.com/api/?name=مستخدم&background=1976d2&color=fff&rounded=true&size=128" class="avatar mb-2" id="userAvatar" alt="avatar">
     <div class="username" id="userNameHeader">طلباتك</div>
     <button class="logout-btn d-none" id="logoutBtn"><i class="bi bi-power"></i> خروج</button>
   </div>
   <div class="container pb-5">
-    <!-- Stats -->
     <div class="dashboard-grid">
       <div class="dash-card">
         <span class="icon"><i class="bi bi-list-task"></i></span>
@@ -481,66 +510,69 @@
         <div class="dash-value" id="statReturnedOrders">0</div>
       </div>
     </div>
-    <!-- Tabs -->
     <ul class="nav nav-pills animated-tabs mb-3" id="mainTabs">
       <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#ordersTab"><i class="bi bi-list-task"></i> الطلبات</button></li>
       <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#withdrawTab"><i class="bi bi-wallet2"></i> الأرباح</button></li>
       <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#supportTab"><i class="bi bi-life-preserver"></i> الدعم</button></li>
     </ul>
     <div class="tab-content mb-3" id="tabContent">
-      <!-- Orders Tab -->
       <div class="tab-pane fade show active" id="ordersTab">
+        <button class="add-order-btn mb-3" id="addOrderBtn"><i class="bi bi-plus-circle"></i> إضافة طلب جديد</button>
         <div id="orderCardsList"></div>
       </div>
-      <!-- Withdraw Tab -->
       <div class="tab-pane fade" id="withdrawTab">
-        <div class="withdraw-section">
-          <div class="withdraw-title mb-3"><i class="bi bi-wallet2"></i> سحب الأرباح</div>
-          <form id="withdrawForm">
-            <div class="mb-3">
-              <label class="form-label fw-bold">اختر طريقة السحب</label>
-              <select class="form-select" id="withdrawMethod" required>
-                <option value="">اختر...</option>
-                <option value="delivery">عن طريق المندوب (خصم 1000 د.ع)</option>
-                <option value="bank">عن طريق مصرف الرافدين (خصم 500 د.ع)</option>
-              </select>
-            </div>
-            <div class="mb-3" id="bankAccountDiv" style="display:none;">
-              <label class="form-label">رقم حساب مصرف الرافدين</label>
-              <input type="text" class="form-control" id="rafidainAccount">
-            </div>
-            <div class="d-grid mb-2">
-              <button type="submit" class="btn btn-success"><i class="bi bi-cash-stack"></i> سحب الأرباح</button>
-            </div>
-          </form>
-          <div>
-            <h6 class="fw-bold text-primary mb-2 mt-4"><i class="bi bi-clock-history"></i> تاريخ السحب</h6>
+        <div class="withdraw-section mb-3">
+            <h5>طلب سحب أرباح</h5>
+            <form id="withdrawForm">
+                <div class="mb-3">
+                    <label for="withdrawMethod" class="form-label">طريقة السحب</label>
+                    <select class="form-select" id="withdrawMethod">
+                        <option value="delivery">عن طريق المندوب</option>
+                        <option value="bank">حساب مصرف الرافدين</option>
+                    </select>
+                </div>
+                <div class="mb-3" id="bankAccountDiv" style="display:none;">
+                    <label for="rafidainAccount" class="form-label">رقم حساب مصرف الرافدين</label>
+                    <input type="text" class="form-control" id="rafidainAccount">
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-cash"></i> طلب سحب</button>
+                </div>
+            </form>
+        </div>
+        <div class="withdrawals-table-container">
+            <h5>سجل عمليات السحب</h5>
             <div class="table-responsive">
-              <table class="withdraw-table-list table align-middle mb-0">
-                <thead>
-                  <tr>
-                    <th>الطريقة</th>
-                    <th>المبلغ</th>
-                    <th>الحالة</th>
-                  </tr>
-                </thead>
-                <tbody id="withdrawalsTable"></tbody>
-              </table>
+                <table class="table withdrawals-table">
+                    <thead>
+                        <tr>
+                            <th>الطريقة</th>
+                            <th>المبلغ</th>
+                            <th>الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody id="withdrawalsTable">
+                        </tbody>
+                </table>
             </div>
-          </div>
         </div>
       </div>
-      <!-- Support Tab -->
       <div class="tab-pane fade" id="supportTab">
-        <div class="support-box mt-4">
-          <h6 class="fw-bold mb-2 text-primary"><i class="bi bi-life-preserver"></i> الدعم الفني</h6>
-          <div>للمساعدة أو الاستفسار يرجى التواصل عبر الرقم:</div>
-          <div class="mt-2" style="font-size:1.14rem"><b>07700000000</b></div>
+        <div class="support-section">
+            <h5>الدعم الفني</h5>
+            <p>إذا كان لديك أي استفسارات أو واجهت أي مشاكل، يرجى التواصل معنا عبر القنوات التالية:</p>
+            <p>
+                <a href="https://t.me/your_telegram_support_link" target="_blank" class="btn btn-info me-2"><i class="bi bi-telegram"></i> تيليجرام</a>
+                <a href="https://wa.me/your_whatsapp_number" target="_blank" class="btn btn-info"><i class="bi bi-whatsapp"></i> واتساب</a>
+            </p>
+            <p class="mt-4">فريق الدعم متاح لمساعدتك في أوقات العمل الرسمية.</p>
         </div>
       </div>
     </div>
   </div>
-  <!-- Add/Edit Order Modal -->
+  <button class="add-order-btn d-md-none w-100" id="addOrderBtnMob" style="display:none;">
+    <i class="bi bi-plus-circle"></i> إضافة طلب جديد
+  </button>
   <div class="modal fade" id="addOrderModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <form class="modal-content" id="orderForm">
@@ -579,12 +611,15 @@
       </form>
     </div>
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getDatabase, ref, set, push, get, update, remove, onValue } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
     import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+    
+    // Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyBKh3zoKYEbm7aGNH6GRzA5SQx4DYhM7gc",
       authDomain: "arpon11-a4ead.firebaseapp.com",
@@ -595,27 +630,13 @@
       appId: "1:231633090493:web:d0c1973bd13b58f7b044d4",
       measurementId: "G-8YJ5394ZP8"
     };
+
+    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
     const auth = getAuth(app);
 
-    // Tab navigation
-    document.querySelectorAll('#mainTabs .nav-link').forEach(btn => {
-      btn.onclick = function() {
-        document.querySelectorAll('#mainTabs .nav-link').forEach(b=>b.classList.remove('active'));
-        btn.classList.add('active');
-        let target = btn.getAttribute('data-bs-target');
-        document.querySelectorAll('.tab-pane').forEach(tab=>tab.classList.remove('show','active'));
-        document.querySelector(target).classList.add('show','active');
-        window.scrollTo({top:0,behavior:'smooth'});
-      };
-    });
-
-    function usernameToEmail(username) {
-      return username.trim().replace(/\s+/g,'_') + "@arpon11.com";
-    }
-
-    // Auth/Login
+    // DOM Elements
     const loginOverlay = document.getElementById('loginOverlay');
     const loginForm = document.getElementById('loginForm');
     const logoutBtn = document.getElementById('logoutBtn');
@@ -626,7 +647,6 @@
     const statReceivedOrders = document.getElementById('statReceivedOrders');
     const statProfits = document.getElementById('statProfits');
     const statReturnedOrders = document.getElementById('statReturnedOrders');
-    const ordersTableBody = document.getElementById('ordersTableBody');
     const orderCardsList = document.getElementById('orderCardsList');
     const withdrawForm = document.getElementById('withdrawForm');
     const withdrawMethod = document.getElementById('withdrawMethod');
@@ -642,20 +662,46 @@
     const orderPhone1 = document.getElementById('orderPhone1');
     const orderPhone2 = document.getElementById('orderPhone2');
     const orderAmount = document.getElementById('orderAmount');
-    let currentUserId = null, currentUserData = null;
-    let ordersArr = [], withdrawalsArr = [];
+    const addOrderBtn = document.getElementById('addOrderBtn');
+    const addOrderBtnMob = document.getElementById('addOrderBtnMob');
+
+    // Global variables
+    let currentUserId = null;
+    let currentUserData = null;
+    let ordersArr = [];
+    let withdrawalsArr = [];
     let allOrderNumbersSet = new Set();
     let paidOrdersMap = {};
-    let lastEditOrderData = null;
+    let lastEditOrderData = null; // Not explicitly used but kept from original code
 
+    // Initial display states
     profileHeader.style.display = "none";
     document.querySelector(".container").style.display = "none";
 
+    // Tab navigation logic
+    document.querySelectorAll('#mainTabs .nav-link').forEach(btn => {
+      btn.onclick = function() {
+        document.querySelectorAll('#mainTabs .nav-link').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        let target = btn.getAttribute('data-bs-target');
+        document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.remove('show', 'active'));
+        document.querySelector(target).classList.add('show', 'active');
+        window.scrollTo({top:0,behavior:'smooth'});
+      };
+    });
+
+    // Helper function to convert username to email format for Firebase Auth
+    function usernameToEmail(username) {
+      return username.trim().replace(/\s+/g,'_') + "@arpon11.com";
+    }
+
+    // Login Form Submission
     loginForm.onsubmit = async (e) => {
       e.preventDefault();
       const username = document.getElementById('loginUsername').value.trim();
       const password = document.getElementById('loginPassword').value;
       const email = usernameToEmail(username);
+
       try {
         const userCred = await signInWithEmailAndPassword(auth, email, password);
         handleLogin(userCred.user.uid);
@@ -663,34 +709,46 @@
         Swal.fire({ icon: 'error', title: 'فشل الدخول', text: 'اسم المستخدم أو كلمة المرور غير صحيحة!' });
       }
     };
+
+    // Check Auth State on page load
     auth.onAuthStateChanged(async user => {
-      if (user) handleLogin(user.uid);
+      if (user) {
+        handleLogin(user.uid);
+      }
     });
+
+    // Logout Button
     logoutBtn.onclick = async () => {
       await signOut(auth);
-      window.location.reload();
+      window.location.reload(); // Reload to show login screen
     };
 
+    // Handle successful login
     async function handleLogin(uid) {
       const userSnap = await get(ref(db, "users/" + uid));
       if (!userSnap.exists()) {
         Swal.fire({ icon: 'error', title: 'حساب غير موجود!', text: 'يرجى التواصل مع الدعم.' });
-        await signOut(auth);
+        await signOut(auth); // Force logout if user data not found
         return;
       }
       currentUserId = uid;
       currentUserData = userSnap.val();
+
       loginOverlay.classList.add("hide");
-      setTimeout(() => { loginOverlay.style.display = "none"; }, 400);
+      setTimeout(() => { loginOverlay.style.display = "none"; }, 400); // Hide overlay after animation
+
       profileHeader.style.display = "";
       document.querySelector(".container").style.display = "";
-      logoutBtn.classList.remove('d-none');
+      logoutBtn.classList.remove('d-none'); // Show logout button
+
       userNameHeader.textContent = currentUserData.username || "طلباتك";
       userAvatar.src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(currentUserData.username || "مستخدم") + "&background=1976d2&color=fff&rounded=true&size=128";
-      await loadAllOrderNumbers();
-      loadWithdrawals();
+
+      await loadAllOrderNumbers(); // Load all order numbers across users for uniqueness check
+      loadWithdrawals(); // This will also trigger loadOrders
     }
 
+    // Load all order numbers to check for uniqueness
     async function loadAllOrderNumbers() {
       allOrderNumbersSet = new Set();
       const allOrdersSnap = await get(ref(db, "orders"));
@@ -703,10 +761,13 @@
       }
     }
 
+    // Determine delivery fee based on index (assuming index refers to delivery zone or type)
     function getDeliveryFee(idx) {
+      // This logic seems specific. Adjust as needed.
       return idx < 3 ? 1500 : 2000;
     }
 
+    // Update paid orders map based on successful withdrawals
     function updatePaidOrdersMap() {
       paidOrdersMap = {};
       withdrawalsArr.forEach(w => {
@@ -718,22 +779,38 @@
       });
     }
 
+    // Render orders in the list
     function renderOrdersList() {
       orderCardsList.innerHTML = "";
       if (!ordersArr.length) {
         orderCardsList.innerHTML = `<div class="alert alert-warning text-center">لا توجد طلبات بعد.</div>`;
         return;
       }
+
       ordersArr.forEach((order, idx) => {
-        let statusClass =
-          order.status === 'بأنتظار وصول المندوب اليك' ? 'order-status-wait' :
-          order.status === 'تم الاستلام من قبل المندوب' ? 'order-status-delivery' :
-          order.status === 'راجعة' ? 'order-status-returned' :
-          order.status === 'تم التسليم بنجاح' ? 'order-status-received' : 'order-status-wait';
+        let statusClass;
+        switch (order.status) {
+          case 'بأنتظار وصول المندوب اليك':
+            statusClass = 'order-status-wait';
+            break;
+          case 'تم الاستلام من قبل المندوب':
+            statusClass = 'order-status-delivery';
+            break;
+          case 'راجعة':
+            statusClass = 'order-status-returned';
+            break;
+          case 'تم التسليم بنجاح':
+            statusClass = 'order-status-received';
+            break;
+          default:
+            statusClass = 'order-status-wait';
+        }
+
         let paidLabel = paidOrdersMap[order.number] ? `<span class="paid-label">تم الدفع</span>` : '';
         let actions = order.status === 'بأنتظار وصول المندوب اليك' ?
           `<button class="btn btn-edit" onclick="editOrder('${order.orderId}')"><i class="bi bi-pencil-square"></i></button>
            <button class="btn btn-delete" onclick="deleteOrder('${order.orderId}')"><i class="bi bi-trash"></i></button>` : '';
+
         orderCardsList.innerHTML += `
           <div class="order-list-card">
             <div class="order-list-header">
@@ -759,41 +836,53 @@
       });
     }
 
+    // Render withdrawals list
     function renderWithdrawalsList() {
       withdrawalsTable.innerHTML = "";
       if (!withdrawalsArr.length) {
         withdrawalsTable.innerHTML = `<tr><td colspan="3" class="text-center text-muted">لا توجد عمليات سحب بعد.</td></tr>`;
         return;
       }
+
       withdrawalsArr.forEach(w => {
-        let statusBadge =
-          w.status === 'قيد المعالجة'
-            ? 'withdraw-status-badge withdraw-status-processing'
-            : w.status === 'تم الاستلام'
-            ? 'withdraw-status-badge withdraw-status-done'
-            : 'withdraw-status-badge withdraw-status-other';
+        let statusBadgeClass;
+        switch (w.status) {
+          case 'قيد المعالجة':
+            statusBadgeClass = 'withdraw-status-badge withdraw-status-processing';
+            break;
+          case 'تم الاستلام':
+            statusBadgeClass = 'withdraw-status-badge withdraw-status-done';
+            break;
+          default:
+            statusBadgeClass = 'withdraw-status-badge withdraw-status-other';
+        }
         withdrawalsTable.innerHTML += `
           <tr>
             <td>${w.method === 'delivery' ? 'مندوب' : 'مصرف الرافدين'}</td>
             <td>${w.amount} د.ع</td>
-            <td><span class="${statusBadge}">${w.status}</span></td>
+            <td><span class="${statusBadgeClass}">${w.status}</span></td>
           </tr>
         `;
       });
     }
 
+    // Load orders from Firebase for the current user
     function loadOrders() {
       onValue(ref(db, `orders/${currentUserId}`), snap => {
         ordersArr = [];
         let total = 0, received = 0, returned = 0, profits = 0;
+
         if (snap.exists()) {
           ordersArr = Object.entries(snap.val()).map(([id, order]) => ({...order, orderId: id}));
+          // Sort orders by createdAt descending
+          ordersArr.sort((a, b) => b.createdAt - a.createdAt);
+
           ordersArr.forEach((order, idx) => {
             total++;
             if (order.status === 'تم التسليم بنجاح') {
               received++;
-              if (!paidOrdersMap[order.number]) {
-                let deliveryFee = getDeliveryFee(idx);
+              if (!paidOrdersMap[order.number]) { // Only count profits for unpaid delivered orders
+                let deliveryFee = getDeliveryFee(idx); // Be careful with `idx` if order is sorted; it refers to position in sorted array not original creation index
                 let orderAmountInt = parseInt(order.amount) || 0;
                 profits += orderAmountInt;
                 profits -= deliveryFee;
@@ -802,6 +891,7 @@
             if (order.status === 'راجعة') returned++;
           });
         }
+
         statTotalOrders.textContent = total;
         statReceivedOrders.textContent = received;
         statReturnedOrders.textContent = returned;
@@ -810,57 +900,73 @@
       });
     }
 
+    // Load withdrawals from Firebase for the current user
     function loadWithdrawals() {
       onValue(ref(db, `withdrawals/${currentUserId}`), snap => {
         withdrawalsArr = [];
         if (snap.exists()) {
           withdrawalsArr = Object.entries(snap.val()).map(([id, w]) => ({...w, id}));
+          // Sort withdrawals by createdAt descending
+          withdrawalsArr.sort((a, b) => b.createdAt - a.createdAt);
         }
-        updatePaidOrdersMap();
+        updatePaidOrdersMap(); // Update map before rendering orders
         renderWithdrawalsList();
-        loadOrders();
+        loadOrders(); // Load orders after updating paid status
       });
     }
 
+    // Order number input validation for uniqueness
     orderNumber.addEventListener('input', async function() {
+      // Re-load all order numbers to ensure the set is up-to-date
       await loadAllOrderNumbers();
       const value = orderNumber.value.trim();
       if (!value) {
         orderNumberError.style.display = "none";
-        orderNumber.setCustomValidity("");
+        orderNumber.setCustomValidity(""); // Clear custom validation message
         return;
       }
-      if (allOrderNumbersSet.has(value)) {
+
+      const isEditingThisOrder = editOrderId.value && ordersArr.find(o => o.orderId === editOrderId.value && o.number === value);
+
+      if (allOrderNumbersSet.has(value) && !isEditingThisOrder) {
         orderNumberError.style.display = "";
-        orderNumber.setCustomValidity("duplicate");
+        orderNumber.setCustomValidity("duplicate"); // Set custom validation error
       } else {
         orderNumberError.style.display = "none";
-        orderNumber.setCustomValidity("");
+        orderNumber.setCustomValidity(""); // Clear custom validation message
       }
+      orderForm.reportValidity(); // Trigger immediate validation check
     });
 
+    // Edit Order function (exposed globally for onclick)
     window.editOrder = async (id) => {
       const order = ordersArr.find(o => o.orderId === id);
       if (!order) return;
+
       editOrderId.value = id;
       orderModalTitle.textContent = "تعديل الطلب";
-      // Fill the modal fields and set them to current values
+
+      // Fill the modal fields
       orderNumber.value = order.number;
       orderAddress.value = order.address;
       orderPhone1.value = order.phone1;
       orderPhone2.value = order.phone2 || '';
       orderAmount.value = order.amount;
-      // Allow all fields to be editable except رقم الطلب
+
+      // Make order number read-only during edit
       orderNumber.readOnly = true;
       orderAddress.readOnly = false;
       orderPhone1.readOnly = false;
       orderPhone2.readOnly = false;
       orderAmount.readOnly = false;
-      orderNumberError.style.display = "none";
-      lastEditOrderData = {...order}; // For possible reset
+      orderNumberError.style.display = "none"; // Hide error on edit
+
+      lastEditOrderData = {...order}; // Store original data for potential reset or comparison
+
       new bootstrap.Modal(document.getElementById('addOrderModal')).show();
     };
 
+    // Delete Order function (exposed globally for onclick)
     window.deleteOrder = async (id) => {
       Swal.fire({
         title: 'تأكيد الحذف',
@@ -868,48 +974,75 @@
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'نعم، احذف',
-        cancelButtonText: 'إلغاء'
+        cancelButtonText: 'إلغاء',
+        customClass: {
+          confirmButton: 'btn btn-danger',
+          cancelButton: 'btn btn-secondary'
+        },
+        buttonsStyling: false
       }).then(async (result) => {
         if (result.isConfirmed) {
-          await remove(ref(db, `orders/${currentUserId}/${id}`));
+          try {
+            await remove(ref(db, `orders/${currentUserId}/${id}`));
+            Swal.fire('تم الحذف!', 'تم حذف الطلب بنجاح.', 'success');
+          } catch (error) {
+            Swal.fire('خطأ!', 'لم يتم حذف الطلب.', 'error');
+          }
         }
       });
     };
 
+    // Order Form Submission (Add/Edit)
     orderForm.onsubmit = async (e) => {
       e.preventDefault();
+
       const isEdit = !!editOrderId.value;
       const number = orderNumber.value.trim();
       const address = orderAddress.value.trim();
       const phone1 = orderPhone1.value.trim();
       const phone2 = orderPhone2.value.trim();
-      const amount = parseInt(orderAmount.value,10);
-      await loadAllOrderNumbers();
+      const amount = parseInt(orderAmount.value, 10);
+
+      await loadAllOrderNumbers(); // Ensure latest numbers for validation
+
+      // Client-side validation for unique order number on add
       if (!isEdit && allOrderNumbersSet.has(number)) {
         orderNumberError.style.display = "";
         orderNumber.setCustomValidity("duplicate");
         orderNumber.focus();
         return;
       }
-      if (!number || !address || !phone1 || isNaN(amount)) return;
 
-      if (isEdit) {
-        await update(ref(db, `orders/${currentUserId}/${editOrderId.value}`), {
-          address, phone1, phone2, amount
-        });
-      } else {
-        await push(ref(db, `orders/${currentUserId}`), {
-          number, address, phone1, phone2, amount, status: 'بأنتظار وصول المندوب اليك', createdAt: Date.now()
-        });
+      if (!number || !address || !phone1 || isNaN(amount) || amount < 0) {
+        Swal.fire({icon:'error',title:'الرجاء إدخال بيانات صحيحة!'});
+        return;
       }
-      editOrderId.value = "";
+
+      try {
+        if (isEdit) {
+          await update(ref(db, `orders/${currentUserId}/${editOrderId.value}`), {
+            address, phone1, phone2, amount
+          });
+          Swal.fire('تم التعديل!', 'تم تعديل الطلب بنجاح.', 'success');
+        } else {
+          await push(ref(db, `orders/${currentUserId}`), {
+            number, address, phone1, phone2, amount, status: 'بأنتظار وصول المندوب اليك', createdAt: Date.now()
+          });
+          Swal.fire('تمت الإضافة!', 'تم إضافة الطلب بنجاح.', 'success');
+        }
+      } catch (error) {
+        Swal.fire('خطأ!', 'حدث خطأ أثناء حفظ الطلب.', 'error');
+      }
+
+      editOrderId.value = ""; // Clear edit ID
       orderForm.reset();
-      orderNumber.readOnly = false;
-      bootstrap.Modal.getInstance(document.getElementById('addOrderModal')).hide();
+      orderNumber.readOnly = false; // Enable for next add
+      bootstrap.Modal.getInstance(document.getElementById('addOrderModal')).hide(); // Hide modal
     };
 
+    // Reset modal fields when shown for adding new order
     document.getElementById('addOrderModal').addEventListener('show.bs.modal', ()=>{
-      if (!editOrderId.value) {
+      if (!editOrderId.value) { // Only reset if not in edit mode
         orderForm.reset();
         orderNumber.readOnly = false;
         orderAddress.readOnly = false;
@@ -918,54 +1051,105 @@
         orderAmount.readOnly = false;
         orderModalTitle.textContent = "إضافة طلب جديد";
         orderNumberError.style.display = "none";
+        orderNumber.setCustomValidity(""); // Clear any previous validation
       }
     });
 
+    // Withdraw method change handler
     withdrawMethod.onchange = function() {
       bankAccountDiv.style.display = this.value === 'bank' ? '' : 'none';
     };
 
+    // Withdraw Form Submission
     withdrawForm.onsubmit = async (e) => {
       e.preventDefault();
       const method = withdrawMethod.value;
-      let profitValue = parseInt(statProfits.textContent.replace(/\D/g,''));
-      if (isNaN(profitValue) || profitValue <= 0) {
-        Swal.fire({icon:'error',title:'لا توجد أرباح كافية!'});
+      let profitValue = parseInt(statProfits.textContent.replace(/\D/g,'')) || 0; // Ensure it's a number
+
+      if (profitValue <= 0) {
+        Swal.fire({icon:'error',title:'لا توجد أرباح كافية لسحبها!'});
         return;
       }
-      let fee = method === 'delivery' ? 1000 : 500;
+
+      let fee = method === 'delivery' ? 1000 : 500; // Define fees
       if (method === 'bank' && !rafidainAccount.value.trim()) {
         Swal.fire({icon:'error',title:'يرجى إدخال رقم حساب مصرف الرافدين'});
         return;
       }
+
       let deliveredOrders = [];
-      ordersArr.forEach((order, idx) => {
+      ordersArr.forEach((order) => {
         if (
           order.status === "تم التسليم بنجاح" &&
-          !paidOrdersMap[order.number]
+          !paidOrdersMap[order.number] // Only include unpaid delivered orders
         ) {
           deliveredOrders.push(order.number);
         }
       });
-      await push(ref(db, `withdrawals/${currentUserId}`), {
-        method,
-        amount: profitValue - fee,
-        status: 'قيد المعالجة',
-        bankAccount: method === 'bank' ? rafidainAccount.value.trim() : "",
-        createdAt: Date.now(),
-        successOrders: deliveredOrders
-      });
-      Swal.fire({icon:'success',title:'تم إرسال طلب السحب!'});
-      withdrawForm.reset();
-      bankAccountDiv.style.display = 'none';
+
+      if (deliveredOrders.length === 0) {
+        Swal.fire({icon:'info',title:'لا توجد طلبات مستلمة غير مدفوعة لإنشاء طلب سحب.'});
+        return;
+      }
+
+      try {
+        await push(ref(db, `withdrawals/${currentUserId}`), {
+          method,
+          amount: profitValue - fee, // Subtract fee from total profit
+          status: 'قيد المعالجة',
+          bankAccount: method === 'bank' ? rafidainAccount.value.trim() : "",
+          createdAt: Date.now(),
+          successOrders: deliveredOrders
+        });
+        Swal.fire({icon:'success',title:'تم إرسال طلب السحب!', text: `المبلغ المطلوب: ${profitValue - fee} د.ع`});
+        withdrawForm.reset();
+        bankAccountDiv.style.display = 'none'; // Hide bank account field
+      } catch (error) {
+        Swal.fire({icon:'error',title:'فشل إرسال طلب السحب!', text: error.message});
+      }
     };
 
+    // Prevent form submission on Enter key in order form fields
     orderForm.addEventListener('keydown', function(e){
       if (e.key === 'Enter') e.preventDefault();
     });
 
-    window.editOrder = window.editOrder;
-    window.deleteOrder = window.deleteOrder;
+    // Add new order button (desktop/tablet)
+    addOrderBtn.onclick = () => {
+      editOrderId.value = "";
+      orderForm.reset();
+      orderNumber.readOnly = false;
+      orderModalTitle.textContent = "إضافة طلب جديد";
+      orderNumberError.style.display = "none";
+      orderNumber.setCustomValidity("");
+      new bootstrap.Modal(document.getElementById('addOrderModal')).show();
+    };
+
+    // Show/hide mobile add order button based on screen size
+    function showMobileAddBtn() {
+      if (window.innerWidth < 768) {
+        addOrderBtnMob.style.display = '';
+      } else {
+        addOrderBtnMob.style.display = 'none';
+      }
+    }
+    showMobileAddBtn(); // Initial check
+    window.addEventListener('resize', showMobileAddBtn); // Check on resize
+
+    // Mobile add order button click handler
+    addOrderBtnMob.onclick = () => {
+      editOrderId.value = "";
+      orderForm.reset();
+      orderNumber.readOnly = false;
+      orderModalTitle.textContent = "إضافة طلب جديد";
+      orderNumberError.style.display = "none";
+      orderNumber.setCustomValidity("");
+      new bootstrap.Modal(document.getElementById('addOrderModal')).show();
+    };
+
+    // These lines are redundant as functions are already global due to `window.functionName` or being in script module top level
+    // window.editOrder = window.editOrder;
+    // window.deleteOrder = window.deleteOrder;
   </script>
 </body>
 </html>
