@@ -10,69 +10,99 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <!-- SweetAlert2 -->
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+  <!-- Google Fonts Tajawal -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      background: linear-gradient(120deg, #4f8cff 0%, #c5cae9 100%);
+      background: linear-gradient(120deg, #232526 0%, #1e3c72 100%);
       min-height: 100vh;
-      font-family: 'Tajawal', 'Cairo', Arial, sans-serif;
+      font-family: 'Tajawal', Arial, sans-serif;
+      background-attachment: fixed;
     }
     .main-card {
-      box-shadow: 0 10px 40px rgba(0,0,0,.08);
+      box-shadow: 0 10px 40px rgba(79,140,255,0.10), 0 1.5px 8px #2222;
       border-radius: 2rem;
       background: #fff;
-      transition: box-shadow 0.2s;
+      transition: box-shadow 0.2s, transform 0.2s;
       border: none;
     }
     .main-card:hover {
-      box-shadow: 0 8px 48px rgba(79,140,255,0.15);
+      box-shadow: 0 18px 48px 0 rgba(47, 128, 237, 0.20);
+      transform: translateY(-4px) scale(1.01);
     }
     .stat-box {
       border-radius: 1.2rem;
       background: linear-gradient(90deg, #f3f7fa 60%, #e8f0fe 100%);
-      padding: 1.1rem 1rem;
+      padding: 1.3rem 1rem;
       text-align: center;
       box-shadow: 0 2px 8px #c5cae9b3;
-      transition: background 0.3s;
-      min-height: 110px;
+      min-height: 120px;
+      transition: box-shadow 0.3s;
+      cursor: pointer;
+      border: 1.5px solid #e3eafd;
+      position: relative;
+    }
+    .stat-box:hover {
+      box-shadow: 0 8px 32px #4f8cff33;
+      border-color: #4f8cff;
+      z-index: 2;
     }
     .stat-title {
-      font-size: 1.1rem;
+      font-size: 1.14rem;
       color: #7b8fa6;
       margin-bottom: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
     }
     .stat-value {
-      font-size: 2.1rem;
+      font-size: 2.4rem;
       font-weight: bold;
       color: #2467d7;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 8px #a3bffd33;
     }
     .nav-pills .nav-link.active {
       background: linear-gradient(90deg, #4f8cff 60%, #2467d7 100%) !important;
       color: #fff !important;
       box-shadow: 0 2px 12px #4f8cff33;
+      font-weight: bold;
+      border-radius: 1.5rem;
+    }
+    .nav-pills .nav-link {
+      border-radius: 1.2rem;
+      font-size: 1.15rem;
+      color: #2467d7;
+      letter-spacing: 0.5px;
+      margin-inline-end: 0.5rem;
     }
     .order-status-badge {
-      font-size: .97rem;
-      border-radius: 12px;
-      padding: 0.45em 0.95em;
+      font-size: .98rem;
+      border-radius: 13px;
+      padding: 0.46em 1.07em;
       display: inline-block;
       color: #fff;
+      font-weight: bold;
+      box-shadow: 0 1px 4px #c5cae9a1;
     }
-    .order-status-wait { background: #ffc107; color: #333; }
-    .order-status-received { background: #1976d2; }
-    .order-status-delivery { background: #43a047; }
-    .order-status-returned { background: #d32f2f; }
+    .order-status-wait { background: linear-gradient(90deg,#ffc107 66%,#ffe066 100%); color: #222; }
+    .order-status-received { background: linear-gradient(90deg,#1976d2 70%,#4f8cff 100%); }
+    .order-status-delivery { background: linear-gradient(90deg,#43a047 60%,#66bb6a 100%);}
+    .order-status-returned { background: linear-gradient(90deg,#d32f2f 70%,#f44336 100%);}
     .order-actions button { margin-inline-end: .4rem; }
     .table > :not(:last-child) > :last-child > * {
       border-bottom-color: #e3eafd;
     }
     .support-box {
-      background: #e3f1ff;
+      background: linear-gradient(120deg, #e3f1ff 65%, #f6fafd 100%);
       border-radius: 1.5rem;
-      padding: 2rem 1.3rem;
-      box-shadow: 0 5px 24px #c5cae922;
+      padding: 2.2rem 1.5rem;
+      box-shadow: 0 8px 32px #2467d72a;
+      border: 1.5px solid #e3eafd;
     }
     .modal-content {
       border-radius: 1.5rem;
+      background: #fafdff;
+      border: 1.5px solid #e3eafd;
     }
     .input-group-text {
       background: #e8f0fe;
@@ -80,7 +110,7 @@
       border: none;
     }
     .fade-in {
-      animation: fadein 0.6s;
+      animation: fadein 0.7s;
     }
     @keyframes fadein {
       from { opacity: 0; transform: translateY(25px);}
@@ -90,13 +120,60 @@
       background: linear-gradient(90deg, #4f8cff 30%, #2467d7 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      font-weight: bold;
+      font-size: 2.1rem;
+      letter-spacing: 1px;
+    }
+    /* ==== Buttons ==== */
+    .btn {
+      font-family: 'Tajawal', Arial, sans-serif;
+      font-weight: 700;
+      font-size: 1.08rem;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px #4f8cff18;
+      transition: background 0.17s, color 0.17s, box-shadow 0.22s, transform 0.18s;
+      border-radius: 1.6rem;
+      padding-top: 0.65em;
+      padding-bottom: 0.65em;
+      padding-inline: 1.6em;
+      outline: none !important;
+      border-width: 2px;
+      border-style: solid;
     }
     .btn-primary {
       background: linear-gradient(90deg, #4f8cff 60%, #2467d7 100%);
-      border: none;
+      color: #fff;
+      border-color: #4f8cff;
+      box-shadow: 0 4px 20px #4f8cff33;
     }
     .btn-primary:hover, .btn-primary:focus {
       background: linear-gradient(90deg, #2467d7 60%, #4f8cff 100%);
+      color: #fff;
+      border-color: #2467d7;
+      box-shadow: 0 6px 26px #2a529877;
+      transform: translateY(-2px) scale(1.035);
+    }
+    .btn-success {
+      background: linear-gradient(90deg, #43ea7c 60%, #1de982 100%);
+      color: #fff;
+      border-color: #24c75b;
+      box-shadow: 0 2px 16px #04e97a23;
+    }
+    .btn-success:hover, .btn-success:focus {
+      background: linear-gradient(90deg, #2dbe5e 60%, #05b06b 100%);
+      color: #fff;
+      border-color: #17b765;
+      transform: translateY(-2px) scale(1.035);
+    }
+    .btn-outline-danger {
+      border: 2px solid #dc3545;
+      color: #dc3545;
+      background: #fff;
+    }
+    .btn-outline-danger:hover, .btn-outline-danger:focus {
+      background: #dc3545;
+      color: #fff;
+      box-shadow: 0 2px 8px #e57373a1;
     }
     .btn-outline-secondary {
       border: 2px solid #4f8cff;
@@ -106,21 +183,85 @@
     .btn-outline-secondary:hover, .btn-outline-secondary:focus {
       background: #4f8cff;
       color: #fff;
+      box-shadow: 0 2px 12px #4f8cff44;
     }
+    .btn.btn-danger {
+      background: linear-gradient(90deg, #f44336 60%, #d32f2f 100%);
+      border-color: #d32f2f;
+      color: #fff;
+      box-shadow: 0 2px 12px #f4433614;
+    }
+    .btn.btn-danger:hover, .btn.btn-danger:focus {
+      background: linear-gradient(90deg, #cf2a2a 60%, #b71c1c 100%);
+      color: #fff;
+      border-color: #b71c1c;
+      box-shadow: 0 4px 20px #f4433660;
+    }
+    /* Action buttons table */
+    .order-actions .btn {
+      padding: 0.32em 0.89em;
+      font-size: 1.06rem;
+      border-radius: 1.2rem;
+      margin-bottom: 2px;
+      margin-inline-end: 0.15em;
+    }
+    .order-actions .btn-primary { font-size: 1.09rem;}
+    .order-actions .btn-danger { font-size: 1.09rem;}
+    /* Paid label */
     .paid-label {
       display: inline-block;
-      background: #00bcd4;
+      background: linear-gradient(90deg, #00bcd4 70%, #00e1ff 100%);
       color: #fff;
       border-radius: 8px;
-      padding: 0.2em 0.8em;
+      padding: 0.18em 0.85em;
       font-size: 1rem;
       margin-inline-end: 0.2em;
       margin-bottom: 2px;
       letter-spacing: 1px;
+      font-weight: 700;
+      box-shadow: 0 1px 6px #00bcd432;
+    }
+    .navbar {
+      background: linear-gradient(90deg, #1976d2 70%, #4f8cff 100%) !important;
+      color: #fff !important;
+      border-radius: 1.5rem;
+      margin-bottom: 2.4rem;
+      box-shadow: 0 6px 28px #4f8cff22;
+    }
+    .navbar .navbar-brand {
+      color: #fff;
+      font-size: 1.7rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+    .navbar .navbar-brand i {
+      font-size: 2.2rem;
+      color: #ffc107;
+    }
+    .navbar .btn-outline-danger {
+      border-radius: 1.4rem;
+      font-size: 1.08rem;
+      font-weight: bold;
+    }
+    /* Custom scrollbar for tables */
+    ::-webkit-scrollbar { width: 8px; background: #e3eafe;}
+    ::-webkit-scrollbar-thumb { background: #b0c9f7; border-radius: 8px; }
+    .modal-content input:focus, .modal-content select:focus {
+      border-color: #4f8cff;
+      box-shadow: 0 0 0 2px #4f8cff55;
+    }
+    @media (max-width: 767.98px) {
+      .brand-gradient { font-size: 1.2rem; }
+      .stat-value { font-size: 1.1rem;}
+      .stat-box { min-height: 70px; }
+      .main-card { border-radius: 1rem;}
+      .modal-content { border-radius: 1rem;}
+      .btn { font-size: 1rem; }
     }
   </style>
-  <!-- Google Fonts Tajawal/Cairo (for Arabic) -->
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="container py-5">
@@ -130,7 +271,7 @@
         <div class="main-card p-4">
           <div class="text-center mb-4">
             <i class="bi bi-box-seam" style="font-size:2.6rem;color:#4f8cff;"></i>
-            <h3 class="fw-bold mt-2 brand-gradient">تسجيل الدخول</h3>
+            <div class="brand-gradient">تسجيل الدخول</div>
           </div>
           <form id="loginForm" autocomplete="off">
             <div class="mb-3">
@@ -159,8 +300,8 @@
     </div>
     <!-- Main App Section -->
     <div id="mainAppSection" style="display:none;">
-      <nav class="navbar navbar-expand-lg navbar-light bg-white rounded shadow mb-4 px-3 fade-in">
-        <a class="navbar-brand fw-bold brand-gradient" href="#" style="font-size:1.5rem;"><i class="bi bi-box-seam"></i> توصيل الطلبات</a>
+      <nav class="navbar navbar-expand-lg navbar-light shadow px-3 fade-in">
+        <a class="navbar-brand fw-bold brand-gradient" href="#"><i class="bi bi-box-seam"></i> توصيل الطلبات</a>
         <button class="btn btn-outline-danger ms-auto" id="logoutBtn">تسجيل الخروج</button>
       </nav>
       <!-- Main Stats -->
@@ -240,7 +381,7 @@
                     <input type="text" class="form-control" id="rafidainAccount">
                   </div>
                   <div class="d-grid">
-                    <button type="submit" class="btn btn-primary">سحب الأرباح</button>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-cash-stack"></i> سحب الأرباح</button>
                   </div>
                 </form>
               </div>
@@ -283,6 +424,11 @@
         <div class="modal-body">
           <input type="hidden" id="editOrderId">
           <div class="mb-3">
+            <label class="form-label">رقم الطلب (يدوياً)</label>
+            <input type="text" class="form-control" id="orderNumber" required pattern="[A-Za-z0-9\-]+">
+            <div class="form-text text-danger" id="orderNumberError" style="display:none">رقم الطلب مستخدم من قبل، يرجى إدخال رقم آخر.</div>
+          </div>
+          <div class="mb-3">
             <label class="form-label">عنوان الزبون</label>
             <input type="text" class="form-control" id="orderAddress" required>
           </div>
@@ -300,8 +446,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-success">حفظ</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+          <button type="submit" class="btn btn-success"><i class="bi bi-check2-circle"></i> حفظ</button>
+          <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> إلغاء</button>
         </div>
       </form>
     </div>
@@ -311,11 +457,9 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script type="module">
-    // Firebase
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getDatabase, ref, set, push, get, update, remove, onValue } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
     import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
-    // Config
     const firebaseConfig = {
       apiKey: "AIzaSyBKh3zoKYEbm7aGNH6GRzA5SQx4DYhM7gc",
       authDomain: "arpon11-a4ead.firebaseapp.com",
@@ -330,7 +474,6 @@
     const db = getDatabase(app);
     const auth = getAuth(app);
 
-    // Cached DOM
     const loginSection = document.getElementById('loginSection');
     const mainAppSection = document.getElementById('mainAppSection');
     const loginForm = document.getElementById('loginForm');
@@ -348,13 +491,15 @@
     const orderForm = document.getElementById('orderForm');
     const orderModalTitle = document.getElementById('orderModalTitle');
     const editOrderId = document.getElementById('editOrderId');
+    const orderNumber = document.getElementById('orderNumber');
+    const orderNumberError = document.getElementById('orderNumberError');
     const orderAddress = document.getElementById('orderAddress');
     const orderPhone1 = document.getElementById('orderPhone1');
     const orderPhone2 = document.getElementById('orderPhone2');
     const orderAmount = document.getElementById('orderAmount');
     let currentUserId = null, currentUserData = null;
     let ordersArr = [], withdrawalsArr = [];
-    // لكل طلب: رقم الطلب => true إذا تم دفعه
+    let allOrderNumbersSet = new Set();
     let paidOrdersMap = {};
 
     function usernameToEmail(username) {
@@ -396,22 +541,26 @@
       currentUserData = userSnap.val();
       loginSection.style.display = 'none';
       mainAppSection.style.display = '';
-      loadWithdrawals(); // يجب تحميل السحوبات أولا ثم الطلبات لأنها تؤثر على حالة الطلبات المدفوعة
+      await loadAllOrderNumbers();
+      loadWithdrawals();
     }
 
-    async function generateOrderNumber() {
-      const userCode = currentUserId.slice(-4).padStart(4, "0");
-      const userOrdersSnap = await get(ref(db, `orders/${currentUserId}`));
-      const n = userOrdersSnap.exists() ? Object.keys(userOrdersSnap.val()).length : 0;
-      const next = (n + 1).toString().padStart(4, "0");
-      return userCode + next;
+    async function loadAllOrderNumbers() {
+      allOrderNumbersSet = new Set();
+      const allOrdersSnap = await get(ref(db, "orders"));
+      if (allOrdersSnap.exists()) {
+        Object.values(allOrdersSnap.val()).forEach(userOrders => {
+          Object.values(userOrders).forEach(order => {
+            if (order.number) allOrderNumbersSet.add(order.number);
+          });
+        });
+      }
     }
 
     function getDeliveryFee(idx) {
       return idx < 3 ? 1500 : 2000;
     }
 
-    // حساب الطلبات المدفوعة: أي طلب شارك في أي سحب بحالة "تم الاستلام"
     function updatePaidOrdersMap() {
       paidOrdersMap = {};
       withdrawalsArr.forEach(w => {
@@ -437,7 +586,6 @@
             if (isDelivered) {
               received++;
               deliveredOrderNumbers.push(order.number);
-              // الربح فقط للطلبات التي تم تسليمها ولم يتم دفعها في أي سحب أرباح ناجح سابق
               if (!paidOrdersMap[order.number]) {
                 let deliveryFee = getDeliveryFee(idx);
                 let orderAmountInt = parseInt(order.amount) || 0;
@@ -453,7 +601,6 @@
         statReturnedOrders.textContent = returned;
         statProfits.textContent = profits > 0 ? profits + " د.ع" : "0 د.ع";
 
-        // رسم جدول الطلبات مع عبارة "تم الدفع" للطلبات التي شاركت في أي سحب ناجح
         ordersTableBody.innerHTML = '';
         ordersArr.forEach((order, idx) => {
           let statusClass =
@@ -464,8 +611,8 @@
 
           let paidLabel = paidOrdersMap[order.number] ? `<span class="paid-label">تم الدفع</span>` : '';
           let actions = order.status === 'بأنتظار وصول المندوب اليك' ?
-            `<button class="btn btn-sm btn-primary" onclick="editOrder('${order.orderId}')"><i class="bi bi-pencil-square"></i></button>
-             <button class="btn btn-sm btn-danger" onclick="deleteOrder('${order.orderId}')"><i class="bi bi-trash"></i></button>` : '';
+            `<button class="btn btn-primary" onclick="editOrder('${order.orderId}')"><i class="bi bi-pencil-square"></i></button>
+             <button class="btn btn-danger" onclick="deleteOrder('${order.orderId}')"><i class="bi bi-trash"></i></button>` : '';
           ordersTableBody.innerHTML += `
             <tr>
               <td>${order.number}</td>
@@ -488,7 +635,6 @@
       });
     }
 
-    // تحميل السحوبات ثم حساب الطلبات المدفوعة ثم تحميل الطلبات
     function loadWithdrawals() {
       onValue(ref(db, `withdrawals/${currentUserId}`), snap => {
         withdrawalsArr = [];
@@ -514,52 +660,35 @@
       });
     }
 
-    // عند السحب: ترسل فقط الطلبات "تم التسليم بنجاح" ولم يتم دفعها سابقاً
-    withdrawForm.onsubmit = async (e) => {
-      e.preventDefault();
-      const method = withdrawMethod.value;
-      let profitValue = parseInt(statProfits.textContent.replace(/\D/g,''));
-      if (isNaN(profitValue) || profitValue <= 0) {
-        Swal.fire({icon:'error',title:'لا توجد أرباح كافية!'});
+    orderNumber.addEventListener('input', async function() {
+      await loadAllOrderNumbers();
+      const value = orderNumber.value.trim();
+      if (!value) {
+        orderNumberError.style.display = "none";
+        orderNumber.setCustomValidity("");
         return;
       }
-      let fee = method === 'delivery' ? 1000 : 500;
-      if (method === 'bank' && !rafidainAccount.value.trim()) {
-        Swal.fire({icon:'error',title:'يرجى إدخال رقم حساب مصرف الرافدين'});
-        return;
+      if (allOrderNumbersSet.has(value)) {
+        orderNumberError.style.display = "";
+        orderNumber.setCustomValidity("duplicate");
+      } else {
+        orderNumberError.style.display = "none";
+        orderNumber.setCustomValidity("");
       }
-      // حساب جميع الطلبات التي حالتها "تم التسليم بنجاح" ولم يتم دفعها في أي سحب أرباح ناجح سابق
-      let deliveredOrders = [];
-      ordersArr.forEach((order, idx) => {
-        if (
-          order.status === "تم التسليم بنجاح" &&
-          !paidOrdersMap[order.number]
-        ) {
-          deliveredOrders.push(order.number);
-        }
-      });
-      await push(ref(db, `withdrawals/${currentUserId}`), {
-        method,
-        amount: profitValue - fee,
-        status: 'قيد المعالجة',
-        bankAccount: method === 'bank' ? rafidainAccount.value.trim() : "",
-        createdAt: Date.now(),
-        successOrders: deliveredOrders // الطلبات المشاركة في السحب الحالي فقط
-      });
-      Swal.fire({icon:'success',title:'تم إرسال طلب السحب!'});
-      withdrawForm.reset();
-      bankAccountDiv.style.display = 'none';
-    };
+    });
 
     window.editOrder = async (id) => {
       const order = ordersArr.find(o => o.orderId === id);
       if (!order) return;
       editOrderId.value = id;
       orderModalTitle.textContent = "تعديل الطلب";
+      orderNumber.value = order.number;
       orderAddress.value = order.address;
       orderPhone1.value = order.phone1;
       orderPhone2.value = order.phone2;
       orderAmount.value = order.amount;
+      orderNumber.readOnly = true;
+      orderNumberError.style.display = "none";
       new bootstrap.Modal(document.getElementById('addOrderModal')).show();
     };
 
@@ -581,38 +710,86 @@
     orderForm.onsubmit = async (e) => {
       e.preventDefault();
       const isEdit = !!editOrderId.value;
+      const number = orderNumber.value.trim();
       const address = orderAddress.value.trim();
       const phone1 = orderPhone1.value.trim();
       const phone2 = orderPhone2.value.trim();
       const amount = parseInt(orderAmount.value,10);
-      if (!address || !phone1 || isNaN(amount)) return;
+
+      await loadAllOrderNumbers();
+
+      if (!isEdit && allOrderNumbersSet.has(number)) {
+        orderNumberError.style.display = "";
+        orderNumber.setCustomValidity("duplicate");
+        orderNumber.focus();
+        return;
+      }
+      if (!number || !address || !phone1 || isNaN(amount)) return;
+
       if (isEdit) {
         await update(ref(db, `orders/${currentUserId}/${editOrderId.value}`), {
           address, phone1, phone2, amount
         });
       } else {
-        const number = await generateOrderNumber();
         await push(ref(db, `orders/${currentUserId}`), {
           number, address, phone1, phone2, amount, status: 'بأنتظار وصول المندوب اليك', createdAt: Date.now()
         });
       }
       editOrderId.value = "";
       orderForm.reset();
+      orderNumber.readOnly = false;
       bootstrap.Modal.getInstance(document.getElementById('addOrderModal')).hide();
     };
-
-    withdrawMethod.onchange = function() {
-      bankAccountDiv.style.display = this.value === 'bank' ? '' : 'none';
-    };
-
-    orderForm.addEventListener('keydown', function(e){
-      if (e.key === 'Enter') e.preventDefault();
-    });
 
     document.getElementById('addOrderModal').addEventListener('show.bs.modal', ()=>{
       orderForm.reset();
       editOrderId.value = "";
       orderModalTitle.textContent = "إضافة طلب جديد";
+      orderNumber.readOnly = false;
+      orderNumberError.style.display = "none";
+    });
+
+    withdrawMethod.onchange = function() {
+      bankAccountDiv.style.display = this.value === 'bank' ? '' : 'none';
+    };
+
+    withdrawForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const method = withdrawMethod.value;
+      let profitValue = parseInt(statProfits.textContent.replace(/\D/g,''));
+      if (isNaN(profitValue) || profitValue <= 0) {
+        Swal.fire({icon:'error',title:'لا توجد أرباح كافية!'});
+        return;
+      }
+      let fee = method === 'delivery' ? 1000 : 500;
+      if (method === 'bank' && !rafidainAccount.value.trim()) {
+        Swal.fire({icon:'error',title:'يرجى إدخال رقم حساب مصرف الرافدين'});
+        return;
+      }
+      let deliveredOrders = [];
+      ordersArr.forEach((order, idx) => {
+        if (
+          order.status === "تم التسليم بنجاح" &&
+          !paidOrdersMap[order.number]
+        ) {
+          deliveredOrders.push(order.number);
+        }
+      });
+      await push(ref(db, `withdrawals/${currentUserId}`), {
+        method,
+        amount: profitValue - fee,
+        status: 'قيد المعالجة',
+        bankAccount: method === 'bank' ? rafidainAccount.value.trim() : "",
+        createdAt: Date.now(),
+        successOrders: deliveredOrders
+      });
+      Swal.fire({icon:'success',title:'تم إرسال طلب السحب!'});
+      withdrawForm.reset();
+      bankAccountDiv.style.display = 'none';
+    };
+
+    orderForm.addEventListener('keydown', function(e){
+      if (e.key === 'Enter') e.preventDefault();
     });
 
     window.editOrder = window.editOrder;
