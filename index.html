@@ -2,232 +2,307 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>توصيل الطلبات | حساب المستخدم</title>
+  <title>توصيل الطلبات | حسابي</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Bootstrap 5 RTL -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;800&display=swap" rel="stylesheet">
   <style>
     html, body {
-      background: #f6f4f7;
+      background: linear-gradient(135deg, #e4ecfa 0%, #a2c5fa 100%);
       min-height: 100vh;
       font-family: "Tajawal", Arial, sans-serif;
-      color: #23272e;
+      color: #263146;
+      overflow-x: hidden;
     }
-    /* Glassy top bar with user details and avatar */
+    .glow {
+      background: radial-gradient(ellipse at 30% 20%, #a2c5fa99 0%, #e4ecfa 60%, #fff0 90%);
+      filter: blur(35px) brightness(1.08);
+      position: absolute;
+      width: 110vw;
+      height: 80vh;
+      top: -10vh;
+      left: -5vw;
+      z-index: 0;
+      pointer-events: none;
+    }
+    #loginOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: linear-gradient(115deg, #fafdff 80%, #e4ecfa 120%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(6px);
+      transition: opacity 0.36s;
+    }
+    #loginOverlay.hide {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s;
+    }
+    .login-modal {
+      background: #fff;
+      border-radius: 2.1rem;
+      box-shadow: 0 4px 32px #b3c8f1aa;
+      padding: 2.1rem 1.3rem 1.2rem;
+      width: 97vw;
+      max-width: 360px;
+      position: relative;
+      text-align: center;
+      animation: popin 0.8s cubic-bezier(.68,-0.55,.27,1.55);
+    }
+    @keyframes popin {
+      0% {transform:scale(.8) rotate(-8deg); opacity:.5;}
+      70%{transform:scale(1.08) rotate(1deg);}
+      100%{transform:scale(1) rotate(0);}
+    }
+    .login-modal .brand {
+      font-size: 2.2rem;
+      font-weight: 900;
+      background: linear-gradient(100deg, #1e88e5, #a2c5fa 70%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: .4rem;
+      letter-spacing: 1px;
+      display: block;
+    }
+    .login-modal .desc {
+      color: #1e88e5;
+      font-size: 1.14rem;
+      margin-bottom: 1.2rem;
+      font-weight: 700;
+      letter-spacing: .3px;
+    }
     .glass-header {
-      backdrop-filter: blur(12px);
-      background: rgba(255,255,255,0.85);
-      box-shadow: 0 8px 32px #442b6a11, 0 2px 8px #442b6a08;
+      backdrop-filter: blur(10px);
+      background: rgba(255,255,255,0.82);
+      box-shadow: 0 8px 32px #a2c5fa33, 0 2px 8px #a2c5fa08;
       border-radius: 0 0 2.2rem 2.2rem;
       padding: 1.7rem 0 1.1rem;
       text-align: center;
       margin-bottom: 1.5rem;
-      border-bottom: 2px solid #ebe6f3;
+      border-bottom: 2px solid #d3e3fa;
       position: sticky;
       top: 0;
       z-index: 1001;
     }
     .glass-header .avatar {
-      width: 80px;
-      height: 80px;
+      width: 82px;
+      height: 82px;
       border-radius: 50%;
       object-fit: cover;
       border: 4px solid #fff;
-      box-shadow: 0 2px 24px #8a6dff31;
-      margin-bottom: .7rem;
+      box-shadow: 0 2px 24px #a2c5fa13;
+      margin-bottom: .8rem;
+      background: #e4ecfa;
     }
     .glass-header .username {
-      font-size: 1.4rem;
-      font-weight: 800;
-      letter-spacing: 0.2px;
-      color: #624ca7;
-    }
-    .glass-header .user-meta {
-      color: #7c6db2;
-      font-size: 1.01rem;
-      margin-bottom: 0.16rem;
-      font-weight: 500;
+      font-size: 1.55rem;
+      font-weight: 900;
+      letter-spacing: 0.3px;
+      color: #1976d2;
+      text-shadow: 0 1px 7px #b3c8f133;
     }
     .glass-header .logout-btn {
-      background: linear-gradient(90deg,#624ca7 60%,#8a6dff 100%);
+      background: linear-gradient(93deg,#1976d2 60%,#90caf9 100%);
       color: #fff;
       border: none;
-      border-radius: 1.5rem;
+      border-radius: 1.6rem;
       font-weight: bold;
-      font-size: 1.06rem;
-      box-shadow: 0 1px 8px #8a6dff22;
-      padding: 0.36em 1.19em;
-      margin-top: 0.7rem;
+      font-size: 1.07rem;
+      box-shadow: 0 1px 8px #a2c5fa22;
+      padding: 0.39em 1.25em;
+      margin-top: 1.2rem;
       transition: background .13s;
       display: inline-block;
     }
-    .glass-header .logout-btn:hover { background: linear-gradient(90deg,#8a6dff 60%,#624ca7 100%);}
-    /* Dashboard grid cards */
+    .glass-header .logout-btn:hover { background: linear-gradient(90deg,#90caf9 60%,#1976d2 100%);}
     .dashboard-grid {
       display: grid;
       grid-template-columns: repeat(2,1fr);
       gap: 1.1rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.7rem;
     }
     .dash-card {
-      background: linear-gradient(135deg, #fff 70%, #f3f1fa 100%);
-      border-radius: 1.25rem;
-      box-shadow: 0 1px 16px #8a6dff1a;
+      background: linear-gradient(135deg, #fafdff 70%, #e4ecfa 100%);
+      border-radius: 1.35rem;
+      box-shadow: 0 1px 16px #a2c5fa1a;
       text-align: center;
-      padding: 1.08rem 0.2rem 0.75rem;
+      padding: 1rem 0.2rem 0.75rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       position: relative;
       overflow: hidden;
+      transition: box-shadow .18s, transform .17s;
+      border: none;
+      cursor: pointer;
     }
     .dash-card .icon {
-      font-size: 1.8rem;
-      color: #8a6dff;
-      margin-bottom: .4rem;
-      filter: drop-shadow(0 3px 9px #8a6dff28);
+      font-size: 2.1rem;
+      color: #1976d2;
+      margin-bottom: .3rem;
+      filter: drop-shadow(0 3px 14px #1976d245);
+      animation: glowicon 3s ease-in-out infinite alternate;
+    }
+    @keyframes glowicon {
+      0% { filter: drop-shadow(0 3px 7px #a2c5fa44);}
+      100% { filter: drop-shadow(0 3px 20px #1e88e5bb);}
     }
     .dash-title {
-      font-size: 1.01rem;
-      color: #7c6db2;
-      font-weight: 700;
+      font-size: 1.07rem;
+      color: #3b5a85;
+      font-weight: 800;
       margin-bottom: 2px;
       letter-spacing: 0.2px;
     }
     .dash-value {
-      font-size: 1.4rem;
-      color: #624ca7;
-      font-weight: 800;
+      font-size: 1.56rem;
+      color: #1976d2;
+      font-weight: 900;
       letter-spacing: 0.5px;
       margin-bottom: 2px;
+      text-shadow: 0 2px 7px #a2c5fa33;
     }
-    /* Animated Tabs (pill style with icon) */
     .animated-tabs {
       display: flex;
-      gap: 0.6rem;
+      gap: 0.7rem;
       justify-content: center;
       align-items: center;
-      margin-bottom: 1.4rem;
+      margin-bottom: 1.5rem;
       margin-top: 0.5rem;
+      position: sticky;
+      top: 80px;
+      background: #fafdffcc;
+      z-index: 20;
+      border-radius: 1.2rem;
+      box-shadow: 0 1px 10px #a2c5fa0d;
+      padding: .22rem;
     }
     .animated-tabs .nav-link {
       border-radius: 1.2rem;
-      font-size: 1.09rem;
-      color: #624ca7;
-      background: #f3f1fa;
+      font-size: 1.12rem;
+      color: #1976d2;
+      background: #fff;
       font-weight: bold;
       border: none;
-      padding: .45em 1.3em;
-      transition: background 0.16s, color 0.13s, box-shadow 0.17s;
-      box-shadow: 0 1px 5px #8a6dff0c;
+      padding: .49em 1.45em;
+      transition: background 0.17s, color 0.15s, box-shadow 0.17s;
+      box-shadow: 0 1px 5px #a2c5fa0c;
       display: flex;
       align-items: center;
       gap: 0.45rem;
     }
-    .animated-tabs .nav-link.active, .animated-tabs .nav-link:focus, .animated-tabs .nav-link:hover {
-      background: linear-gradient(90deg,#8a6dff 35%,#624ca7 100%);
+    .animated-tabs .nav-link.active,
+    .animated-tabs .nav-link:focus,
+    .animated-tabs .nav-link:hover {
+      background: linear-gradient(90deg,#1976d2 40%,#90caf9 100%);
       color: #fff !important;
-      box-shadow: 0 2px 16px #8a6dff33;
+      box-shadow: 0 2px 16px #a2c5fa33;
+      transform: scale(1.07);
     }
-    /* Orders Table/Section - Modern card style */
     .orders-section {
       background: #fff;
-      border-radius: 1.3rem;
-      box-shadow: 0 1px 13px #8a6dff10;
-      padding: 1.1rem 0.3rem 0.8rem;
+      border-radius: 1.4rem;
+      box-shadow: 0 1px 14px #a2c5fa1a;
+      padding: 1.18rem 0.5rem 1.04rem;
       margin-bottom: 1.2rem;
+      position: relative;
+      overflow: hidden;
     }
     .orders-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 0.5rem;
+      gap: 10px;
+      margin-bottom: 0.7rem;
     }
     .orders-header h5 {
-      font-weight: 800;
-      color: #624ca7;
-      font-size: 1.07rem;
+      font-weight: 900;
+      color: #1976d2;
+      font-size: 1.15rem;
       margin: 0;
-      letter-spacing: .2px;
+      letter-spacing: .3px;
     }
     .btn-add-order {
-      background: linear-gradient(90deg,#624ca7 60%,#8a6dff 100%);
+      background: linear-gradient(90deg,#1976d2 60%,#90caf9 100%);
       color: #fff;
       font-weight: bold;
       border: none;
-      border-radius: 1.2rem;
-      padding: 0.24em 1.06em;
-      font-size: 1.01rem;
-      box-shadow: 0 2px 12px #8a6dff22;
+      border-radius: 1.3rem;
+      padding: 0.29em 1.12em;
+      font-size: 1.07rem;
+      box-shadow: 0 2px 12px #1976d233;
       transition: background 0.16s, box-shadow 0.16s;
     }
     .btn-add-order:active,
     .btn-add-order:focus,
     .btn-add-order:hover {
-      background: linear-gradient(90deg,#8a6dff 60%,#624ca7 100%);
+      background: linear-gradient(90deg,#90caf9 60%,#1976d2 100%);
       color: #fff;
     }
     .orders-table {
       width: 100%;
       border-radius: 1rem;
       overflow-x: auto;
-      font-size: 1.01rem;
+      font-size: 1rem;
       margin-bottom: 0;
     }
     .orders-table th {
-      background: #f3f1fa;
-      color: #624ca7;
+      background: #e4ecfa;
+      color: #1976d2;
       font-weight: 800;
-      font-size: 1.01rem;
+      font-size: 1.04rem;
       border: none;
-      padding: 0.49em 0.11em;
+      padding: 0.54em 0.15em;
     }
     .orders-table td {
-      padding: 0.38em 0.07em;
+      padding: 0.39em 0.11em;
       vertical-align: middle;
-      border-top: 1px solid #ebe6f3;
-      font-size: 1.00rem;
+      border-top: 1px solid #d3e3fa;
+      font-size: 1.04rem;
     }
     .orders-table tbody tr:last-child td {
       border-bottom: none;
     }
     .order-status-badge {
-      font-size: .92rem;
-      border-radius: 8px;
-      padding: 0.18em 0.68em;
+      font-size: .96rem;
+      border-radius: 9px;
+      padding: 0.21em 0.78em;
       font-weight: 700;
-      box-shadow: 0 1px 4px #c5cae9a1;
+      box-shadow: 0 1px 4px #a2c5fa1a;
       color: #fff;
       margin-bottom: 2px;
     }
     .order-status-wait { background: #ffb037; color: #222;}
-    .order-status-delivery { background: #3ab6e3;}
-    .order-status-received { background: #34d399;}
+    .order-status-delivery { background: #42a5f5;}
+    .order-status-received { background: #43ea7c;}
     .order-status-returned { background: #ef4444;}
     .order-actions .btn {
-      padding: 0.13em 0.52em;
-      font-size: .97rem;
+      padding: 0.15em 0.56em;
+      font-size: 1rem;
       border-radius: 1rem;
       margin-bottom: 2px;
       margin-inline-end: 0.08em;
-      min-width: 27px;
-      min-height: 25px;
+      min-width: 28px;
+      min-height: 24px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       box-shadow: 0 1px 3px #e0e7ef33;
     }
     .order-actions .btn-edit {
-      background: #3ab6e3;
+      background: #42a5f5;
       color: #fff;
       border: none;
     }
-    .order-actions .btn-edit:active, .order-actions .btn-edit:focus, .order-actions .btn-edit:hover {
-      background: #624ca7;
+    .order-actions .btn-edit:active,
+    .order-actions .btn-edit:focus,
+    .order-actions .btn-edit:hover {
+      background: #1976d2;
       color: #fff;
     }
     .order-actions .btn-delete {
@@ -235,68 +310,67 @@
       color: #fff;
       border: none;
     }
-    .order-actions .btn-delete:active, .order-actions .btn-delete:focus, .order-actions .btn-delete:hover {
+    .order-actions .btn-delete:active,
+    .order-actions .btn-delete:focus,
+    .order-actions .btn-delete:hover {
       background: #b91c1c;
       color: #fff;
     }
     .paid-label {
       display: inline-block;
-      background: #ebe6f3;
-      color: #624ca7;
+      background: #e4ecfa;
+      color: #1976d2;
       border-radius: 8px;
-      padding: 0.08em 0.6em;
-      font-size: .93rem;
+      padding: 0.11em 0.7em;
+      font-size: .97rem;
       margin-inline-end: 0.2em;
       margin-bottom: 2px;
-      font-weight: 700;
-      box-shadow: 0 1px 6px #8a6dff20;
+      font-weight: 800;
+      box-shadow: 0 1px 6px #1976d220;
     }
-    /* Withdraw */
     .withdraw-section {
       background: #fff;
       border-radius: 1.1rem;
-      box-shadow: 0 1px 11px #8a6dff13;
+      box-shadow: 0 1px 11px #a2c5fa12;
       padding: 1.1rem 0.7rem;
       margin-bottom: 1.1rem;
     }
     .withdraw-title {
-      color: #624ca7;
+      color: #1976d2;
       font-weight: bold;
-      font-size: 1.08rem;
+      font-size: 1.13rem;
       margin-bottom: 0.5rem;
     }
     .withdraw-history-table th,
     .withdraw-history-table td {
-      font-size: 0.96rem;
-      padding: 0.29em 0.09em;
+      font-size: 0.99rem;
+      padding: 0.39em 0.11em;
       text-align: center;
     }
-    /* Support */
     .support-box {
-      background: linear-gradient(120deg, #f3f1fa 65%, #ebe6f3 100%);
+      background: linear-gradient(120deg, #e4ecfa 65%, #fafdff 100%);
       border-radius: 1.09rem;
       padding: 1rem 0.7rem 0.7rem;
-      box-shadow: 0 3px 13px #8a6dff18;
-      border: 1.3px solid #ebe6f3;
-      font-size: 1.04rem;
+      box-shadow: 0 3px 13px #a2c5fa13;
+      border: 1.3px solid #e4ecfa;
+      font-size: 1.06rem;
       margin-bottom: 1.1rem;
       text-align: center;
     }
-    /* Modal & Form */
     .modal-content {
       border-radius: 1rem;
-      background: #f3f1fa;
-      border: 1.5px solid #ebe6f3;
+      background: #e4ecfa;
+      border: 1.5px solid #d3e3fa;
     }
     .modal-header { border-bottom: none; }
     .modal-footer { border-top: none; justify-content: flex-end; gap: 0.6rem; }
     .btn-success {
-      background: linear-gradient(90deg, #ffb037 60%, #624ca7 100%);
+      background: linear-gradient(90deg, #43ea7c 60%, #42a5f5 100%);
       color: #fff;
       border: none;
     }
     .btn-success:hover, .btn-success:focus {
-      background: linear-gradient(90deg, #624ca7 60%, #ffb037 100%);
+      background: linear-gradient(90deg, #42a5f5 60%, #43ea7c 100%);
       color: #fff;
     }
     .btn-outline-danger {
@@ -309,38 +383,65 @@
       color: #fff !important;
     }
     .input-group-text {
-      background: #f3f1fa;
+      background: #e4ecfa;
       border-radius: 8px 0 0 8px;
       border: none;
     }
-    /* Responsive */
     @media (max-width: 991.98px) {
-      .app-title { font-size: 1.15rem;}
       .main-card, .modal-content { border-radius: 1rem;}
-      .btn { font-size: 0.97rem; }
-      .orders-header h5 { font-size: 0.98rem;}
-      .stat-card { min-width: 80px; font-size: 0.97rem;}
+      .btn { font-size: 0.96rem; }
+      .orders-header h5 { font-size: 0.97rem;}
+      .stat-card { min-width: 82px; font-size: 0.97rem;}
       .stat-value { font-size: 1.08rem;}
     }
     @media (max-width: 767.98px) {
-      .header-bg { font-size: 1.03rem; padding: 1.1rem 0.2rem 0.7rem;}
-      .orders-section, .withdraw-section, .support-box { padding: 0.58rem 0.05rem 0.31rem;}
+      .glass-header { font-size: 1.02rem; padding: .88rem 0.1rem 0.48rem;}
+      .orders-section, .withdraw-section, .support-box { padding: 0.52rem 0.01rem 0.21rem;}
       .orders-header { flex-direction: column; gap: 7px;}
       .dashboard-grid { grid-template-columns: 1fr; gap: 0.5rem;}
-      .stat-card { min-width: 60px; font-size: 0.94rem;}
-      .orders-table th, .orders-table td { font-size: 0.88rem; padding: 0.13em 0.05em;}
-      .btn-add-order { font-size: 0.89rem;}
-      .animated-tabs { gap: 0.2rem;}
-      .animated-tabs .nav-link { font-size: 0.99rem; padding: .45em 0.49em;}
+      .stat-card { min-width: 66px; font-size: 0.94rem;}
+      .orders-table th, .orders-table td { font-size: 0.91rem; padding: 0.13em 0.05em;}
+      .btn-add-order { font-size: 0.94rem;}
+      .animated-tabs { gap: 0.11rem;}
+      .animated-tabs .nav-link { font-size: 0.97rem; padding: .45em 0.39em;}
     }
   </style>
 </head>
 <body>
-  <!-- Header/Profile -->
-  <div class="glass-header" id="profileHeader">
-    <img src="https://ui-avatars.com/api/?name=مستخدم&background=8a6dff&color=fff&rounded=true&size=128" class="avatar mb-2" id="userAvatar" alt="avatar">
+  <div class="glow"></div>
+  <!-- Login Overlay -->
+  <div id="loginOverlay">
+    <div class="login-modal">
+      <span class="brand"><i class="bi bi-box-seam"></i> توصيل الطلبات</span>
+      <div class="desc mb-0">دخول المستخدم</div>
+      <form id="loginForm" autocomplete="off">
+        <div class="mb-3 text-start">
+          <label class="form-label">اسم المستخدم</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-person"></i></span>
+            <input type="text" class="form-control" id="loginUsername" required>
+          </div>
+        </div>
+        <div class="mb-3 text-start">
+          <label class="form-label">كلمة المرور</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+            <input type="password" class="form-control" id="loginPassword" required>
+          </div>
+        </div>
+        <div class="d-grid mb-2">
+          <button type="submit" class="btn btn-primary" style="font-weight:bold;font-size:1.13rem;"><i class="bi bi-box-arrow-in-left"></i> دخول</button>
+        </div>
+        <div class="text-center mt-2">
+          <a href="#" class="btn btn-outline-secondary w-100"><i class="bi bi-people"></i> انضم معنا</a>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- User Header -->
+  <div class="glass-header" id="profileHeader" style="display: none;">
+    <img src="https://ui-avatars.com/api/?name=مستخدم&background=1976d2&color=fff&rounded=true&size=128" class="avatar mb-2" id="userAvatar" alt="avatar">
     <div class="username" id="userNameHeader">طلباتك</div>
-    <div class="user-meta" id="userMetaHeader"></div>
     <button class="logout-btn d-none" id="logoutBtn"><i class="bi bi-power"></i> خروج</button>
   </div>
   <div class="container pb-5">
@@ -445,37 +546,6 @@
       </div>
     </div>
   </div>
-  <!-- Login Overlay -->
-  <div id="loginOverlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;background:rgba(98,76,167,.16);display:flex;align-items:center;justify-content:center;">
-    <div class="neumorph-card p-4" style="max-width:335px;width:99vw;">
-      <div class="text-center mb-4">
-        <i class="bi bi-box-seam" style="font-size:2.0rem;color:#624ca7;"></i>
-        <div class="app-title" style="font-size:1.11rem">تسجيل الدخول</div>
-      </div>
-      <form id="loginForm" autocomplete="off">
-        <div class="mb-3">
-          <label class="form-label">اسم المستخدم</label>
-          <div class="input-group">
-            <span class="input-group-text"><i class="bi bi-person"></i></span>
-            <input type="text" class="form-control" id="loginUsername" required>
-          </div>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">كلمة المرور</label>
-          <div class="input-group">
-            <span class="input-group-text"><i class="bi bi-lock"></i></span>
-            <input type="password" class="form-control" id="loginPassword" required>
-          </div>
-        </div>
-        <div class="d-grid mb-2">
-          <button type="submit" class="btn btn-primary">دخول</button>
-        </div>
-        <div class="text-center mt-2">
-          <a href="#" class="btn btn-outline-secondary w-100"><i class="bi bi-people"></i> انضم معنا</a>
-        </div>
-      </form>
-    </div>
-  </div>
   <!-- Add/Edit Order Modal -->
   <div class="modal fade" id="addOrderModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
@@ -555,8 +625,8 @@
     const loginOverlay = document.getElementById('loginOverlay');
     const loginForm = document.getElementById('loginForm');
     const logoutBtn = document.getElementById('logoutBtn');
+    const profileHeader = document.getElementById('profileHeader');
     const userNameHeader = document.getElementById('userNameHeader');
-    const userMetaHeader = document.getElementById('userMetaHeader');
     const userAvatar = document.getElementById('userAvatar');
     const statTotalOrders = document.getElementById('statTotalOrders');
     const statReceivedOrders = document.getElementById('statReceivedOrders');
@@ -581,6 +651,10 @@
     let ordersArr = [], withdrawalsArr = [];
     let allOrderNumbersSet = new Set();
     let paidOrdersMap = {};
+    let lastEditOrderData = null;
+
+    profileHeader.style.display = "none";
+    document.querySelector(".container").style.display = "none";
 
     loginForm.onsubmit = async (e) => {
       e.preventDefault();
@@ -599,7 +673,7 @@
     });
     logoutBtn.onclick = async () => {
       await signOut(auth);
-      location.reload();
+      window.location.reload();
     };
 
     async function handleLogin(uid) {
@@ -611,11 +685,13 @@
       }
       currentUserId = uid;
       currentUserData = userSnap.val();
-      loginOverlay.style.display = "none";
+      loginOverlay.classList.add("hide");
+      setTimeout(() => { loginOverlay.style.display = "none"; }, 400);
+      profileHeader.style.display = "";
+      document.querySelector(".container").style.display = "";
       logoutBtn.classList.remove('d-none');
       userNameHeader.textContent = currentUserData.username || "طلباتك";
-      userMetaHeader.textContent = (currentUserData.page ? "صفحة: " + currentUserData.page : "") + (currentUserData.phone1 ? " | هاتف: " + currentUserData.phone1 : "");
-      userAvatar.src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(currentUserData.username || "مستخدم") + "&background=8a6dff&color=fff&rounded=true&size=128";
+      userAvatar.src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(currentUserData.username || "مستخدم") + "&background=1976d2&color=fff&rounded=true&size=128";
       await loadAllOrderNumbers();
       loadWithdrawals();
     }
@@ -752,13 +828,20 @@
       if (!order) return;
       editOrderId.value = id;
       orderModalTitle.textContent = "تعديل الطلب";
+      // Fill the modal fields and set them to current values
       orderNumber.value = order.number;
       orderAddress.value = order.address;
       orderPhone1.value = order.phone1;
-      orderPhone2.value = order.phone2;
+      orderPhone2.value = order.phone2 || '';
       orderAmount.value = order.amount;
+      // Allow all fields to be editable except رقم الطلب
       orderNumber.readOnly = true;
+      orderAddress.readOnly = false;
+      orderPhone1.readOnly = false;
+      orderPhone2.readOnly = false;
+      orderAmount.readOnly = false;
       orderNumberError.style.display = "none";
+      lastEditOrderData = {...order}; // For possible reset
       new bootstrap.Modal(document.getElementById('addOrderModal')).show();
     };
 
@@ -793,6 +876,7 @@
         return;
       }
       if (!number || !address || !phone1 || isNaN(amount)) return;
+
       if (isEdit) {
         await update(ref(db, `orders/${currentUserId}/${editOrderId.value}`), {
           address, phone1, phone2, amount
@@ -809,11 +893,17 @@
     };
 
     document.getElementById('addOrderModal').addEventListener('show.bs.modal', ()=>{
-      orderForm.reset();
-      editOrderId.value = "";
-      orderModalTitle.textContent = "إضافة طلب جديد";
-      orderNumber.readOnly = false;
-      orderNumberError.style.display = "none";
+      // If not editing, reset all fields to empty
+      if (!editOrderId.value) {
+        orderForm.reset();
+        orderNumber.readOnly = false;
+        orderAddress.readOnly = false;
+        orderPhone1.readOnly = false;
+        orderPhone2.readOnly = false;
+        orderAmount.readOnly = false;
+        orderModalTitle.textContent = "إضافة طلب جديد";
+        orderNumberError.style.display = "none";
+      }
     });
 
     withdrawMethod.onchange = function() {
