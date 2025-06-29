@@ -2,355 +2,394 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>توصيل الطلبات | صفحة المستخدم</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+  <title>توصيل الطلبات | حساب المستخدم</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Bootstrap 5 RTL -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;800&display=swap" rel="stylesheet">
   <style>
     html, body {
-      background: linear-gradient(120deg, #1e3c72 0%, #2a5298 100%);
+      background: #f6f4f7;
       min-height: 100vh;
-      font-family: 'Tajawal', Arial, sans-serif;
-      background-attachment: fixed;
+      font-family: "Tajawal", Arial, sans-serif;
+      color: #23272e;
     }
-    .main-card {
-      box-shadow: 0 6px 24px rgba(79,140,255,0.10), 0 1.5px 8px #2222;
-      border-radius: 1.5rem;
-      background: #fff;
-      border: none;
-      margin-bottom: 1.2rem;
-      transition: box-shadow 0.17s;
-    }
-    .main-card:hover {
-      box-shadow: 0 12px 34px 0 rgba(47, 128, 237, 0.15);
-      transform: scale(1.013);
-    }
-    .stat-box {
-      border-radius: 1.1rem;
-      background: linear-gradient(90deg, #f3f7fa 60%, #e8f0fe 100%);
-      padding: 1rem 0.7rem;
+    /* Glassy top bar with user details and avatar */
+    .glass-header {
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.85);
+      box-shadow: 0 8px 32px #442b6a11, 0 2px 8px #442b6a08;
+      border-radius: 0 0 2.2rem 2.2rem;
+      padding: 1.7rem 0 1.1rem;
       text-align: center;
-      box-shadow: 0 1px 7px #c5cae9b3;
-      min-height: 88px;
-      border: 1.5px solid #e3eafd;
-      margin-bottom: 1rem;
-      font-size: 1.08rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid #ebe6f3;
+      position: sticky;
+      top: 0;
+      z-index: 1001;
     }
-    .stat-title {
-      font-size: 1.08rem;
-      color: #7b8fa6;
-      margin-bottom: 5px;
+    .glass-header .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid #fff;
+      box-shadow: 0 2px 24px #8a6dff31;
+      margin-bottom: .7rem;
+    }
+    .glass-header .username {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+      color: #624ca7;
+    }
+    .glass-header .user-meta {
+      color: #7c6db2;
+      font-size: 1.01rem;
+      margin-bottom: 0.16rem;
+      font-weight: 500;
+    }
+    .glass-header .logout-btn {
+      background: linear-gradient(90deg,#624ca7 60%,#8a6dff 100%);
+      color: #fff;
+      border: none;
+      border-radius: 1.5rem;
+      font-weight: bold;
+      font-size: 1.06rem;
+      box-shadow: 0 1px 8px #8a6dff22;
+      padding: 0.36em 1.19em;
+      margin-top: 0.7rem;
+      transition: background .13s;
+      display: inline-block;
+    }
+    .glass-header .logout-btn:hover { background: linear-gradient(90deg,#8a6dff 60%,#624ca7 100%);}
+    /* Dashboard grid cards */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      gap: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+    .dash-card {
+      background: linear-gradient(135deg, #fff 70%, #f3f1fa 100%);
+      border-radius: 1.25rem;
+      box-shadow: 0 1px 16px #8a6dff1a;
+      text-align: center;
+      padding: 1.08rem 0.2rem 0.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .dash-card .icon {
+      font-size: 1.8rem;
+      color: #8a6dff;
+      margin-bottom: .4rem;
+      filter: drop-shadow(0 3px 9px #8a6dff28);
+    }
+    .dash-title {
+      font-size: 1.01rem;
+      color: #7c6db2;
       font-weight: 700;
-      letter-spacing: 1px;
+      margin-bottom: 2px;
+      letter-spacing: 0.2px;
     }
-    .stat-value {
-      font-size: 1.55rem;
+    .dash-value {
+      font-size: 1.4rem;
+      color: #624ca7;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+    /* Animated Tabs (pill style with icon) */
+    .animated-tabs {
+      display: flex;
+      gap: 0.6rem;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 1.4rem;
+      margin-top: 0.5rem;
+    }
+    .animated-tabs .nav-link {
+      border-radius: 1.2rem;
+      font-size: 1.09rem;
+      color: #624ca7;
+      background: #f3f1fa;
       font-weight: bold;
-      color: #2467d7;
-      letter-spacing: 1px;
-      text-shadow: 0 2px 8px #a3bffd22;
+      border: none;
+      padding: .45em 1.3em;
+      transition: background 0.16s, color 0.13s, box-shadow 0.17s;
+      box-shadow: 0 1px 5px #8a6dff0c;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
     }
-    .nav-pills .nav-link.active {
-      background: linear-gradient(90deg, #4f8cff 60%, #2467d7 100%) !important;
+    .animated-tabs .nav-link.active, .animated-tabs .nav-link:focus, .animated-tabs .nav-link:hover {
+      background: linear-gradient(90deg,#8a6dff 35%,#624ca7 100%);
       color: #fff !important;
-      border-radius: 1.3rem;
-      font-weight: bold;
-      box-shadow: 0 1px 8px #4f8cff18;
+      box-shadow: 0 2px 16px #8a6dff33;
     }
-    .nav-pills .nav-link {
+    /* Orders Table/Section - Modern card style */
+    .orders-section {
+      background: #fff;
       border-radius: 1.3rem;
-      font-size: 1.1rem;
-      color: #2467d7;
-      margin-inline-end: 0.19rem;
+      box-shadow: 0 1px 13px #8a6dff10;
+      padding: 1.1rem 0.3rem 0.8rem;
+      margin-bottom: 1.2rem;
     }
-    .order-status-badge {
-      font-size: .96rem;
-      border-radius: 12px;
-      padding: 0.38em 0.99em;
+    .orders-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 0.5rem;
+    }
+    .orders-header h5 {
+      font-weight: 800;
+      color: #624ca7;
+      font-size: 1.07rem;
+      margin: 0;
+      letter-spacing: .2px;
+    }
+    .btn-add-order {
+      background: linear-gradient(90deg,#624ca7 60%,#8a6dff 100%);
       color: #fff;
       font-weight: bold;
-      box-shadow: 0 1px 4px #c5cae9a1;
+      border: none;
+      border-radius: 1.2rem;
+      padding: 0.24em 1.06em;
+      font-size: 1.01rem;
+      box-shadow: 0 2px 12px #8a6dff22;
+      transition: background 0.16s, box-shadow 0.16s;
     }
-    .order-status-wait { background: linear-gradient(90deg,#ffc107 66%,#ffe066 100%); color: #222; }
-    .order-status-received { background: linear-gradient(90deg,#1976d2 70%,#4f8cff 100%); }
-    .order-status-delivery { background: linear-gradient(90deg,#43a047 60%,#66bb6a 100%);}
-    .order-status-returned { background: linear-gradient(90deg,#d32f2f 70%,#f44336 100%);}
-    .order-actions .btn {
-      padding: 0.28em 0.89em;
-      font-size: 1.08rem;
-      border-radius: 1.1rem;
+    .btn-add-order:active,
+    .btn-add-order:focus,
+    .btn-add-order:hover {
+      background: linear-gradient(90deg,#8a6dff 60%,#624ca7 100%);
+      color: #fff;
+    }
+    .orders-table {
+      width: 100%;
+      border-radius: 1rem;
+      overflow-x: auto;
+      font-size: 1.01rem;
+      margin-bottom: 0;
+    }
+    .orders-table th {
+      background: #f3f1fa;
+      color: #624ca7;
+      font-weight: 800;
+      font-size: 1.01rem;
+      border: none;
+      padding: 0.49em 0.11em;
+    }
+    .orders-table td {
+      padding: 0.38em 0.07em;
+      vertical-align: middle;
+      border-top: 1px solid #ebe6f3;
+      font-size: 1.00rem;
+    }
+    .orders-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .order-status-badge {
+      font-size: .92rem;
+      border-radius: 8px;
+      padding: 0.18em 0.68em;
+      font-weight: 700;
+      box-shadow: 0 1px 4px #c5cae9a1;
+      color: #fff;
       margin-bottom: 2px;
-      margin-inline-end: 0.10em;
-      min-width: 40px;
-      min-height: 36px;
+    }
+    .order-status-wait { background: #ffb037; color: #222;}
+    .order-status-delivery { background: #3ab6e3;}
+    .order-status-received { background: #34d399;}
+    .order-status-returned { background: #ef4444;}
+    .order-actions .btn {
+      padding: 0.13em 0.52em;
+      font-size: .97rem;
+      border-radius: 1rem;
+      margin-bottom: 2px;
+      margin-inline-end: 0.08em;
+      min-width: 27px;
+      min-height: 25px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      box-shadow: 0 1px 3px #e0e7ef33;
     }
-    .table > :not(:last-child) > :last-child > * {
-      border-bottom-color: #e3eafd;
-    }
-    .support-box {
-      background: linear-gradient(120deg, #e3f1ff 65%, #f6fafd 100%);
-      border-radius: 1.3rem;
-      padding: 1.3rem 1.1rem;
-      box-shadow: 0 6px 18px #2467d72a;
-      border: 1.3px solid #e3eafd;
-      font-size: 1.08rem;
-      margin-bottom: 2rem;
-    }
-    .modal-content {
-      border-radius: 1.1rem;
-      background: #fafdff;
-      border: 1.5px solid #e3eafd;
-    }
-    .input-group-text {
-      background: #e8f0fe;
-      border-radius: 8px 0 0 8px;
+    .order-actions .btn-edit {
+      background: #3ab6e3;
+      color: #fff;
       border: none;
     }
-    .fade-in {
-      animation: fadein 0.7s;
-    }
-    @keyframes fadein {
-      from { opacity: 0; transform: translateY(25px);}
-      to   { opacity: 1; transform: translateY(0);}
-    }
-    .brand-gradient {
-      background: linear-gradient(90deg, #4f8cff 30%, #2467d7 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-weight: bold;
-      font-size: 1.45rem;
-      letter-spacing: 1px;
-    }
-    .btn {
-      font-family: 'Tajawal', Arial, sans-serif;
-      font-weight: 700;
-      font-size: 1.09rem;
-      letter-spacing: 0.5px;
-      box-shadow: 0 2px 8px #4f8cff12;
-      transition: background 0.17s, color 0.17s, box-shadow 0.22s, transform 0.18s;
-      border-radius: 1.3rem;
-      padding-top: 0.56em;
-      padding-bottom: 0.56em;
-      padding-inline: 1.3em;
-      outline: none !important;
-      border-width: 2px;
-      border-style: solid;
-    }
-    .btn-primary {
-      background: linear-gradient(90deg, #4f8cff 60%, #2467d7 100%);
+    .order-actions .btn-edit:active, .order-actions .btn-edit:focus, .order-actions .btn-edit:hover {
+      background: #624ca7;
       color: #fff;
-      border-color: #4f8cff;
-      box-shadow: 0 4px 20px #4f8cff22;
     }
-    .btn-primary:hover, .btn-primary:focus {
-      background: linear-gradient(90deg, #2467d7 60%, #4f8cff 100%);
+    .order-actions .btn-delete {
+      background: #ef4444;
       color: #fff;
-      border-color: #2467d7;
-      box-shadow: 0 6px 26px #2a529877;
-      transform: translateY(-2px) scale(1.035);
+      border: none;
     }
-    .btn-success {
-      background: linear-gradient(90deg, #43ea7c 60%, #1de982 100%);
+    .order-actions .btn-delete:active, .order-actions .btn-delete:focus, .order-actions .btn-delete:hover {
+      background: #b91c1c;
       color: #fff;
-      border-color: #24c75b;
-      box-shadow: 0 2px 16px #04e97a23;
-    }
-    .btn-success:hover, .btn-success:focus {
-      background: linear-gradient(90deg, #2dbe5e 60%, #05b06b 100%);
-      color: #fff;
-      border-color: #17b765;
-      transform: translateY(-2px) scale(1.035);
-    }
-    .btn-outline-danger {
-      border: 2px solid #dc3545 !important;
-      color: #dc3545 !important;
-      background: #fff !important;
-    }
-    .btn-outline-danger:hover, .btn-outline-danger:focus {
-      background: #dc3545 !important;
-      color: #fff !important;
-      box-shadow: 0 2px 8px #e57373a1;
-    }
-    .btn-outline-secondary {
-      border: 2px solid #4f8cff;
-      color: #4f8cff;
-      background: #fff;
-    }
-    .btn-outline-secondary:hover, .btn-outline-secondary:focus {
-      background: #4f8cff;
-      color: #fff;
-      box-shadow: 0 2px 12px #4f8cff44;
-    }
-    .btn.btn-danger {
-      background: linear-gradient(90deg, #f44336 60%, #d32f2f 100%);
-      border-color: #d32f2f !important;
-      color: #fff !important;
-      box-shadow: 0 2px 12px #f4433614;
-    }
-    .btn.btn-danger:hover, .btn.btn-danger:focus {
-      background: linear-gradient(90deg, #cf2a2a 60%, #b71c1c 100%);
-      color: #fff !important;
-      border-color: #b71c1c !important;
-      box-shadow: 0 4px 20px #f4433660;
     }
     .paid-label {
       display: inline-block;
-      background: linear-gradient(90deg, #00bcd4 70%, #00e1ff 100%);
-      color: #fff;
+      background: #ebe6f3;
+      color: #624ca7;
       border-radius: 8px;
-      padding: 0.18em 0.85em;
-      font-size: 1rem;
+      padding: 0.08em 0.6em;
+      font-size: .93rem;
       margin-inline-end: 0.2em;
       margin-bottom: 2px;
-      letter-spacing: 1px;
       font-weight: 700;
-      box-shadow: 0 1px 6px #00bcd432;
+      box-shadow: 0 1px 6px #8a6dff20;
     }
-    .navbar {
-      background: linear-gradient(90deg, #1976d2 70%, #4f8cff 100%) !important;
-      color: #fff !important;
-      border-radius: 1.2rem;
-      margin-bottom: 1.4rem;
-      box-shadow: 0 5px 16px #4f8cff22;
+    /* Withdraw */
+    .withdraw-section {
+      background: #fff;
+      border-radius: 1.1rem;
+      box-shadow: 0 1px 11px #8a6dff13;
+      padding: 1.1rem 0.7rem;
+      margin-bottom: 1.1rem;
     }
-    .navbar .navbar-brand {
+    .withdraw-title {
+      color: #624ca7;
+      font-weight: bold;
+      font-size: 1.08rem;
+      margin-bottom: 0.5rem;
+    }
+    .withdraw-history-table th,
+    .withdraw-history-table td {
+      font-size: 0.96rem;
+      padding: 0.29em 0.09em;
+      text-align: center;
+    }
+    /* Support */
+    .support-box {
+      background: linear-gradient(120deg, #f3f1fa 65%, #ebe6f3 100%);
+      border-radius: 1.09rem;
+      padding: 1rem 0.7rem 0.7rem;
+      box-shadow: 0 3px 13px #8a6dff18;
+      border: 1.3px solid #ebe6f3;
+      font-size: 1.04rem;
+      margin-bottom: 1.1rem;
+      text-align: center;
+    }
+    /* Modal & Form */
+    .modal-content {
+      border-radius: 1rem;
+      background: #f3f1fa;
+      border: 1.5px solid #ebe6f3;
+    }
+    .modal-header { border-bottom: none; }
+    .modal-footer { border-top: none; justify-content: flex-end; gap: 0.6rem; }
+    .btn-success {
+      background: linear-gradient(90deg, #ffb037 60%, #624ca7 100%);
       color: #fff;
-      font-size: 1.3rem;
-      font-weight: bold;
-      letter-spacing: 1px;
-      display: flex;
-      align-items: center;
-      gap: .6rem;
+      border: none;
     }
-    .navbar .navbar-brand i {
-      font-size: 1.7rem;
-      color: #ffc107;
+    .btn-success:hover, .btn-success:focus {
+      background: linear-gradient(90deg, #624ca7 60%, #ffb037 100%);
+      color: #fff;
     }
-    .navbar .btn-outline-danger {
-      border-radius: 1.3rem;
-      font-size: 1.03rem;
-      font-weight: bold;
-      margin-right: 0.2rem;
+    .btn-outline-danger {
+      border: 2px solid #ef4444 !important;
+      color: #ef4444 !important;
+      background: #fff !important;
     }
-    ::-webkit-scrollbar { width: 8px; background: #e3eafe;}
-    ::-webkit-scrollbar-thumb { background: #b0c9f7; border-radius: 8px; }
-    .modal-content input:focus, .modal-content select:focus {
-      border-color: #4f8cff;
-      box-shadow: 0 0 0 2px #4f8cff55;
+    .btn-outline-danger:hover, .btn-outline-danger:focus {
+      background: #ef4444 !important;
+      color: #fff !important;
     }
+    .input-group-text {
+      background: #f3f1fa;
+      border-radius: 8px 0 0 8px;
+      border: none;
+    }
+    /* Responsive */
     @media (max-width: 991.98px) {
-      .main-card { border-radius: 1rem;}
-      .modal-content { border-radius: 1rem;}
-      .btn { font-size: 1rem; }
-      .brand-gradient { font-size: 1.1rem;}
-      .stat-box { min-height: 70px; font-size: 0.93rem;}
+      .app-title { font-size: 1.15rem;}
+      .main-card, .modal-content { border-radius: 1rem;}
+      .btn { font-size: 0.97rem; }
+      .orders-header h5 { font-size: 0.98rem;}
+      .stat-card { min-width: 80px; font-size: 0.97rem;}
+      .stat-value { font-size: 1.08rem;}
     }
     @media (max-width: 767.98px) {
-      .main-card, .modal-content { border-radius: 0.6rem;}
-      .btn { font-size: 0.97rem; }
-      .brand-gradient { font-size: 0.98rem;}
-      .stat-box { min-height: 55px; font-size: 0.83rem;}
-      .order-actions .btn { min-width: 32px; min-height: 28px; font-size: 1rem;}
-      .d-flex.justify-content-between.align-items-center.mb-3 { flex-direction: column; gap: 10px; }
-      table thead { font-size: 0.96rem;}
-      table td, table th { padding: 0.45rem 0.32rem; }
+      .header-bg { font-size: 1.03rem; padding: 1.1rem 0.2rem 0.7rem;}
+      .orders-section, .withdraw-section, .support-box { padding: 0.58rem 0.05rem 0.31rem;}
+      .orders-header { flex-direction: column; gap: 7px;}
+      .dashboard-grid { grid-template-columns: 1fr; gap: 0.5rem;}
+      .stat-card { min-width: 60px; font-size: 0.94rem;}
+      .orders-table th, .orders-table td { font-size: 0.88rem; padding: 0.13em 0.05em;}
+      .btn-add-order { font-size: 0.89rem;}
+      .animated-tabs { gap: 0.2rem;}
+      .animated-tabs .nav-link { font-size: 0.99rem; padding: .45em 0.49em;}
     }
   </style>
 </head>
 <body>
-  <div class="container py-3 py-md-4">
-    <!-- Login Section -->
-    <div id="loginSection" class="row justify-content-center align-items-center fade-in" style="min-height:80vh;">
-      <div class="col-12 col-sm-10 col-md-8 col-lg-5">
-        <div class="main-card p-3 p-md-4">
-          <div class="text-center mb-4">
-            <i class="bi bi-box-seam" style="font-size:2.1rem;color:#4f8cff;"></i>
-            <div class="brand-gradient">تسجيل الدخول</div>
-          </div>
-          <form id="loginForm" autocomplete="off">
-            <div class="mb-3">
-              <label class="form-label">اسم المستخدم</label>
-              <div class="input-group">
-                <span class="input-group-text"><i class="bi bi-person"></i></span>
-                <input type="text" class="form-control" id="loginUsername" required>
-              </div>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">كلمة المرور</label>
-              <div class="input-group">
-                <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                <input type="password" class="form-control" id="loginPassword" required>
-              </div>
-            </div>
-            <div class="d-grid mb-2">
-              <button type="submit" class="btn btn-primary">دخول</button>
-            </div>
-            <div class="text-center mt-3">
-              <a href="#" class="btn btn-outline-secondary w-100"><i class="bi bi-people"></i> انضم معنا</a>
-            </div>
-          </form>
-        </div>
+  <!-- Header/Profile -->
+  <div class="glass-header" id="profileHeader">
+    <img src="https://ui-avatars.com/api/?name=مستخدم&background=8a6dff&color=fff&rounded=true&size=128" class="avatar mb-2" id="userAvatar" alt="avatar">
+    <div class="username" id="userNameHeader">طلباتك</div>
+    <div class="user-meta" id="userMetaHeader"></div>
+    <button class="logout-btn d-none" id="logoutBtn"><i class="bi bi-power"></i> خروج</button>
+  </div>
+  <div class="container pb-5">
+    <!-- Stats -->
+    <div class="dashboard-grid">
+      <div class="dash-card">
+        <span class="icon"><i class="bi bi-list-task"></i></span>
+        <div class="dash-title">الطلبات الكلية</div>
+        <div class="dash-value" id="statTotalOrders">0</div>
+      </div>
+      <div class="dash-card">
+        <span class="icon"><i class="bi bi-bag-check"></i></span>
+        <div class="dash-title">المستلمة</div>
+        <div class="dash-value" id="statReceivedOrders">0</div>
+      </div>
+      <div class="dash-card">
+        <span class="icon"><i class="bi bi-cash-stack"></i></span>
+        <div class="dash-title">الأرباح</div>
+        <div class="dash-value" id="statProfits">0 د.ع</div>
+      </div>
+      <div class="dash-card">
+        <span class="icon"><i class="bi bi-arrow-repeat"></i></span>
+        <div class="dash-title">الراجعة</div>
+        <div class="dash-value" id="statReturnedOrders">0</div>
       </div>
     </div>
-    <!-- Main App Section -->
-    <div id="mainAppSection" style="display:none;">
-      <nav class="navbar navbar-expand-lg navbar-light shadow px-3 fade-in">
-        <a class="navbar-brand fw-bold brand-gradient" href="#"><i class="bi bi-box-seam"></i> توصيل الطلبات</a>
-        <button class="btn btn-outline-danger ms-auto" id="logoutBtn">تسجيل الخروج</button>
-      </nav>
-      <div class="row mb-4 g-2 fade-in">
-        <div class="col-6 col-md-3">
-          <div class="stat-box">
-            <div class="stat-title"><i class="bi bi-list-task"></i> عدد الطلبات الكلي</div>
-            <div class="stat-value" id="statTotalOrders">0</div>
+    <!-- Tabs -->
+    <ul class="nav nav-pills animated-tabs mb-3" id="mainTabs">
+      <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#ordersTab"><i class="bi bi-list-task"></i> الطلبات</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#withdrawTab"><i class="bi bi-wallet2"></i> الأرباح</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#supportTab"><i class="bi bi-life-preserver"></i> الدعم</button></li>
+    </ul>
+    <div class="tab-content mb-3" id="tabContent">
+      <!-- Orders Tab -->
+      <div class="tab-pane fade show active" id="ordersTab">
+        <div class="orders-section">
+          <div class="orders-header">
+            <h5><i class="bi bi-list-task"></i> قائمة الطلبات</h5>
+            <button class="btn btn-add-order" data-bs-toggle="modal" data-bs-target="#addOrderModal"><i class="bi bi-plus-circle"></i> إضافة طلب</button>
           </div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="stat-box">
-            <div class="stat-title"><i class="bi bi-bag-check"></i> الطلبات المستلمة</div>
-            <div class="stat-value" id="statReceivedOrders">0</div>
-          </div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="stat-box">
-            <div class="stat-title"><i class="bi bi-cash-stack"></i> الأرباح</div>
-            <div class="stat-value" id="statProfits">0 د.ع</div>
-          </div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="stat-box">
-            <div class="stat-title"><i class="bi bi-arrow-repeat"></i> الطلبات الراجعة</div>
-            <div class="stat-value" id="statReturnedOrders">0</div>
-          </div>
-        </div>
-      </div>
-      <ul class="nav nav-pills mb-4 fade-in" id="mainTabs">
-        <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#ordersTab"><i class="bi bi-clipboard-data"></i> الطلبات</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#profitsTab"><i class="bi bi-wallet2"></i> سحب الأرباح</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#supportTab"><i class="bi bi-life-preserver"></i> الدعم</button></li>
-      </ul>
-      <div class="tab-content">
-        <!-- Orders Tab -->
-        <div class="tab-pane fade show active" id="ordersTab">
-          <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
-            <h5 class="fw-bold mb-0 brand-gradient"><i class="bi bi-list-task"></i> الطلبات</h5>
-            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addOrderModal"><i class="bi bi-plus-circle"></i> إضافة طلب</button>
-          </div>
-          <div class="table-responsive fade-in">
-            <table class="table align-middle table-hover">
-              <thead class="table-light">
+          <div class="table-responsive">
+            <table class="orders-table table align-middle mb-0">
+              <thead>
                 <tr>
                   <th>رقم الطلب</th>
                   <th>العنوان</th>
                   <th>الهاتف 1</th>
                   <th>الهاتف 2</th>
-                  <th>المبلغ (د.ع)</th>
+                  <th>المبلغ</th>
                   <th>الحالة</th>
                   <th>إجراءات</th>
                 </tr>
@@ -359,58 +398,84 @@
             </table>
           </div>
         </div>
-        <!-- Profits Tab -->
-        <div class="tab-pane fade" id="profitsTab">
-          <div class="row fade-in">
-            <div class="col-12 col-md-8 col-lg-6">
-              <div class="main-card p-3 mb-3">
-                <h5 class="fw-bold mb-3 brand-gradient"><i class="bi bi-wallet2"></i> سحب الأرباح</h5>
-                <form id="withdrawForm">
-                  <div class="mb-3">
-                    <label class="form-label fw-bold">اختر طريقة السحب</label>
-                    <select class="form-select" id="withdrawMethod" required>
-                      <option value="">اختر...</option>
-                      <option value="delivery">عن طريق المندوب (خصم 1000 د.ع)</option>
-                      <option value="bank">عن طريق مصرف الرافدين (خصم 500 د.ع)</option>
-                    </select>
-                  </div>
-                  <div class="mb-3" id="bankAccountDiv" style="display:none;">
-                    <label class="form-label">رقم حساب مصرف الرافدين</label>
-                    <input type="text" class="form-control" id="rafidainAccount">
-                  </div>
-                  <div class="d-grid">
-                    <button type="submit" class="btn btn-primary"><i class="bi bi-cash-stack"></i> سحب الأرباح</button>
-                  </div>
-                </form>
-              </div>
-              <div class="main-card p-3">
-                <h6 class="fw-bold brand-gradient"><i class="bi bi-clock-history"></i> عمليات السحب</h6>
-                <table class="table table-sm align-middle">
-                  <thead>
-                    <tr>
-                      <th>الطريقة</th>
-                      <th>المبلغ</th>
-                      <th>الحالة</th>
-                    </tr>
-                  </thead>
-                  <tbody id="withdrawalsTable"></tbody>
-                </table>
-              </div>
+      </div>
+      <!-- Withdraw Tab -->
+      <div class="tab-pane fade" id="withdrawTab">
+        <div class="withdraw-section">
+          <div class="withdraw-title mb-3"><i class="bi bi-wallet2"></i> سحب الأرباح</div>
+          <form id="withdrawForm">
+            <div class="mb-3">
+              <label class="form-label fw-bold">اختر طريقة السحب</label>
+              <select class="form-select" id="withdrawMethod" required>
+                <option value="">اختر...</option>
+                <option value="delivery">عن طريق المندوب (خصم 1000 د.ع)</option>
+                <option value="bank">عن طريق مصرف الرافدين (خصم 500 د.ع)</option>
+              </select>
             </div>
+            <div class="mb-3" id="bankAccountDiv" style="display:none;">
+              <label class="form-label">رقم حساب مصرف الرافدين</label>
+              <input type="text" class="form-control" id="rafidainAccount">
+            </div>
+            <div class="d-grid mb-2">
+              <button type="submit" class="btn btn-success"><i class="bi bi-cash-stack"></i> سحب الأرباح</button>
+            </div>
+          </form>
+          <div>
+            <h6 class="fw-bold text-primary mb-2 mt-4"><i class="bi bi-clock-history"></i> تاريخ السحب</h6>
+            <table class="table table-sm withdraw-history-table align-middle">
+              <thead>
+                <tr>
+                  <th>الطريقة</th>
+                  <th>المبلغ</th>
+                  <th>الحالة</th>
+                </tr>
+              </thead>
+              <tbody id="withdrawalsTable"></tbody>
+            </table>
           </div>
         </div>
-        <!-- Support Tab -->
-        <div class="tab-pane fade" id="supportTab">
-          <div class="support-box mt-4 fade-in">
-            <h5 class="mb-2 fw-bold brand-gradient"><i class="bi bi-life-preserver"></i> الدعم الفني</h5>
-            <p>في حالة واجهت أي مشكلة أو لديك أي استفسار لا تنسى مراسلتنا على هذا الرقم:</p>
-            <h4 class="text-primary fw-bold">07700000000</h4>
-          </div>
+      </div>
+      <!-- Support Tab -->
+      <div class="tab-pane fade" id="supportTab">
+        <div class="support-box mt-4">
+          <h6 class="fw-bold mb-2 text-primary"><i class="bi bi-life-preserver"></i> الدعم الفني</h6>
+          <div>للمساعدة أو الاستفسار يرجى التواصل عبر الرقم:</div>
+          <div class="mt-2" style="font-size:1.14rem"><b>07700000000</b></div>
         </div>
       </div>
     </div>
   </div>
-
+  <!-- Login Overlay -->
+  <div id="loginOverlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;background:rgba(98,76,167,.16);display:flex;align-items:center;justify-content:center;">
+    <div class="neumorph-card p-4" style="max-width:335px;width:99vw;">
+      <div class="text-center mb-4">
+        <i class="bi bi-box-seam" style="font-size:2.0rem;color:#624ca7;"></i>
+        <div class="app-title" style="font-size:1.11rem">تسجيل الدخول</div>
+      </div>
+      <form id="loginForm" autocomplete="off">
+        <div class="mb-3">
+          <label class="form-label">اسم المستخدم</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-person"></i></span>
+            <input type="text" class="form-control" id="loginUsername" required>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">كلمة المرور</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+            <input type="password" class="form-control" id="loginPassword" required>
+          </div>
+        </div>
+        <div class="d-grid mb-2">
+          <button type="submit" class="btn btn-primary">دخول</button>
+        </div>
+        <div class="text-center mt-2">
+          <a href="#" class="btn btn-outline-secondary w-100"><i class="bi bi-people"></i> انضم معنا</a>
+        </div>
+      </form>
+    </div>
+  </div>
   <!-- Add/Edit Order Modal -->
   <div class="modal fade" id="addOrderModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
@@ -450,7 +515,6 @@
       </form>
     </div>
   </div>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script type="module">
@@ -471,20 +535,39 @@
     const db = getDatabase(app);
     const auth = getAuth(app);
 
-    const loginSection = document.getElementById('loginSection');
-    const mainAppSection = document.getElementById('mainAppSection');
+    // Tab navigation
+    document.querySelectorAll('#mainTabs .nav-link').forEach(btn => {
+      btn.onclick = function() {
+        document.querySelectorAll('#mainTabs .nav-link').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        let target = btn.getAttribute('data-bs-target');
+        document.querySelectorAll('.tab-pane').forEach(tab=>tab.classList.remove('show','active'));
+        document.querySelector(target).classList.add('show','active');
+        window.scrollTo({top:0,behavior:'smooth'});
+      };
+    });
+
+    function usernameToEmail(username) {
+      return username.trim().replace(/\s+/g,'_') + "@arpon11.com";
+    }
+
+    // Auth/Login
+    const loginOverlay = document.getElementById('loginOverlay');
     const loginForm = document.getElementById('loginForm');
     const logoutBtn = document.getElementById('logoutBtn');
+    const userNameHeader = document.getElementById('userNameHeader');
+    const userMetaHeader = document.getElementById('userMetaHeader');
+    const userAvatar = document.getElementById('userAvatar');
     const statTotalOrders = document.getElementById('statTotalOrders');
     const statReceivedOrders = document.getElementById('statReceivedOrders');
     const statProfits = document.getElementById('statProfits');
     const statReturnedOrders = document.getElementById('statReturnedOrders');
     const ordersTableBody = document.getElementById('ordersTableBody');
-    const withdrawalsTable = document.getElementById('withdrawalsTable');
     const withdrawForm = document.getElementById('withdrawForm');
     const withdrawMethod = document.getElementById('withdrawMethod');
     const bankAccountDiv = document.getElementById('bankAccountDiv');
     const rafidainAccount = document.getElementById('rafidainAccount');
+    const withdrawalsTable = document.getElementById('withdrawalsTable');
     const orderForm = document.getElementById('orderForm');
     const orderModalTitle = document.getElementById('orderModalTitle');
     const editOrderId = document.getElementById('editOrderId');
@@ -499,10 +582,6 @@
     let allOrderNumbersSet = new Set();
     let paidOrdersMap = {};
 
-    function usernameToEmail(username) {
-      return username.trim().replace(/\s+/g,'_') + "@arpon11.com";
-    }
-
     loginForm.onsubmit = async (e) => {
       e.preventDefault();
       const username = document.getElementById('loginUsername').value.trim();
@@ -515,17 +594,13 @@
         Swal.fire({ icon: 'error', title: 'فشل الدخول', text: 'اسم المستخدم أو كلمة المرور غير صحيحة!' });
       }
     };
-
+    auth.onAuthStateChanged(async user => {
+      if (user) handleLogin(user.uid);
+    });
     logoutBtn.onclick = async () => {
       await signOut(auth);
       location.reload();
     };
-
-    auth.onAuthStateChanged(async user => {
-      if (user) {
-        handleLogin(user.uid);
-      }
-    });
 
     async function handleLogin(uid) {
       const userSnap = await get(ref(db, "users/" + uid));
@@ -536,8 +611,11 @@
       }
       currentUserId = uid;
       currentUserData = userSnap.val();
-      loginSection.style.display = 'none';
-      mainAppSection.style.display = '';
+      loginOverlay.style.display = "none";
+      logoutBtn.classList.remove('d-none');
+      userNameHeader.textContent = currentUserData.username || "طلباتك";
+      userMetaHeader.textContent = (currentUserData.page ? "صفحة: " + currentUserData.page : "") + (currentUserData.phone1 ? " | هاتف: " + currentUserData.phone1 : "");
+      userAvatar.src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(currentUserData.username || "مستخدم") + "&background=8a6dff&color=fff&rounded=true&size=128";
       await loadAllOrderNumbers();
       loadWithdrawals();
     }
@@ -594,7 +672,6 @@
         statReceivedOrders.textContent = received;
         statReturnedOrders.textContent = returned;
         statProfits.textContent = profits > 0 ? profits + " د.ع" : "0 د.ع";
-
         ordersTableBody.innerHTML = '';
         ordersArr.forEach((order, idx) => {
           let statusClass =
@@ -602,11 +679,10 @@
             order.status === 'تم الاستلام من قبل المندوب' ? 'order-status-delivery' :
             order.status === 'راجعة' ? 'order-status-returned' :
             order.status === 'تم التسليم بنجاح' ? 'order-status-received' : 'order-status-wait';
-
           let paidLabel = paidOrdersMap[order.number] ? `<span class="paid-label">تم الدفع</span>` : '';
           let actions = order.status === 'بأنتظار وصول المندوب اليك' ?
-            `<button class="btn btn-primary" onclick="editOrder('${order.orderId}')"><i class="bi bi-pencil-square"></i></button>
-             <button class="btn btn-danger" onclick="deleteOrder('${order.orderId}')"><i class="bi bi-trash"></i></button>` : '';
+            `<button class="btn btn-edit order-actions" onclick="editOrder('${order.orderId}')"><i class="bi bi-pencil-square"></i></button>
+             <button class="btn btn-delete order-actions" onclick="deleteOrder('${order.orderId}')"><i class="bi bi-trash"></i></button>` : '';
           ordersTableBody.innerHTML += `
             <tr>
               <td>${order.number}</td>
@@ -618,9 +694,9 @@
                 <span class="order-status-badge ${statusClass}">
                   ${order.status}
                 </span>
+                ${paidLabel}
               </td>
               <td class="order-actions">
-                ${paidLabel}
                 ${actions}
               </td>
             </tr>
@@ -709,9 +785,7 @@
       const phone1 = orderPhone1.value.trim();
       const phone2 = orderPhone2.value.trim();
       const amount = parseInt(orderAmount.value,10);
-
       await loadAllOrderNumbers();
-
       if (!isEdit && allOrderNumbersSet.has(number)) {
         orderNumberError.style.display = "";
         orderNumber.setCustomValidity("duplicate");
@@ -719,7 +793,6 @@
         return;
       }
       if (!number || !address || !phone1 || isNaN(amount)) return;
-
       if (isEdit) {
         await update(ref(db, `orders/${currentUserId}/${editOrderId.value}`), {
           address, phone1, phone2, amount
