@@ -204,103 +204,69 @@
       box-shadow: 0 2px 16px #a2c5fa33;
       transform: scale(1.07);
     }
-    .orders-section {
+
+    /* Custom Card for Order List */
+    .order-list-card {
       background: #fff;
-      border-radius: 1.4rem;
-      box-shadow: 0 1px 14px #a2c5fa1a;
-      padding: 1.18rem 0.5rem 1.04rem;
-      margin-bottom: 1.2rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .orders-header {
+      border-radius: 1.15rem;
+      box-shadow: 0 2px 10px #a2c5fa22;
+      margin-bottom: 1rem;
+      padding: 0.7rem 1rem 0.4rem 1rem;
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
+      gap: .7rem;
+      transition: box-shadow .13s;
+      border: 1.5px solid #e4ecfa;
+      position: relative;
+    }
+    .order-list-header {
+      display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 0.7rem;
+      gap: .7rem;
     }
-    .orders-header h5 {
-      font-weight: 900;
-      color: #1976d2;
-      font-size: 1.15rem;
-      margin: 0;
-      letter-spacing: .3px;
-    }
-    .btn-add-order {
-      background: linear-gradient(90deg,#1976d2 60%,#90caf9 100%);
-      color: #fff;
+    .order-badge-num {
       font-weight: bold;
-      border: none;
-      border-radius: 1.3rem;
-      padding: 0.29em 1.12em;
-      font-size: 1.07rem;
-      box-shadow: 0 2px 12px #1976d233;
-      transition: background 0.16s, box-shadow 0.16s;
-    }
-    .btn-add-order:active,
-    .btn-add-order:focus,
-    .btn-add-order:hover {
-      background: linear-gradient(90deg,#90caf9 60%,#1976d2 100%);
-      color: #fff;
-    }
-    .orders-table {
-      width: 100%;
-      border-radius: 1rem;
-      overflow-x: auto;
-      font-size: 1rem;
-      margin-bottom: 0;
-    }
-    .orders-table th {
-      background: #e4ecfa;
       color: #1976d2;
-      font-weight: 800;
-      font-size: 1.04rem;
-      border: none;
-      padding: 0.54em 0.15em;
-    }
-    .orders-table td {
-      padding: 0.39em 0.11em;
-      vertical-align: middle;
-      border-top: 1px solid #d3e3fa;
-      font-size: 1.04rem;
-    }
-    .orders-table tbody tr:last-child td {
-      border-bottom: none;
+      background: #e4ecfa;
+      border-radius: 8px;
+      font-size: 1.15rem;
+      padding: 0.16em 0.78em;
+      box-shadow: 0 1px 6px #b3c8f133;
     }
     .order-status-badge {
       font-size: .96rem;
       border-radius: 9px;
-      padding: 0.21em 0.78em;
+      padding: 0.17em 0.7em;
       font-weight: 700;
       box-shadow: 0 1px 4px #a2c5fa1a;
       color: #fff;
-      margin-bottom: 2px;
+      margin-inline-end: .3em;
     }
     .order-status-wait { background: #ffb037; color: #222;}
     .order-status-delivery { background: #42a5f5;}
     .order-status-received { background: #43ea7c;}
     .order-status-returned { background: #ef4444;}
+    .order-actions {
+      display: flex;
+      gap: 5px;
+      margin-top:.35rem;
+    }
     .order-actions .btn {
-      padding: 0.15em 0.56em;
-      font-size: 1rem;
-      border-radius: 1rem;
-      margin-bottom: 2px;
-      margin-inline-end: 0.08em;
-      min-width: 28px;
-      min-height: 24px;
-      display: inline-flex;
+      border-radius: 50%;
+      min-width: 36px;
+      min-height: 36px;
+      display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 1.1rem;
       box-shadow: 0 1px 3px #e0e7ef33;
+      padding: .23em .23em;
     }
     .order-actions .btn-edit {
       background: #42a5f5;
       color: #fff;
       border: none;
     }
-    .order-actions .btn-edit:active,
-    .order-actions .btn-edit:focus,
     .order-actions .btn-edit:hover {
       background: #1976d2;
       color: #fff;
@@ -310,8 +276,6 @@
       color: #fff;
       border: none;
     }
-    .order-actions .btn-delete:active,
-    .order-actions .btn-delete:focus,
     .order-actions .btn-delete:hover {
       background: #b91c1c;
       color: #fff;
@@ -320,14 +284,69 @@
       display: inline-block;
       background: #e4ecfa;
       color: #1976d2;
-      border-radius: 8px;
-      padding: 0.11em 0.7em;
-      font-size: .97rem;
+      border-radius: 7px;
+      padding: 0.09em 0.7em;
+      font-size: .96rem;
       margin-inline-end: 0.2em;
       margin-bottom: 2px;
-      font-weight: 800;
+      font-weight: 700;
       box-shadow: 0 1px 6px #1976d220;
     }
+    .order-field-mini {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem 1.5rem;
+      font-size: 1.08rem;
+      margin-bottom: .2rem;
+    }
+    .order-field-mini span {
+      color: #3b5a85;
+      font-weight: 700;
+      min-width: 110px;
+      display: inline-block;
+    }
+
+    /* Withdraw Table Stylish */
+    .withdraw-table-list {
+      width: 100%;
+      border-radius: 1rem;
+      overflow: hidden;
+      background: #e4ecfa;
+      box-shadow: 0 1px 6px #a2c5fa22;
+      margin-bottom: 0;
+    }
+    .withdraw-table-list th {
+      background: #e4ecfa;
+      color: #1976d2;
+      font-weight: bold;
+      font-size: 1.05rem;
+      border: none;
+      padding: 0.52em 0.12em;
+      text-align: center;
+    }
+    .withdraw-table-list td {
+      padding: 0.44em 0.06em;
+      vertical-align: middle;
+      border-top: 1px solid #d3e3fa;
+      font-size: 1.03rem;
+      text-align: center;
+      background: #fff;
+    }
+    .withdraw-table-list tr:last-child td {
+      border-bottom: none;
+    }
+    .withdraw-status-badge {
+      font-size: .93rem;
+      border-radius: 7px;
+      padding: 0.13em 1.1em;
+      font-weight: 700;
+      box-shadow: 0 1px 2px #d3e3fa45;
+      color: #fff;
+    }
+    .withdraw-status-processing { background: #ffb037; color: #222;}
+    .withdraw-status-done { background: #43ea7c;}
+    .withdraw-status-other { background: #90caf9; color: #fff;}
+    /* Withdraw Section */
     .withdraw-section {
       background: #fff;
       border-radius: 1.1rem;
@@ -341,12 +360,7 @@
       font-size: 1.13rem;
       margin-bottom: 0.5rem;
     }
-    .withdraw-history-table th,
-    .withdraw-history-table td {
-      font-size: 0.99rem;
-      padding: 0.39em 0.11em;
-      text-align: center;
-    }
+    /* Support Box */
     .support-box {
       background: linear-gradient(120deg, #e4ecfa 65%, #fafdff 100%);
       border-radius: 1.09rem;
@@ -393,6 +407,7 @@
       .orders-header h5 { font-size: 0.97rem;}
       .stat-card { min-width: 82px; font-size: 0.97rem;}
       .stat-value { font-size: 1.08rem;}
+      .order-list-card {padding: 0.7rem .4rem;}
     }
     @media (max-width: 767.98px) {
       .glass-header { font-size: 1.02rem; padding: .88rem 0.1rem 0.48rem;}
@@ -400,10 +415,8 @@
       .orders-header { flex-direction: column; gap: 7px;}
       .dashboard-grid { grid-template-columns: 1fr; gap: 0.5rem;}
       .stat-card { min-width: 66px; font-size: 0.94rem;}
-      .orders-table th, .orders-table td { font-size: 0.91rem; padding: 0.13em 0.05em;}
-      .btn-add-order { font-size: 0.94rem;}
-      .animated-tabs { gap: 0.11rem;}
-      .animated-tabs .nav-link { font-size: 0.97rem; padding: .45em 0.39em;}
+      .order-list-card {flex-direction: column; gap: .55rem;}
+      .withdraw-table-list th, .withdraw-table-list td { font-size: 0.92rem;}
     }
   </style>
 </head>
@@ -477,28 +490,7 @@
     <div class="tab-content mb-3" id="tabContent">
       <!-- Orders Tab -->
       <div class="tab-pane fade show active" id="ordersTab">
-        <div class="orders-section">
-          <div class="orders-header">
-            <h5><i class="bi bi-list-task"></i> قائمة الطلبات</h5>
-            <button class="btn btn-add-order" data-bs-toggle="modal" data-bs-target="#addOrderModal"><i class="bi bi-plus-circle"></i> إضافة طلب</button>
-          </div>
-          <div class="table-responsive">
-            <table class="orders-table table align-middle mb-0">
-              <thead>
-                <tr>
-                  <th>رقم الطلب</th>
-                  <th>العنوان</th>
-                  <th>الهاتف 1</th>
-                  <th>الهاتف 2</th>
-                  <th>المبلغ</th>
-                  <th>الحالة</th>
-                  <th>إجراءات</th>
-                </tr>
-              </thead>
-              <tbody id="ordersTableBody"></tbody>
-            </table>
-          </div>
-        </div>
+        <div id="orderCardsList"></div>
       </div>
       <!-- Withdraw Tab -->
       <div class="tab-pane fade" id="withdrawTab">
@@ -523,16 +515,18 @@
           </form>
           <div>
             <h6 class="fw-bold text-primary mb-2 mt-4"><i class="bi bi-clock-history"></i> تاريخ السحب</h6>
-            <table class="table table-sm withdraw-history-table align-middle">
-              <thead>
-                <tr>
-                  <th>الطريقة</th>
-                  <th>المبلغ</th>
-                  <th>الحالة</th>
-                </tr>
-              </thead>
-              <tbody id="withdrawalsTable"></tbody>
-            </table>
+            <div class="table-responsive">
+              <table class="withdraw-table-list table align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th>الطريقة</th>
+                    <th>المبلغ</th>
+                    <th>الحالة</th>
+                  </tr>
+                </thead>
+                <tbody id="withdrawalsTable"></tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -633,6 +627,7 @@
     const statProfits = document.getElementById('statProfits');
     const statReturnedOrders = document.getElementById('statReturnedOrders');
     const ordersTableBody = document.getElementById('ordersTableBody');
+    const orderCardsList = document.getElementById('orderCardsList');
     const withdrawForm = document.getElementById('withdrawForm');
     const withdrawMethod = document.getElementById('withdrawMethod');
     const bankAccountDiv = document.getElementById('bankAccountDiv');
@@ -723,10 +718,73 @@
       });
     }
 
+    function renderOrdersList() {
+      orderCardsList.innerHTML = "";
+      if (!ordersArr.length) {
+        orderCardsList.innerHTML = `<div class="alert alert-warning text-center">لا توجد طلبات بعد.</div>`;
+        return;
+      }
+      ordersArr.forEach((order, idx) => {
+        let statusClass =
+          order.status === 'بأنتظار وصول المندوب اليك' ? 'order-status-wait' :
+          order.status === 'تم الاستلام من قبل المندوب' ? 'order-status-delivery' :
+          order.status === 'راجعة' ? 'order-status-returned' :
+          order.status === 'تم التسليم بنجاح' ? 'order-status-received' : 'order-status-wait';
+        let paidLabel = paidOrdersMap[order.number] ? `<span class="paid-label">تم الدفع</span>` : '';
+        let actions = order.status === 'بأنتظار وصول المندوب اليك' ?
+          `<button class="btn btn-edit" onclick="editOrder('${order.orderId}')"><i class="bi bi-pencil-square"></i></button>
+           <button class="btn btn-delete" onclick="deleteOrder('${order.orderId}')"><i class="bi bi-trash"></i></button>` : '';
+        orderCardsList.innerHTML += `
+          <div class="order-list-card">
+            <div class="order-list-header">
+              <span class="order-badge-num">${order.number}</span>
+              <span class="order-status-badge ${statusClass}">${order.status}</span>
+              ${paidLabel}
+            </div>
+            <div class="order-field-mini">
+              <span>العنوان:</span> <span>${order.address}</span>
+            </div>
+            <div class="order-field-mini">
+              <span>هاتف1:</span> <span>${order.phone1}</span>
+              <span>هاتف2:</span> <span>${order.phone2 || '-'}</span>
+            </div>
+            <div class="order-field-mini">
+              <span>المبلغ الكلي مع التوصيل:</span> <span>${parseInt(order.amount) + getDeliveryFee(idx)} د.ع</span>
+            </div>
+            <div class="order-actions">
+              ${actions}
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function renderWithdrawalsList() {
+      withdrawalsTable.innerHTML = "";
+      if (!withdrawalsArr.length) {
+        withdrawalsTable.innerHTML = `<tr><td colspan="3" class="text-center text-muted">لا توجد عمليات سحب بعد.</td></tr>`;
+        return;
+      }
+      withdrawalsArr.forEach(w => {
+        let statusBadge =
+          w.status === 'قيد المعالجة'
+            ? 'withdraw-status-badge withdraw-status-processing'
+            : w.status === 'تم الاستلام'
+            ? 'withdraw-status-badge withdraw-status-done'
+            : 'withdraw-status-badge withdraw-status-other';
+        withdrawalsTable.innerHTML += `
+          <tr>
+            <td>${w.method === 'delivery' ? 'مندوب' : 'مصرف الرافدين'}</td>
+            <td>${w.amount} د.ع</td>
+            <td><span class="${statusBadge}">${w.status}</span></td>
+          </tr>
+        `;
+      });
+    }
+
     function loadOrders() {
       onValue(ref(db, `orders/${currentUserId}`), snap => {
         ordersArr = [];
-        ordersTableBody.innerHTML = '';
         let total = 0, received = 0, returned = 0, profits = 0;
         if (snap.exists()) {
           ordersArr = Object.entries(snap.val()).map(([id, order]) => ({...order, orderId: id}));
@@ -748,60 +806,18 @@
         statReceivedOrders.textContent = received;
         statReturnedOrders.textContent = returned;
         statProfits.textContent = profits > 0 ? profits + " د.ع" : "0 د.ع";
-        ordersTableBody.innerHTML = '';
-        ordersArr.forEach((order, idx) => {
-          let statusClass =
-            order.status === 'بأنتظار وصول المندوب اليك' ? 'order-status-wait' :
-            order.status === 'تم الاستلام من قبل المندوب' ? 'order-status-delivery' :
-            order.status === 'راجعة' ? 'order-status-returned' :
-            order.status === 'تم التسليم بنجاح' ? 'order-status-received' : 'order-status-wait';
-          let paidLabel = paidOrdersMap[order.number] ? `<span class="paid-label">تم الدفع</span>` : '';
-          let actions = order.status === 'بأنتظار وصول المندوب اليك' ?
-            `<button class="btn btn-edit order-actions" onclick="editOrder('${order.orderId}')"><i class="bi bi-pencil-square"></i></button>
-             <button class="btn btn-delete order-actions" onclick="deleteOrder('${order.orderId}')"><i class="bi bi-trash"></i></button>` : '';
-          ordersTableBody.innerHTML += `
-            <tr>
-              <td>${order.number}</td>
-              <td>${order.address}</td>
-              <td>${order.phone1}</td>
-              <td>${order.phone2 || '-'}</td>
-              <td>${parseInt(order.amount) + getDeliveryFee(idx)}</td>
-              <td>
-                <span class="order-status-badge ${statusClass}">
-                  ${order.status}
-                </span>
-                ${paidLabel}
-              </td>
-              <td class="order-actions">
-                ${actions}
-              </td>
-            </tr>
-          `;
-        });
+        renderOrdersList();
       });
     }
 
     function loadWithdrawals() {
       onValue(ref(db, `withdrawals/${currentUserId}`), snap => {
         withdrawalsArr = [];
-        withdrawalsTable.innerHTML = '';
         if (snap.exists()) {
           withdrawalsArr = Object.entries(snap.val()).map(([id, w]) => ({...w, id}));
-          withdrawalsArr.forEach(w => {
-            withdrawalsTable.innerHTML += `
-              <tr>
-                <td>${w.method === 'delivery' ? 'مندوب' : 'مصرف الرافدين'}</td>
-                <td>${w.amount} د.ع</td>
-                <td>
-                  <span class="badge bg-${w.status === 'قيد المعالجة' ? 'warning' : w.status === 'تم الاستلام' ? 'success' : 'secondary'}">
-                    ${w.status}
-                  </span>
-                </td>
-              </tr>
-            `;
-          });
         }
         updatePaidOrdersMap();
+        renderWithdrawalsList();
         loadOrders();
       });
     }
@@ -893,7 +909,6 @@
     };
 
     document.getElementById('addOrderModal').addEventListener('show.bs.modal', ()=>{
-      // If not editing, reset all fields to empty
       if (!editOrderId.value) {
         orderForm.reset();
         orderNumber.readOnly = false;
