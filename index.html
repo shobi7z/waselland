@@ -1,1155 +1,988 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>توصيل الطلبات | حسابي</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;800&display=swap" rel="stylesheet">
-  <style>
-    html, body {
-      background: linear-gradient(135deg, #e4ecfa 0%, #a2c5fa 100%);
-      min-height: 100vh;
-      font-family: "Tajawal", Arial, sans-serif;
-      color: #263146;
-      overflow-x: hidden;
-    }
-    .glow {
-      background: radial-gradient(ellipse at 30% 20%, #a2c5fa99 0%, #e4ecfa 60%, #fff0 90%);
-      filter: blur(35px) brightness(1.08);
-      position: absolute;
-      width: 110vw;
-      height: 80vh;
-      top: -10vh;
-      left: -5vw;
-      z-index: 0;
-      pointer-events: none;
-    }
-    #loginOverlay {
-      position: fixed;
-      inset: 0;
-      z-index: 99999;
-      background: linear-gradient(115deg, #fafdff 80%, #e4ecfa 120%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(6px);
-      transition: opacity 0.36s;
-    }
-    #loginOverlay.hide {
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s;
-    }
-    .login-modal {
-      background: #fff;
-      border-radius: 2.1rem;
-      box-shadow: 0 4px 32px #b3c8f1aa;
-      padding: 2.1rem 1.3rem 1.2rem;
-      width: 97vw;
-      max-width: 360px;
-      position: relative;
-      text-align: center;
-      animation: popin 0.8s cubic-bezier(.68,-0.55,.27,1.55);
-    }
-    @keyframes popin {
-      0% {transform:scale(.8) rotate(-8deg); opacity:.5;}
-      70%{transform:scale(1.08) rotate(1deg);}
-      100%{transform:scale(1) rotate(0);}
-    }
-    .login-modal .brand {
-      font-size: 2.2rem;
-      font-weight: 900;
-      background: linear-gradient(100deg, #1e88e5, #a2c5fa 70%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: .4rem;
-      letter-spacing: 1px;
-      display: block;
-    }
-    .login-modal .desc {
-      color: #1e88e5;
-      font-size: 1.14rem;
-      margin-bottom: 1.2rem;
-      font-weight: 700;
-      letter-spacing: .3px;
-    }
-    .glass-header {
-      backdrop-filter: blur(10px);
-      background: rgba(255,255,255,0.82);
-      box-shadow: 0 8px 32px #a2c5fa33, 0 2px 8px #a2c5fa08;
-      border-radius: 0 0 2.2rem 2.2rem;
-      padding: 1.7rem 0 1.1rem;
-      text-align: center;
-      margin-bottom: 1.5rem;
-      border-bottom: 2px solid #d3e3fa;
-      position: sticky;
-      top: 0;
-      z-index: 1001;
-    }
-    .glass-header .avatar {
-      width: 82px;
-      height: 82px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 4px solid #fff;
-      box-shadow: 0 2px 24px #a2c5fa13;
-      margin-bottom: .8rem;
-      background: #e4ecfa;
-    }
-    .glass-header .username {
-      font-size: 1.55rem;
-      font-weight: 900;
-      letter-spacing: 0.3px;
-      color: #1976d2;
-      text-shadow: 0 1px 7px #b3c8f133;
-    }
-    .glass-header .logout-btn {
-      background: linear-gradient(93deg,#1976d2 60%,#90caf9 100%);
-      color: #fff;
-      border: none;
-      border-radius: 1.6rem;
-      font-weight: bold;
-      font-size: 1.07rem;
-      box-shadow: 0 1px 8px #a2c5fa22;
-      padding: 0.39em 1.25em;
-      margin-top: 1.2rem;
-      transition: background .13s;
-      display: inline-block;
-    }
-    .glass-header .logout-btn:hover { background: linear-gradient(90deg,#90caf9 60%,#1976d2 100%);}
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: repeat(2,1fr);
-      gap: 1.1rem;
-      margin-bottom: 1.7rem;
-    }
-    .dash-card {
-      background: linear-gradient(135deg, #fafdff 70%, #e4ecfa 100%);
-      border-radius: 1.35rem;
-      box-shadow: 0 1px 16px #a2c5fa1a;
-      text-align: center;
-      padding: 1rem 0.2rem 0.75rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-      transition: box-shadow .18s, transform .17s;
-      border: none;
-      cursor: pointer;
-    }
-    .dash-card .icon {
-      font-size: 2.1rem;
-      color: #1976d2;
-      margin-bottom: .3rem;
-      filter: drop-shadow(0 3px 14px #1976d245);
-      animation: glowicon 3s ease-in-out infinite alternate;
-    }
-    @keyframes glowicon {
-      0% { filter: drop-shadow(0 3px 7px #a2c5fa44);}
-      100% { filter: drop-shadow(0 3px 20px #1e88e5bb);}
-    }
-    .dash-title {
-      font-size: 1.07rem;
-      color: #3b5a85;
-      font-weight: 800;
-      margin-bottom: 2px;
-      letter-spacing: 0.2px;
-    }
-    .dash-value {
-      font-size: 1.56rem;
-      color: #1976d2;
-      font-weight: 900;
-      letter-spacing: 0.5px;
-      margin-bottom: 2px;
-      text-shadow: 0 2px 7px #a2c5fa33;
-    }
-    .animated-tabs {
-      display: flex;
-      gap: 0.7rem;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 1.5rem;
-      margin-top: 0.5rem;
-      position: sticky;
-      top: 80px;
-      background: #fafdffcc;
-      z-index: 20;
-      border-radius: 1.2rem;
-      box-shadow: 0 1px 10px #a2c5fa0d;
-      padding: .22rem;
-    }
-    .animated-tabs .nav-link {
-      border-radius: 1.2rem;
-      font-size: 1.12rem;
-      color: #1976d2;
-      background: #fff;
-      font-weight: bold;
-      border: none;
-      padding: .49em 1.45em;
-      transition: background 0.17s, color 0.15s, box-shadow 0.17s;
-      box-shadow: 0 1px 5px #a2c5fa0c;
-      display: flex;
-      align-items: center;
-      gap: 0.45rem;
-    }
-    .animated-tabs .nav-link.active,
-    .animated-tabs .nav-link:focus,
-    .animated-tabs .nav-link:hover {
-      background: linear-gradient(90deg,#1976d2 40%,#90caf9 100%);
-      color: #fff !important;
-      box-shadow: 0 2px 16px #a2c5fa33;
-      transform: scale(1.07);
-    }
-    .add-order-btn {
-      margin-bottom: 1rem;
-      font-size: 1.08rem;
-      font-weight: bold;
-      border-radius: 1.2rem;
-      padding: .6em 1.6em;
-      box-shadow: 0 1px 8px #90caf922;
-      display: inline-flex;
-      align-items: center;
-      gap: .6em;
-      background: linear-gradient(90deg, #43ea7c 60%, #42a5f5 100%);
-      color: #fff !important;
-      border: none;
-      transition: background .13s;
-    }
-    .add-order-btn:hover, .add-order-btn:focus {
-      background: linear-gradient(90deg, #42a5f5 60%, #43ea7c 100%);
-      color: #fff !important;
-    }
-    @media (max-width: 767.98px) {
-      .add-order-btn {
-        width: 100%;
-        font-size: 1.06rem;
-        padding: .6em 0;
-        position: fixed;
-        left: 16px;
-        right: 16px;
-        bottom: 18px;
-        z-index: 999;
-        margin-bottom: 0;
-        box-shadow: 0 6px 26px #1976d277;
-      }
-    }
-    /* Styles for order cards */
-    .order-card {
-      background: #fff;
-      border-radius: 1.2rem;
-      box-shadow: 0 2px 12px #a2c5fa1a;
-      padding: 1.1rem;
-      margin-bottom: 1rem;
-      position: relative;
-      overflow: hidden;
-      border: 1px solid #e3eefd;
-    }
-    .order-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 6px;
-      background: linear-gradient(90deg, #1976d2 0%, #90caf9 100%);
-      transition: all 0.3s ease;
-    }
-    .order-card.status-pending::before { background: linear-gradient(90deg, #ffc107 0%, #ffeb3b 100%); } /* Orange for Pending */
-    .order-card.status-received::before { background: linear-gradient(90deg, #28a745 0%, #81c784 100%); } /* Green for Received */
-    .order-card.status-returned::before { background: linear-gradient(90deg, #dc3545 0%, #ef9a9a 100%); } /* Red for Returned */
-    .order-card .order-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: .8rem;
-    }
-    .order-card .order-number {
-      font-weight: 800;
-      font-size: 1.2rem;
-    }
-    /* New styles for order-list-card from the JS part */
-    .order-list-card {
-        background: linear-gradient(135deg, #fafdff 70%, #e4ecfa 100%);
-        border-radius: 1.35rem;
-        box-shadow: 0 1px 16px #a2c5fa1a;
-        padding: 1rem 1.2rem;
-        margin-bottom: 1rem;
-        position: relative;
-        overflow: hidden;
-        border: 1px solid #e3eefd;
-    }
-    .order-list-card .order-list-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 0.8rem;
-    }
-    .order-list-card .order-badge-num {
-        font-weight: 800;
-        font-size: 1.1rem;
-        color: #1976d2;
-    }
-    .order-list-card .order-status-badge {
-        font-size: 0.85rem;
-        font-weight: bold;
-        padding: 0.3em 0.8em;
-        border-radius: 1.5em;
-        color: #fff;
-        background: #ccc; /* Default */
-    }
-    .order-list-card .order-status-wait { background: #ffc107; }
-    .order-list-card .order-status-delivery { background: #007bff; }
-    .order-list-card .order-status-returned { background: #dc3545; }
-    .order-list-card .order-status-received { background: #28a745; }
-    .order-list-card .paid-label {
-        background: #6f42c1; /* Purple */
-        color: #fff;
-        font-size: 0.8rem;
-        padding: 0.25em 0.7em;
-        border-radius: 1.2em;
-        margin-right: 0.5rem;
-    }
-    .order-list-card .order-field-mini {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.95rem;
-        margin-bottom: 0.3rem;
-        color: #555;
-    }
-    .order-list-card .order-field-mini span:first-child {
-        font-weight: 600;
-        color: #333;
-    }
-    .order-list-card .order-actions {
-        margin-top: 0.8rem;
-        text-align: end;
-    }
-    .order-list-card .btn-edit,
-    .order-list-card .btn-delete {
-        background: #1976d2;
-        color: #fff;
-        border: none;
-        border-radius: 0.8rem;
-        padding: 0.4em 0.8em;
-        font-size: 0.9rem;
-        margin-left: 0.5rem;
-        transition: background 0.2s;
-    }
-    .order-list-card .btn-delete { background: #dc3545; }
-    .order-list-card .btn-edit:hover { background: #1565c0; }
-    .order-list-card .btn-delete:hover { background: #c82333; }
-
-    /* Styles for withdraw tab */
-    .withdraw-section {
-        background: #fff;
-        border-radius: 1.2rem;
-        box-shadow: 0 2px 12px #a2c5fa1a;
-        padding: 1.5rem;
-        margin-bottom: 1rem;
-        border: 1px solid #e3eefd;
-    }
-    .withdraw-section h5 {
-        font-weight: bold;
-        color: #1976d2;
-        margin-bottom: 1rem;
-    }
-    .withdraw-section .form-label {
-        font-weight: 600;
-        color: #3b5a85;
-    }
-    .withdraw-section .btn-primary {
-        background: linear-gradient(90deg, #1976d2 40%, #90caf9 100%);
-        border: none;
-        font-weight: bold;
-    }
-    .withdraw-section .btn-primary:hover {
-        background: linear-gradient(90deg, #90caf9 40%, #1976d2 100%);
-    }
-
-    .withdrawals-table-container {
-        background: #fff;
-        border-radius: 1.2rem;
-        box-shadow: 0 2px 12px #a2c5fa1a;
-        padding: 1.5rem;
-        border: 1px solid #e3eefd;
-    }
-    .withdrawals-table-container h5 {
-        font-weight: bold;
-        color: #1976d2;
-        margin-bottom: 1rem;
-    }
-    .withdrawals-table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0 8px; /* Space between rows */
-    }
-    .withdrawals-table thead th {
-        color: #1976d2;
-        font-weight: bold;
-        padding-bottom: 10px;
-        border-bottom: 2px solid #e3eefd;
-    }
-    .withdrawals-table tbody tr {
-        background: #fafdff;
-        border-radius: 0.8rem;
-        box-shadow: 0 1px 6px #a2c5fa10;
-    }
-    .withdrawals-table tbody td {
-        padding: 0.8rem 1rem;
-        vertical-align: middle;
-        border: none; /* Remove default table borders */
-    }
-    .withdrawals-table tbody tr:first-child td { border-top-left-radius: 0.8rem; border-top-right-radius: 0.8rem; }
-    .withdrawals-table tbody tr:last-child td { border-bottom-left-radius: 0.8rem; border-bottom-right-radius: 0.8rem; }
-
-    .withdraw-status-badge {
-        font-size: 0.8rem;
-        font-weight: bold;
-        padding: 0.3em 0.8em;
-        border-radius: 1.5em;
-        color: #fff;
-        display: inline-block;
-    }
-    .withdraw-status-processing { background: #ffc107; } /* Yellow for processing */
-    .withdraw-status-done { background: #28a745; } /* Green for done */
-    .withdraw-status-other { background: #6c757d; } /* Gray for other/default */
-
-    /* Support tab styles (placeholder) */
-    .support-section {
-        background: #fff;
-        border-radius: 1.2rem;
-        box-shadow: 0 2px 12px #a2c5fa1a;
-        padding: 1.5rem;
-        margin-bottom: 1rem;
-        border: 1px solid #e3eefd;
-        text-align: center;
-    }
-    .support-section h5 {
-        font-weight: bold;
-        color: #1976d2;
-        margin-bottom: 1rem;
-    }
-    .support-section p {
-        color: #555;
-        line-height: 1.6;
-    }
-    .support-section .btn-info {
-        background: linear-gradient(90deg, #17a2b8 60%, #5bc0de 100%);
-        border: none;
-        font-weight: bold;
-        color: #fff;
-        padding: 0.6em 1.5em;
-        border-radius: 1.2rem;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5em;
-    }
-    .support-section .btn-info:hover {
-        background: linear-gradient(90deg, #5bc0de 60%, #17a2b8 100%);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة المستخدم</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <style>
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar-item {
+            transition: all 0.3s ease;
+        }
+        .sidebar-item:hover {
+            background-color: #f3f4f6;
+            transform: translateX(-5px);
+        }
+        .sidebar-item.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .order-card {
+            transition: all 0.3s ease;
+        }
+        .order-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
-<body>
-  <div class="glow"></div>
-  <div id="loginOverlay">
-    <div class="login-modal">
-      <span class="brand"><i class="bi bi-box-seam"></i> توصيل الطلبات</span>
-      <div class="desc mb-0">دخول المستخدم</div>
-      <form id="loginForm" autocomplete="off">
-        <div class="mb-3 text-start">
-          <label class="form-label">اسم المستخدم</label>
-          <div class="input-group">
-            <span class="input-group-text"><i class="bi bi-person"></i></span>
-            <input type="text" class="form-control" id="loginUsername" required>
-          </div>
-        </div>
-        <div class="mb-3 text-start">
-          <label class="form-label">كلمة المرور</label>
-          <div class="input-group">
-            <span class="input-group-text"><i class="bi bi-lock"></i></span>
-            <input type="password" class="form-control" id="loginPassword" required>
-          </div>
-        </div>
-        <div class="d-grid mb-2">
-          <button type="submit" class="btn btn-primary" style="font-weight:bold;font-size:1.13rem;"><i class="bi bi-box-arrow-in-left"></i> دخول</button>
-        </div>
-        <div class="text-center mt-2">
-          <a href="#" class="btn btn-outline-secondary w-100"><i class="bi bi-people"></i> انضم معنا</a>
-        </div>
-      </form>
-    </div>
-  </div>
-  <div class="glass-header" id="profileHeader" style="display: none;">
-    <img src="https://ui-avatars.com/api/?name=مستخدم&background=1976d2&color=fff&rounded=true&size=128" class="avatar mb-2" id="userAvatar" alt="avatar">
-    <div class="username" id="userNameHeader">طلباتك</div>
-    <button class="logout-btn d-none" id="logoutBtn"><i class="bi bi-power"></i> خروج</button>
-  </div>
-  <div class="container pb-5">
-    <div class="dashboard-grid">
-      <div class="dash-card">
-        <span class="icon"><i class="bi bi-list-task"></i></span>
-        <div class="dash-title">الطلبات الكلية</div>
-        <div class="dash-value" id="statTotalOrders">0</div>
-      </div>
-      <div class="dash-card">
-        <span class="icon"><i class="bi bi-bag-check"></i></span>
-        <div class="dash-title">المستلمة</div>
-        <div class="dash-value" id="statReceivedOrders">0</div>
-      </div>
-      <div class="dash-card">
-        <span class="icon"><i class="bi bi-cash-stack"></i></span>
-        <div class="dash-title">الأرباح</div>
-        <div class="dash-value" id="statProfits">0 د.ع</div>
-      </div>
-      <div class="dash-card">
-        <span class="icon"><i class="bi bi-arrow-repeat"></i></span>
-        <div class="dash-title">الراجعة</div>
-        <div class="dash-value" id="statReturnedOrders">0</div>
-      </div>
-    </div>
-    <ul class="nav nav-pills animated-tabs mb-3" id="mainTabs">
-      <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#ordersTab"><i class="bi bi-list-task"></i> الطلبات</button></li>
-      <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#withdrawTab"><i class="bi bi-wallet2"></i> الأرباح</button></li>
-      <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#supportTab"><i class="bi bi-life-preserver"></i> الدعم</button></li>
-    </ul>
-    <div class="tab-content mb-3" id="tabContent">
-      <div class="tab-pane fade show active" id="ordersTab">
-        <button class="add-order-btn mb-3" id="addOrderBtn"><i class="bi bi-plus-circle"></i> إضافة طلب جديد</button>
-        <div id="orderCardsList"></div>
-      </div>
-      <div class="tab-pane fade" id="withdrawTab">
-        <div class="withdraw-section mb-3">
-            <h5>طلب سحب أرباح</h5>
-            <form id="withdrawForm">
-                <div class="mb-3">
-                    <label for="withdrawMethod" class="form-label">طريقة السحب</label>
-                    <select class="form-select" id="withdrawMethod">
-                        <option value="delivery">عن طريق المندوب</option>
-                        <option value="bank">حساب مصرف الرافدين</option>
-                    </select>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    
+    <!-- Login Section -->
+    <div id="loginSection" class="min-h-screen flex items-center justify-center px-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+            <div class="text-center mb-8">
+                <div class="text-6xl mb-4">👤</div>
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">تسجيل الدخول</h1>
+                <p class="text-gray-600">أدخل بياناتك للوصول إلى حسابك</p>
+            </div>
+            
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">اسم المستخدم</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        required 
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                        placeholder="أدخل اسم المستخدم"
+                    >
                 </div>
-                <div class="mb-3" id="bankAccountDiv" style="display:none;">
-                    <label for="rafidainAccount" class="form-label">رقم حساب مصرف الرافدين</label>
-                    <input type="text" class="form-control" id="rafidainAccount">
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">كلمة المرور</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        required 
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                        placeholder="أدخل كلمة المرور"
+                    >
                 </div>
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-primary"><i class="bi bi-cash"></i> طلب سحب</button>
+                
+                <button 
+                    type="submit" 
+                    class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all font-medium text-lg"
+                >
+                    تسجيل الدخول
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboardSection" class="hidden">
+        <!-- Header -->
+        <header class="bg-white shadow-lg border-b-4 border-blue-500 fixed w-full top-0 z-40">
+            <div class="px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center py-6">
+                    <div class="flex items-center">
+                        <button onclick="toggleSidebar()" class="lg:hidden ml-4 p-2 rounded-md text-gray-600 hover:text-gray-900">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                        </button>
+                        <h1 class="text-3xl font-bold text-gray-900">🏠 لوحة المستخدم</h1>
+                    </div>
+                    <div class="flex items-center space-x-4 space-x-reverse">
+                        <span class="text-gray-600" id="welcomeText">مرحباً</span>
+                        <button onclick="logout()" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
+                            تسجيل الخروج
+                        </button>
+                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+                            م
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar -->
+        <div id="sidebar" class="fixed right-0 top-20 h-full w-64 bg-white shadow-lg transform translate-x-0 transition-transform duration-300 ease-in-out z-30 lg:translate-x-0">
+            <div class="p-6">
+                <nav class="space-y-2">
+                    <a href="#" onclick="showSection('stats')" class="sidebar-item active flex items-center px-4 py-3 rounded-lg">
+                        <span class="ml-3">📊</span>
+                        الإحصائيات
+                    </a>
+                    <a href="#" onclick="showSection('orders')" class="sidebar-item flex items-center px-4 py-3 rounded-lg">
+                        <span class="ml-3">📋</span>
+                        إدارة الطلبات
+                    </a>
+                    <a href="#" onclick="showSection('addOrder')" class="sidebar-item flex items-center px-4 py-3 rounded-lg">
+                        <span class="ml-3">➕</span>
+                        إضافة طلب جديد
+                    </a>
+                    <a href="#" onclick="showSection('withdraw')" class="sidebar-item flex items-center px-4 py-3 rounded-lg">
+                        <span class="ml-3">💰</span>
+                        سحب الأرباح
+                    </a>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Overlay for mobile -->
+        <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden lg:hidden" onclick="toggleSidebar()"></div>
+
+        <!-- Main Content -->
+        <div class="lg:mr-64 pt-20">
+            <div class="px-4 sm:px-6 lg:px-8 py-8">
+                
+                <!-- Statistics Section -->
+                <div id="statsSection" class="section-content">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">📊 إحصائياتك</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                        <div class="stat-card bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 text-white">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-blue-100 text-sm">إجمالي الطلبات</p>
+                                    <p class="text-3xl font-bold" id="totalOrders">0</p>
+                                </div>
+                                <div class="text-4xl">📦</div>
+                            </div>
+                        </div>
+                        <div class="stat-card bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-green-100 text-sm">تم التسليم</p>
+                                    <p class="text-3xl font-bold" id="deliveredOrders">0</p>
+                                </div>
+                                <div class="text-4xl">✅</div>
+                            </div>
+                        </div>
+                        <div class="stat-card bg-gradient-to-r from-red-500 to-red-600 rounded-xl p-6 text-white">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-red-100 text-sm">الطلبات الراجعة</p>
+                                    <p class="text-3xl font-bold" id="returnedOrders">0</p>
+                                </div>
+                                <div class="text-4xl">↩️</div>
+                            </div>
+                        </div>
+                        <div class="stat-card bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-xl p-6 text-white">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-yellow-100 text-sm">الأرباح الحالية</p>
+                                    <p class="text-3xl font-bold" id="currentEarnings">0</p>
+                                </div>
+                                <div class="text-4xl">💰</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orders Management Section -->
+                <div id="ordersSection" class="section-content hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-900">📋 إدارة الطلبات</h2>
+                        <div class="flex space-x-4 space-x-reverse">
+                            <input 
+                                type="text" 
+                                id="searchInput" 
+                                placeholder="ابحث في الطلبات..."
+                                class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            >
+                            <button onclick="searchOrders()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                                بحث
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="ordersContainer" class="space-y-4">
+                        <!-- Orders will be loaded here -->
+                    </div>
+                    
+                    <div id="noOrders" class="text-center py-12 hidden">
+                        <div class="text-6xl mb-4">📭</div>
+                        <p class="text-gray-500 text-lg">لا توجد طلبات للعرض</p>
+                    </div>
+                </div>
+
+                <!-- Add Order Section -->
+                <div id="addOrderSection" class="section-content hidden">
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">➕ إضافة طلب جديد</h2>
+                        
+                        <form id="orderForm" class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">العنوان *</label>
+                                    <input 
+                                        type="text" 
+                                        id="orderAddress" 
+                                        required 
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        placeholder="أدخل عنوان التسليم"
+                                    >
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">رقم الهاتف الأول *</label>
+                                    <input 
+                                        type="tel" 
+                                        id="orderPhone1" 
+                                        required 
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        placeholder="أدخل رقم الهاتف الأول"
+                                    >
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">رقم الهاتف الثاني</label>
+                                    <input 
+                                        type="tel" 
+                                        id="orderPhone2" 
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        placeholder="أدخل رقم الهاتف الثاني (اختياري)"
+                                    >
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">مبلغ الطلب *</label>
+                                    <input 
+                                        type="number" 
+                                        id="orderAmount" 
+                                        required 
+                                        min="1"
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        placeholder="أدخل مبلغ الطلب بالدينار"
+                                    >
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-end">
+                                <button 
+                                    type="submit" 
+                                    class="px-8 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all font-medium"
+                                >
+                                    إضافة الطلب
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Withdraw Section -->
+                <div id="withdrawSection" class="section-content hidden">
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">💰 سحب الأرباح</h2>
+                        
+                        <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white mb-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-green-100 text-sm">الأرباح المتاحة للسحب</p>
+                                    <p class="text-4xl font-bold" id="availableEarnings">0</p>
+                                    <p class="text-green-100 text-sm">دينار عراقي</p>
+                                </div>
+                                <div class="text-6xl">💰</div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                            <div class="flex items-start">
+                                <div class="text-yellow-600 text-xl ml-3">⚠️</div>
+                                <div>
+                                    <h4 class="font-bold text-yellow-800 mb-2">تنبيه مهم</h4>
+                                    <p class="text-yellow-700 text-sm">
+                                        عند سحب الأرباح، سيتم تصفير الأرباح الحالية وحذف جميع الطلبات المستلمة. 
+                                        تأكد من رغبتك في المتابعة قبل الضغط على زر السحب.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mb-8">
+                            <button 
+                                onclick="withdrawEarnings()" 
+                                id="withdrawBtn"
+                                class="px-8 py-4 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 transition-all font-medium text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                سحب الأرباح
+                            </button>
+                        </div>
+                        
+                        <!-- Withdrawal Requests History -->
+                        <div class="bg-gray-50 rounded-xl p-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-4">📋 تاريخ طلبات السحب</h3>
+                            <div id="withdrawalHistory" class="space-y-3">
+                                <!-- Withdrawal requests will be loaded here -->
+                            </div>
+                            <div id="noWithdrawals" class="text-center py-8 hidden">
+                                <div class="text-4xl mb-2">📭</div>
+                                <p class="text-gray-500">لا توجد طلبات سحب سابقة</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 w-full max-w-md mx-4 transform transition-all">
+            <div class="text-center">
+                <div id="confirmIcon" class="text-6xl mb-4">⚠️</div>
+                <h3 id="confirmTitle" class="text-2xl font-bold text-gray-900 mb-4">تأكيد العملية</h3>
+                <p id="confirmMessage" class="text-gray-600 mb-6 leading-relaxed"></p>
+                <div class="flex space-x-4 space-x-reverse justify-center">
+                    <button onclick="closeConfirmModal()" class="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors font-medium">
+                        إلغاء
+                    </button>
+                    <button id="confirmButton" class="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-medium">
+                        تأكيد
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 w-full max-w-md mx-4 transform transition-all">
+            <div class="text-center">
+                <div class="text-6xl mb-4">✅</div>
+                <h3 class="text-2xl font-bold text-green-600 mb-4">تم بنجاح!</h3>
+                <p id="successMessage" class="text-gray-600 mb-6 leading-relaxed"></p>
+                <button onclick="closeSuccessModal()" class="px-8 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium">
+                    موافق
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Order Modal -->
+    <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 w-full max-w-2xl mx-4 max-h-screen overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-gray-900">✏️ تعديل الطلب</h3>
+                <button onclick="closeEditModal()" class="text-gray-500 hover:text-gray-700 text-2xl">×</button>
+            </div>
+            <form id="editForm" class="space-y-4">
+                <input type="hidden" id="editOrderId">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">العنوان</label>
+                        <input type="text" id="editAddress" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">رقم الهاتف الأول</label>
+                        <input type="tel" id="editPhone1" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">رقم الهاتف الثاني</label>
+                        <input type="tel" id="editPhone2" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">مبلغ الطلب</label>
+                        <input type="number" id="editAmount" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-4 space-x-reverse pt-4">
+                    <button type="button" onclick="closeEditModal()" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+                        إلغاء
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                        حفظ التغييرات
+                    </button>
                 </div>
             </form>
         </div>
-        <div class="withdrawals-table-container">
-            <h5>سجل عمليات السحب</h5>
-            <div class="table-responsive">
-                <table class="table withdrawals-table">
-                    <thead>
-                        <tr>
-                            <th>الطريقة</th>
-                            <th>المبلغ</th>
-                            <th>الحالة</th>
-                        </tr>
-                    </thead>
-                    <tbody id="withdrawalsTable">
-                        </tbody>
-                </table>
-            </div>
-        </div>
-      </div>
-      <div class="tab-pane fade" id="supportTab">
-        <div class="support-section">
-            <h5>الدعم الفني</h5>
-            <p>إذا كان لديك أي استفسارات أو واجهت أي مشاكل، يرجى التواصل معنا عبر القنوات التالية:</p>
-            <p>
-                <a href="https://t.me/your_telegram_support_link" target="_blank" class="btn btn-info me-2"><i class="bi bi-telegram"></i> تيليجرام</a>
-                <a href="https://wa.me/your_whatsapp_number" target="_blank" class="btn btn-info"><i class="bi bi-whatsapp"></i> واتساب</a>
-            </p>
-            <p class="mt-4">فريق الدعم متاح لمساعدتك في أوقات العمل الرسمية.</p>
-        </div>
-      </div>
     </div>
-  </div>
-  <button class="add-order-btn d-md-none w-100" id="addOrderBtnMob" style="display:none;">
-    <i class="bi bi-plus-circle"></i> إضافة طلب جديد
-  </button>
-  <div class="modal fade" id="addOrderModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <form class="modal-content" id="orderForm">
-        <div class="modal-header">
-          <h5 class="modal-title" id="orderModalTitle">إضافة طلب جديد</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <input type="hidden" id="editOrderId">
-          <div class="mb-3">
-            <label class="form-label">رقم الطلب (يدوياً)</label>
-            <input type="text" class="form-control" id="orderNumber" required pattern="[A-Za-z0-9\-]+">
-            <div class="form-text text-danger" id="orderNumberError" style="display:none">رقم الطلب مستخدم من قبل، يرجى إدخال رقم آخر.</div>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">عنوان الزبون</label>
-            <input type="text" class="form-control" id="orderAddress" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">رقم الهاتف الأول</label>
-            <input type="text" class="form-control" id="orderPhone1" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">رقم الهاتف الثاني</label>
-            <input type="text" class="form-control" id="orderPhone2">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">المبلغ الكلي بدون التوصيل (د.ع)</label>
-            <input type="number" class="form-control" id="orderAmount" required min="0">
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-success"><i class="bi bi-check2-circle"></i> حفظ</button>
-          <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> إلغاء</button>
-        </div>
-      </form>
-    </div>
-  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-    import { getDatabase, ref, set, push, get, update, remove, onValue } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
-    import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
-    
-    // Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyBKh3zoKYEbm7aGNH6GRzA5SQx4DYhM7gc",
-      authDomain: "arpon11-a4ead.firebaseapp.com",
-      databaseURL: "https://arpon11-a4ead-default-rtdb.firebaseio.com",
-      projectId: "arpon11-a4ead",
-      storageBucket: "arpon11-a4ead.firebasestorage.app",
-      messagingSenderId: "231633090493",
-      appId: "1:231633090493:web:d0c1973bd13b58f7b044d4",
-      measurementId: "G-8YJ5394ZP8"
-    };
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBKh3zoKYEbm7aGNH6GRzA5SQx4DYhM7gc",
+            authDomain: "arpon11-a4ead.firebaseapp.com",
+            databaseURL: "https://arpon11-a4ead-default-rtdb.firebaseio.com",
+            projectId: "arpon11-a4ead",
+            storageBucket: "arpon11-a4ead.firebasestorage.app",
+            messagingSenderId: "231633090493",
+            appId: "1:231633090493:web:d0c1973bd13b58f7b044d4",
+            measurementId: "G-8YJ5394ZP8"
+        };
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const auth = getAuth(app);
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
 
-    // DOM Elements
-    const loginOverlay = document.getElementById('loginOverlay');
-    const loginForm = document.getElementById('loginForm');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const profileHeader = document.getElementById('profileHeader');
-    const userNameHeader = document.getElementById('userNameHeader');
-    const userAvatar = document.getElementById('userAvatar');
-    const statTotalOrders = document.getElementById('statTotalOrders');
-    const statReceivedOrders = document.getElementById('statReceivedOrders');
-    const statProfits = document.getElementById('statProfits');
-    const statReturnedOrders = document.getElementById('statReturnedOrders');
-    const orderCardsList = document.getElementById('orderCardsList');
-    const withdrawForm = document.getElementById('withdrawForm');
-    const withdrawMethod = document.getElementById('withdrawMethod');
-    const bankAccountDiv = document.getElementById('bankAccountDiv');
-    const rafidainAccount = document.getElementById('rafidainAccount');
-    const withdrawalsTable = document.getElementById('withdrawalsTable');
-    const orderForm = document.getElementById('orderForm');
-    const orderModalTitle = document.getElementById('orderModalTitle');
-    const editOrderId = document.getElementById('editOrderId');
-    const orderNumber = document.getElementById('orderNumber');
-    const orderNumberError = document.getElementById('orderNumberError');
-    const orderAddress = document.getElementById('orderAddress');
-    const orderPhone1 = document.getElementById('orderPhone1');
-    const orderPhone2 = document.getElementById('orderPhone2');
-    const orderAmount = document.getElementById('orderAmount');
-    const addOrderBtn = document.getElementById('addOrderBtn');
-    const addOrderBtnMob = document.getElementById('addOrderBtnMob');
+        let currentUser = null;
+        let userOrders = [];
+        let filteredOrders = [];
+        let userWithdrawals = [];
 
-    // Global variables
-    let currentUserId = null;
-    let currentUserData = null;
-    let ordersArr = [];
-    let withdrawalsArr = [];
-    let allOrderNumbersSet = new Set();
-    let paidOrdersMap = {};
-    let lastEditOrderData = null; // Not explicitly used but kept from original code
-
-    // Initial display states
-    profileHeader.style.display = "none";
-    document.querySelector(".container").style.display = "none";
-
-    // Tab navigation logic
-    document.querySelectorAll('#mainTabs .nav-link').forEach(btn => {
-      btn.onclick = function() {
-        document.querySelectorAll('#mainTabs .nav-link').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        let target = btn.getAttribute('data-bs-target');
-        document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.remove('show', 'active'));
-        document.querySelector(target).classList.add('show', 'active');
-        window.scrollTo({top:0,behavior:'smooth'});
-      };
-    });
-
-    // Helper function to convert username to email format for Firebase Auth
-    function usernameToEmail(username) {
-      return username.trim().replace(/\s+/g,'_') + "@arpon11.com";
-    }
-
-    // Login Form Submission
-    loginForm.onsubmit = async (e) => {
-      e.preventDefault();
-      const username = document.getElementById('loginUsername').value.trim();
-      const password = document.getElementById('loginPassword').value;
-      const email = usernameToEmail(username);
-
-      try {
-        const userCred = await signInWithEmailAndPassword(auth, email, password);
-        handleLogin(userCred.user.uid);
-      } catch (err) {
-        Swal.fire({ icon: 'error', title: 'فشل الدخول', text: 'اسم المستخدم أو كلمة المرور غير صحيحة!' });
-      }
-    };
-
-    // Check Auth State on page load
-    auth.onAuthStateChanged(async user => {
-      if (user) {
-        handleLogin(user.uid);
-      }
-    });
-
-    // Logout Button
-    logoutBtn.onclick = async () => {
-      await signOut(auth);
-      window.location.reload(); // Reload to show login screen
-    };
-
-    // Handle successful login
-    async function handleLogin(uid) {
-      const userSnap = await get(ref(db, "users/" + uid));
-      if (!userSnap.exists()) {
-        Swal.fire({ icon: 'error', title: 'حساب غير موجود!', text: 'يرجى التواصل مع الدعم.' });
-        await signOut(auth); // Force logout if user data not found
-        return;
-      }
-      currentUserId = uid;
-      currentUserData = userSnap.val();
-
-      loginOverlay.classList.add("hide");
-      setTimeout(() => { loginOverlay.style.display = "none"; }, 400); // Hide overlay after animation
-
-      profileHeader.style.display = "";
-      document.querySelector(".container").style.display = "";
-      logoutBtn.classList.remove('d-none'); // Show logout button
-
-      userNameHeader.textContent = currentUserData.username || "طلباتك";
-      userAvatar.src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(currentUserData.username || "مستخدم") + "&background=1976d2&color=fff&rounded=true&size=128";
-
-      await loadAllOrderNumbers(); // Load all order numbers across users for uniqueness check
-      loadWithdrawals(); // This will also trigger loadOrders
-    }
-
-    // Load all order numbers to check for uniqueness
-    async function loadAllOrderNumbers() {
-      allOrderNumbersSet = new Set();
-      const allOrdersSnap = await get(ref(db, "orders"));
-      if (allOrdersSnap.exists()) {
-        Object.values(allOrdersSnap.val()).forEach(userOrders => {
-          Object.values(userOrders).forEach(order => {
-            if (order.number) allOrderNumbersSet.add(order.number);
-          });
-        });
-      }
-    }
-
-    // Determine delivery fee based on index (assuming index refers to delivery zone or type)
-    function getDeliveryFee(idx) {
-      // This logic seems specific. Adjust as needed.
-      return idx < 3 ? 1500 : 2000;
-    }
-
-    // Update paid orders map based on successful withdrawals
-    function updatePaidOrdersMap() {
-      paidOrdersMap = {};
-      withdrawalsArr.forEach(w => {
-        if (w.status === "تم الاستلام" && Array.isArray(w.successOrders)) {
-          w.successOrders.forEach(num => {
-            paidOrdersMap[num] = true;
-          });
-        }
-      });
-    }
-
-    // Render orders in the list
-    function renderOrdersList() {
-      orderCardsList.innerHTML = "";
-      if (!ordersArr.length) {
-        orderCardsList.innerHTML = `<div class="alert alert-warning text-center">لا توجد طلبات بعد.</div>`;
-        return;
-      }
-
-      ordersArr.forEach((order, idx) => {
-        let statusClass;
-        switch (order.status) {
-          case 'بأنتظار وصول المندوب اليك':
-            statusClass = 'order-status-wait';
-            break;
-          case 'تم الاستلام من قبل المندوب':
-            statusClass = 'order-status-delivery';
-            break;
-          case 'راجعة':
-            statusClass = 'order-status-returned';
-            break;
-          case 'تم التسليم بنجاح':
-            statusClass = 'order-status-received';
-            break;
-          default:
-            statusClass = 'order-status-wait';
-        }
-
-        let paidLabel = paidOrdersMap[order.number] ? `<span class="paid-label">تم الدفع</span>` : '';
-        let actions = order.status === 'بأنتظار وصول المندوب اليك' ?
-          `<button class="btn btn-edit" onclick="editOrder('${order.orderId}')"><i class="bi bi-pencil-square"></i></button>
-           <button class="btn btn-delete" onclick="deleteOrder('${order.orderId}')"><i class="bi bi-trash"></i></button>` : '';
-
-        orderCardsList.innerHTML += `
-          <div class="order-list-card">
-            <div class="order-list-header">
-              <span class="order-badge-num">${order.number}</span>
-              <span class="order-status-badge ${statusClass}">${order.status}</span>
-              ${paidLabel}
-            </div>
-            <div class="order-field-mini">
-              <span>العنوان:</span> <span>${order.address}</span>
-            </div>
-            <div class="order-field-mini">
-              <span>هاتف1:</span> <span>${order.phone1}</span>
-              <span>هاتف2:</span> <span>${order.phone2 || '-'}</span>
-            </div>
-            <div class="order-field-mini">
-              <span>المبلغ الكلي مع التوصيل:</span> <span>${parseInt(order.amount) + getDeliveryFee(idx)} د.ع</span>
-            </div>
-            <div class="order-actions">
-              ${actions}
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    // Render withdrawals list
-    function renderWithdrawalsList() {
-      withdrawalsTable.innerHTML = "";
-      if (!withdrawalsArr.length) {
-        withdrawalsTable.innerHTML = `<tr><td colspan="3" class="text-center text-muted">لا توجد عمليات سحب بعد.</td></tr>`;
-        return;
-      }
-
-      withdrawalsArr.forEach(w => {
-        let statusBadgeClass;
-        switch (w.status) {
-          case 'قيد المعالجة':
-            statusBadgeClass = 'withdraw-status-badge withdraw-status-processing';
-            break;
-          case 'تم الاستلام':
-            statusBadgeClass = 'withdraw-status-badge withdraw-status-done';
-            break;
-          default:
-            statusBadgeClass = 'withdraw-status-badge withdraw-status-other';
-        }
-        withdrawalsTable.innerHTML += `
-          <tr>
-            <td>${w.method === 'delivery' ? 'مندوب' : 'مصرف الرافدين'}</td>
-            <td>${w.amount} د.ع</td>
-            <td><span class="${statusBadgeClass}">${w.status}</span></td>
-          </tr>
-        `;
-      });
-    }
-
-    // Load orders from Firebase for the current user
-    function loadOrders() {
-      onValue(ref(db, `orders/${currentUserId}`), snap => {
-        ordersArr = [];
-        let total = 0, received = 0, returned = 0, profits = 0;
-
-        if (snap.exists()) {
-          ordersArr = Object.entries(snap.val()).map(([id, order]) => ({...order, orderId: id}));
-          // Sort orders by createdAt descending
-          ordersArr.sort((a, b) => b.createdAt - a.createdAt);
-
-          ordersArr.forEach((order, idx) => {
-            total++;
-            if (order.status === 'تم التسليم بنجاح') {
-              received++;
-              if (!paidOrdersMap[order.number]) { // Only count profits for unpaid delivered orders
-                let deliveryFee = getDeliveryFee(idx); // Be careful with `idx` if order is sorted; it refers to position in sorted array not original creation index
-                let orderAmountInt = parseInt(order.amount) || 0;
-                profits += orderAmountInt;
-                profits -= deliveryFee;
-              }
+        // Check for saved login on page load
+        function checkSavedLogin() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showDashboard();
+                loadUserOrders();
+                loadUserWithdrawals();
             }
-            if (order.status === 'راجعة') returned++;
-          });
         }
 
-        statTotalOrders.textContent = total;
-        statReceivedOrders.textContent = received;
-        statReturnedOrders.textContent = returned;
-        statProfits.textContent = profits > 0 ? profits + " د.ع" : "0 د.ع";
-        renderOrdersList();
-      });
-    }
-
-    // Load withdrawals from Firebase for the current user
-    function loadWithdrawals() {
-      onValue(ref(db, `withdrawals/${currentUserId}`), snap => {
-        withdrawalsArr = [];
-        if (snap.exists()) {
-          withdrawalsArr = Object.entries(snap.val()).map(([id, w]) => ({...w, id}));
-          // Sort withdrawals by createdAt descending
-          withdrawalsArr.sort((a, b) => b.createdAt - a.createdAt);
-        }
-        updatePaidOrdersMap(); // Update map before rendering orders
-        renderWithdrawalsList();
-        loadOrders(); // Load orders after updating paid status
-      });
-    }
-
-    // Order number input validation for uniqueness
-    orderNumber.addEventListener('input', async function() {
-      // Re-load all order numbers to ensure the set is up-to-date
-      await loadAllOrderNumbers();
-      const value = orderNumber.value.trim();
-      if (!value) {
-        orderNumberError.style.display = "none";
-        orderNumber.setCustomValidity(""); // Clear custom validation message
-        return;
-      }
-
-      const isEditingThisOrder = editOrderId.value && ordersArr.find(o => o.orderId === editOrderId.value && o.number === value);
-
-      if (allOrderNumbersSet.has(value) && !isEditingThisOrder) {
-        orderNumberError.style.display = "";
-        orderNumber.setCustomValidity("duplicate"); // Set custom validation error
-      } else {
-        orderNumberError.style.display = "none";
-        orderNumber.setCustomValidity(""); // Clear custom validation message
-      }
-      orderForm.reportValidity(); // Trigger immediate validation check
-    });
-
-    // Edit Order function (exposed globally for onclick)
-    window.editOrder = async (id) => {
-      const order = ordersArr.find(o => o.orderId === id);
-      if (!order) return;
-
-      editOrderId.value = id;
-      orderModalTitle.textContent = "تعديل الطلب";
-
-      // Fill the modal fields
-      orderNumber.value = order.number;
-      orderAddress.value = order.address;
-      orderPhone1.value = order.phone1;
-      orderPhone2.value = order.phone2 || '';
-      orderAmount.value = order.amount;
-
-      // Make order number read-only during edit
-      orderNumber.readOnly = true;
-      orderAddress.readOnly = false;
-      orderPhone1.readOnly = false;
-      orderPhone2.readOnly = false;
-      orderAmount.readOnly = false;
-      orderNumberError.style.display = "none"; // Hide error on edit
-
-      lastEditOrderData = {...order}; // Store original data for potential reset or comparison
-
-      new bootstrap.Modal(document.getElementById('addOrderModal')).show();
-    };
-
-    // Delete Order function (exposed globally for onclick)
-    window.deleteOrder = async (id) => {
-      Swal.fire({
-        title: 'تأكيد الحذف',
-        text: 'هل أنت متأكد من حذف الطلب؟',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'نعم، احذف',
-        cancelButtonText: 'إلغاء',
-        customClass: {
-          confirmButton: 'btn btn-danger',
-          cancelButton: 'btn btn-secondary'
-        },
-        buttonsStyling: false
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-            await remove(ref(db, `orders/${currentUserId}/${id}`));
-            Swal.fire('تم الحذف!', 'تم حذف الطلب بنجاح.', 'success');
-          } catch (error) {
-            Swal.fire('خطأ!', 'لم يتم حذف الطلب.', 'error');
-          }
-        }
-      });
-    };
-
-    // Order Form Submission (Add/Edit)
-    orderForm.onsubmit = async (e) => {
-      e.preventDefault();
-
-      const isEdit = !!editOrderId.value;
-      const number = orderNumber.value.trim();
-      const address = orderAddress.value.trim();
-      const phone1 = orderPhone1.value.trim();
-      const phone2 = orderPhone2.value.trim();
-      const amount = parseInt(orderAmount.value, 10);
-
-      await loadAllOrderNumbers(); // Ensure latest numbers for validation
-
-      // Client-side validation for unique order number on add
-      if (!isEdit && allOrderNumbersSet.has(number)) {
-        orderNumberError.style.display = "";
-        orderNumber.setCustomValidity("duplicate");
-        orderNumber.focus();
-        return;
-      }
-
-      if (!number || !address || !phone1 || isNaN(amount) || amount < 0) {
-        Swal.fire({icon:'error',title:'الرجاء إدخال بيانات صحيحة!'});
-        return;
-      }
-
-      try {
-        if (isEdit) {
-          await update(ref(db, `orders/${currentUserId}/${editOrderId.value}`), {
-            address, phone1, phone2, amount
-          });
-          Swal.fire('تم التعديل!', 'تم تعديل الطلب بنجاح.', 'success');
-        } else {
-          await push(ref(db, `orders/${currentUserId}`), {
-            number, address, phone1, phone2, amount, status: 'بأنتظار وصول المندوب اليك', createdAt: Date.now()
-          });
-          Swal.fire('تمت الإضافة!', 'تم إضافة الطلب بنجاح.', 'success');
-        }
-      } catch (error) {
-        Swal.fire('خطأ!', 'حدث خطأ أثناء حفظ الطلب.', 'error');
-      }
-
-      editOrderId.value = ""; // Clear edit ID
-      orderForm.reset();
-      orderNumber.readOnly = false; // Enable for next add
-      bootstrap.Modal.getInstance(document.getElementById('addOrderModal')).hide(); // Hide modal
-    };
-
-    // Reset modal fields when shown for adding new order
-    document.getElementById('addOrderModal').addEventListener('show.bs.modal', ()=>{
-      if (!editOrderId.value) { // Only reset if not in edit mode
-        orderForm.reset();
-        orderNumber.readOnly = false;
-        orderAddress.readOnly = false;
-        orderPhone1.readOnly = false;
-        orderPhone2.readOnly = false;
-        orderAmount.readOnly = false;
-        orderModalTitle.textContent = "إضافة طلب جديد";
-        orderNumberError.style.display = "none";
-        orderNumber.setCustomValidity(""); // Clear any previous validation
-      }
-    });
-
-    // Withdraw method change handler
-    withdrawMethod.onchange = function() {
-      bankAccountDiv.style.display = this.value === 'bank' ? '' : 'none';
-    };
-
-    // Withdraw Form Submission
-    withdrawForm.onsubmit = async (e) => {
-      e.preventDefault();
-      const method = withdrawMethod.value;
-      let profitValue = parseInt(statProfits.textContent.replace(/\D/g,'')) || 0; // Ensure it's a number
-
-      if (profitValue <= 0) {
-        Swal.fire({icon:'error',title:'لا توجد أرباح كافية لسحبها!'});
-        return;
-      }
-
-      let fee = method === 'delivery' ? 1000 : 500; // Define fees
-      if (method === 'bank' && !rafidainAccount.value.trim()) {
-        Swal.fire({icon:'error',title:'يرجى إدخال رقم حساب مصرف الرافدين'});
-        return;
-      }
-
-      let deliveredOrders = [];
-      ordersArr.forEach((order) => {
-        if (
-          order.status === "تم التسليم بنجاح" &&
-          !paidOrdersMap[order.number] // Only include unpaid delivered orders
-        ) {
-          deliveredOrders.push(order.number);
-        }
-      });
-
-      if (deliveredOrders.length === 0) {
-        Swal.fire({icon:'info',title:'لا توجد طلبات مستلمة غير مدفوعة لإنشاء طلب سحب.'});
-        return;
-      }
-
-      try {
-        await push(ref(db, `withdrawals/${currentUserId}`), {
-          method,
-          amount: profitValue - fee, // Subtract fee from total profit
-          status: 'قيد المعالجة',
-          bankAccount: method === 'bank' ? rafidainAccount.value.trim() : "",
-          createdAt: Date.now(),
-          successOrders: deliveredOrders
+        // Handle login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (!username || !password) {
+                alert('يرجى إدخال اسم المستخدم وكلمة المرور');
+                return;
+            }
+            
+            // Check credentials in Firebase
+            database.ref('users').orderByChild('username').equalTo(username).once('value')
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        let userFound = false;
+                        snapshot.forEach((childSnapshot) => {
+                            const userData = childSnapshot.val();
+                            if (userData.password === password) {
+                                userFound = true;
+                                currentUser = {
+                                    id: childSnapshot.key,
+                                    username: userData.username,
+                                    address: userData.address || '',
+                                    phone1: userData.phone1 || '',
+                                    phone2: userData.phone2 || ''
+                                };
+                                
+                                // Save login info to localStorage
+                                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                                
+                                showDashboard();
+                                loadUserOrders();
+                                loadUserWithdrawals();
+                                return false; // Break the loop
+                            }
+                        });
+                        
+                        if (!userFound) {
+                            alert('كلمة المرور غير صحيحة');
+                        }
+                    } else {
+                        alert('اسم المستخدم غير موجود');
+                    }
+                })
+                .catch((error) => {
+                    alert('حدث خطأ في تسجيل الدخول: ' + error.message);
+                });
         });
-        Swal.fire({icon:'success',title:'تم إرسال طلب السحب!', text: `المبلغ المطلوب: ${profitValue - fee} د.ع`});
-        withdrawForm.reset();
-        bankAccountDiv.style.display = 'none'; // Hide bank account field
-      } catch (error) {
-        Swal.fire({icon:'error',title:'فشل إرسال طلب السحب!', text: error.message});
-      }
-    };
 
-    // Prevent form submission on Enter key in order form fields
-    orderForm.addEventListener('keydown', function(e){
-      if (e.key === 'Enter') e.preventDefault();
-    });
+        // Show dashboard
+        function showDashboard() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('dashboardSection').classList.remove('hidden');
+            document.getElementById('welcomeText').textContent = `مرحباً، ${currentUser.username}`;
+        }
 
-    // Add new order button (desktop/tablet)
-    addOrderBtn.onclick = () => {
-      editOrderId.value = "";
-      orderForm.reset();
-      orderNumber.readOnly = false;
-      orderModalTitle.textContent = "إضافة طلب جديد";
-      orderNumberError.style.display = "none";
-      orderNumber.setCustomValidity("");
-      new bootstrap.Modal(document.getElementById('addOrderModal')).show();
-    };
+        // Logout function
+        function logout() {
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            document.getElementById('dashboardSection').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('loginForm').reset();
+        }
 
-    // Show/hide mobile add order button based on screen size
-    function showMobileAddBtn() {
-      if (window.innerWidth < 768) {
-        addOrderBtnMob.style.display = '';
-      } else {
-        addOrderBtnMob.style.display = 'none';
-      }
-    }
-    showMobileAddBtn(); // Initial check
-    window.addEventListener('resize', showMobileAddBtn); // Check on resize
+        // Load user orders
+        function loadUserOrders() {
+            if (!currentUser) return;
+            
+            database.ref('orders').orderByChild('username').equalTo(currentUser.username).on('value', (snapshot) => {
+                userOrders = [];
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnapshot) => {
+                        const order = {
+                            id: childSnapshot.key,
+                            ...childSnapshot.val()
+                        };
+                        // Hide orders based on status and withdrawal status
+                        // Hide delivered orders that have been withdrawn
+                        // Hide returned orders that have been marked as "تم الإرجاع"
+                        const shouldHide = (order.withdrawnByUser && order.status === 'تم الاستلام من قبل الزبون') || 
+                                         (order.status === 'تم الإرجاع');
+                        
+                        if (!shouldHide) {
+                            userOrders.push(order);
+                        }
+                    });
+                }
+                filteredOrders = [...userOrders];
+                displayOrders();
+                updateStatistics();
+            });
+        }
 
-    // Mobile add order button click handler
-    addOrderBtnMob.onclick = () => {
-      editOrderId.value = "";
-      orderForm.reset();
-      orderNumber.readOnly = false;
-      orderModalTitle.textContent = "إضافة طلب جديد";
-      orderNumberError.style.display = "none";
-      orderNumber.setCustomValidity("");
-      new bootstrap.Modal(document.getElementById('addOrderModal')).show();
-    };
+        // Load user withdrawals
+        function loadUserWithdrawals() {
+            if (!currentUser) return;
+            
+            database.ref('withdrawals').orderByChild('username').equalTo(currentUser.username).on('value', (snapshot) => {
+                userWithdrawals = [];
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnapshot) => {
+                        const withdrawal = {
+                            id: childSnapshot.key,
+                            ...childSnapshot.val()
+                        };
+                        userWithdrawals.push(withdrawal);
+                    });
+                }
+                displayWithdrawals();
+            });
+        }
 
-    // These lines are redundant as functions are already global due to `window.functionName` or being in script module top level
-    // window.editOrder = window.editOrder;
-    // window.deleteOrder = window.deleteOrder;
-  </script>
-</body>
+        // Display withdrawals
+        function displayWithdrawals() {
+            const container = document.getElementById('withdrawalHistory');
+            const noWithdrawals = document.getElementById('noWithdrawals');
+
+            if (userWithdrawals.length === 0) {
+                container.innerHTML = '';
+                noWithdrawals.classList.remove('hidden');
+                return;
+            }
+
+            noWithdrawals.classList.add('hidden');
+            
+            // Sort withdrawals by date (newest first)
+            const sortedWithdrawals = userWithdrawals.sort((a, b) => 
+                new Date(b.dateRequested) - new Date(a.dateRequested)
+            );
+
+            container.innerHTML = sortedWithdrawals.map(withdrawal => {
+                const statusColor = getWithdrawalStatusColor(withdrawal.status);
+                return `
+                <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <h4 class="font-bold text-gray-900">طلب سحب #${withdrawal.id}</h4>
+                            <p class="text-sm text-gray-600">تاريخ الطلب: ${new Date(withdrawal.dateRequested).toLocaleDateString('ar-EG')}</p>
+                        </div>
+                        <span class="px-3 py-1 rounded-full text-xs font-medium ${statusColor}">
+                            ${withdrawal.status}
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <span class="font-medium text-gray-700">المبلغ:</span>
+                            <span class="text-gray-900">${withdrawal.amount.toLocaleString()} دينار</span>
+                        </div>
+                        <div>
+                            <span class="font-medium text-gray-700">عدد الطلبات:</span>
+                            <span class="text-gray-900">${withdrawal.ordersCount}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            }).join('');
+        }
+
+        // Get withdrawal status color
+        function getWithdrawalStatusColor(status) {
+            switch(status) {
+                case 'تم الدفع': return 'bg-green-100 text-green-800';
+                case 'مرفوض': return 'bg-red-100 text-red-800';
+                case 'قيد المراجعة': return 'bg-yellow-100 text-yellow-800';
+                default: return 'bg-gray-100 text-gray-800';
+            }
+        }
+
+        // Update statistics - only count delivered orders for earnings
+        function updateStatistics() {
+            const totalOrders = userOrders.length;
+            const deliveredOrders = userOrders.filter(order => order.status === 'تم الاستلام من قبل الزبون').length;
+            const returnedOrders = userOrders.filter(order => order.status === 'راجع').length;
+            
+            // Calculate earnings only from delivered orders with 1500 deduction per order
+            const currentEarnings = userOrders
+                .filter(order => order.status === 'تم الاستلام من قبل الزبون')
+                .reduce((total, order) => {
+                    const orderAmount = parseFloat(order.amount) || 0;
+                    const profit = orderAmount - 1500; // Deduct 1500 from each order
+                    return total + Math.max(profit, 0); // Don't allow negative profits
+                }, 0);
+
+            document.getElementById('totalOrders').textContent = totalOrders;
+            document.getElementById('deliveredOrders').textContent = deliveredOrders;
+            document.getElementById('returnedOrders').textContent = returnedOrders;
+            document.getElementById('currentEarnings').textContent = currentEarnings.toLocaleString();
+            document.getElementById('availableEarnings').textContent = currentEarnings.toLocaleString();
+            
+            // Disable withdraw button if no earnings
+            const withdrawBtn = document.getElementById('withdrawBtn');
+            if (currentEarnings <= 0) {
+                withdrawBtn.disabled = true;
+                withdrawBtn.textContent = 'لا توجد أرباح للسحب';
+            } else {
+                withdrawBtn.disabled = false;
+                withdrawBtn.textContent = 'سحب الأرباح';
+            }
+        }
+
+        // Display orders
+        function displayOrders() {
+            const container = document.getElementById('ordersContainer');
+            const noOrders = document.getElementById('noOrders');
+
+            if (filteredOrders.length === 0) {
+                container.innerHTML = '';
+                noOrders.classList.remove('hidden');
+                return;
+            }
+
+            noOrders.classList.add('hidden');
+            container.innerHTML = filteredOrders.map(order => {
+                // Cannot edit if: delivered, handed to courier, returned, or marked as "تم الإرجاع"
+                const canEdit = order.status !== 'تم الاستلام من قبل الزبون' && 
+                               order.status !== 'تم التسليم للمندوب' && 
+                               order.status !== 'راجع' && 
+                               order.status !== 'تم الإرجاع';
+                
+                return `
+                <div class="order-card bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow fade-in shadow-sm">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex-1">
+                            <h4 class="font-bold text-lg text-gray-900">طلب #${order.id}</h4>
+                            <p class="text-gray-600">تاريخ الإضافة: ${order.dateAdded ? new Date(order.dateAdded).toLocaleDateString('en-GB') : 'غير محدد'}</p>
+                        </div>
+                        <div class="flex space-x-2 space-x-reverse">
+                            ${canEdit ? `
+                                <button onclick="editOrder('${order.id}')" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm">
+                                    تعديل
+                                </button>
+                                <button onclick="deleteOrder('${order.id}')" class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm">
+                                    حذف
+                                </button>
+                            ` : `
+                                <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded text-sm">
+                                    لا يمكن التعديل
+                                </span>
+                            `}
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+                        <div>
+                            <span class="font-medium text-gray-700">العنوان:</span>
+                            <span class="text-gray-900">${order.address || 'غير محدد'}</span>
+                        </div>
+                        <div>
+                            <span class="font-medium text-gray-700">الهاتف الأول:</span>
+                            <span class="text-gray-900">${order.phone1 || 'غير محدد'}</span>
+                        </div>
+                        <div>
+                            <span class="font-medium text-gray-700">الهاتف الثاني:</span>
+                            <span class="text-gray-900">${order.phone2 || 'غير محدد'}</span>
+                        </div>
+                        <div>
+                            <span class="font-medium text-gray-700">المبلغ:</span>
+                            <span class="text-gray-900">${order.amount || '0'} دينار</span>
+                        </div>
+                        <div class="md:col-span-2">
+                            <span class="font-medium text-gray-700 mb-2 block">الحالة:</span>
+                            <div class="flex items-center">
+                                <span class="px-4 py-2 rounded-full text-sm font-bold ${getStatusColor(order.status)} shadow-sm border">
+                                    ${getStatusIcon(order.status)} ${order.status || 'بانتظار المندوب'}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            }).join('');
+        }
+
+        // Get status color
+        function getStatusColor(status) {
+            switch(status) {
+                case 'تم الاستلام من قبل الزبون': return 'bg-green-100 text-green-800 border-green-200';
+                case 'تم التسليم للمندوب': return 'bg-blue-100 text-blue-800 border-blue-200';
+                case 'راجع': return 'bg-red-100 text-red-800 border-red-200';
+                case 'تم الإرجاع': return 'bg-gray-100 text-gray-800 border-gray-200';
+                default: return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+            }
+        }
+
+        // Get status icon
+        function getStatusIcon(status) {
+            switch(status) {
+                case 'تم الاستلام من قبل الزبون': return '✅';
+                case 'تم التسليم للمندوب': return '🚚';
+                case 'راجع': return '↩️';
+                case 'تم الإرجاع': return '🔄';
+                default: return '⏳';
+            }
+        }
+
+        // Show/Hide sections
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('.section-content').forEach(el => {
+                el.classList.add('hidden');
+            });
+            
+            // Remove active class from all sidebar items
+            document.querySelectorAll('.sidebar-item').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(section + 'Section').classList.remove('hidden');
+            
+            // Add active class to clicked sidebar item
+            event.target.classList.add('active');
+        }
+
+        // Toggle sidebar for mobile
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            
+            if (sidebar.classList.contains('translate-x-full')) {
+                sidebar.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        // Search orders
+        function searchOrders() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            
+            if (!searchTerm) {
+                filteredOrders = [...userOrders];
+            } else {
+                filteredOrders = userOrders.filter(order => 
+                    (order.address && order.address.toLowerCase().includes(searchTerm)) ||
+                    (order.phone1 && order.phone1.includes(searchTerm)) ||
+                    (order.phone2 && order.phone2.includes(searchTerm)) ||
+                    (order.id && order.id.toLowerCase().includes(searchTerm))
+                );
+            }
+            
+            displayOrders();
+        }
+
+        // Handle add order form
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!currentUser) {
+                alert('يرجى تسجيل الدخول أولاً');
+                return;
+            }
+            
+            const newOrder = {
+                username: currentUser.username,
+                address: document.getElementById('orderAddress').value,
+                phone1: document.getElementById('orderPhone1').value,
+                phone2: document.getElementById('orderPhone2').value,
+                amount: document.getElementById('orderAmount').value,
+                status: 'بانتظار المندوب',
+                dateAdded: new Date().toISOString()
+            };
+
+            database.ref('orders').push(newOrder)
+                .then(() => {
+                    alert('تم إضافة الطلب بنجاح');
+                    document.getElementById('orderForm').reset();
+                    showSection('orders');
+                })
+                .catch((error) => {
+                    alert('حدث خطأ في إضافة الطلب: ' + error.message);
+                });
+        });
+
+        // Edit order
+        function editOrder(orderId) {
+            const order = userOrders.find(o => o.id === orderId);
+            if (!order) return;
+
+            document.getElementById('editOrderId').value = orderId;
+            document.getElementById('editAddress').value = order.address || '';
+            document.getElementById('editPhone1').value = order.phone1 || '';
+            document.getElementById('editPhone2').value = order.phone2 || '';
+            document.getElementById('editAmount').value = order.amount || '';
+
+            document.getElementById('editModal').classList.remove('hidden');
+            document.getElementById('editModal').classList.add('flex');
+        }
+
+        // Close edit modal
+        function closeEditModal() {
+            document.getElementById('editModal').classList.add('hidden');
+            document.getElementById('editModal').classList.remove('flex');
+        }
+
+        // Delete order
+        function deleteOrder(orderId) {
+            if (confirm('هل أنت متأكد من حذف هذا الطلب؟')) {
+                database.ref('orders/' + orderId).remove()
+                    .then(() => {
+                        alert('تم حذف الطلب بنجاح');
+                    })
+                    .catch((error) => {
+                        alert('حدث خطأ في حذف الطلب: ' + error.message);
+                    });
+            }
+        }
+
+        // Handle edit form submission
+        document.getElementById('editForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const orderId = document.getElementById('editOrderId').value;
+            const updatedOrder = {
+                address: document.getElementById('editAddress').value,
+                phone1: document.getElementById('editPhone1').value,
+                phone2: document.getElementById('editPhone2').value,
+                amount: document.getElementById('editAmount').value
+            };
+
+            database.ref('orders/' + orderId).update(updatedOrder)
+                .then(() => {
+                    alert('تم تحديث الطلب بنجاح');
+                    closeEditModal();
+                })
+                .catch((error) => {
+                    alert('حدث خطأ في تحديث الطلب: ' + error.message);
+                });
+        });
+
+        // Show confirmation modal
+        function showConfirmModal(title, message, icon, onConfirm) {
+            document.getElementById('confirmTitle').textContent = title;
+            document.getElementById('confirmMessage').textContent = message;
+            document.getElementById('confirmIcon').textContent = icon;
+            document.getElementById('confirmButton').onclick = onConfirm;
+            document.getElementById('confirmModal').classList.remove('hidden');
+            document.getElementById('confirmModal').classList.add('flex');
+        }
+
+        // Close confirmation modal
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').classList.add('hidden');
+            document.getElementById('confirmModal').classList.remove('flex');
+        }
+
+        // Show success modal
+        function showSuccessModal(message) {
+            document.getElementById('successMessage').textContent = message;
+            document.getElementById('successModal').classList.remove('hidden');
+            document.getElementById('successModal').classList.add('flex');
+        }
+
+        // Close success modal
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.add('hidden');
+            document.getElementById('successModal').classList.remove('flex');
+        }
+
+        // Withdraw earnings
+        function withdrawEarnings() {
+            if (!currentUser) return;
+            
+            const deliveredOrders = userOrders.filter(order => order.status === 'تم الاستلام من قبل الزبون');
+            const totalEarnings = deliveredOrders.reduce((total, order) => {
+                const orderAmount = parseFloat(order.amount) || 0;
+                const profit = orderAmount - 1500; // Deduct 1500 from each order
+                return total + Math.max(profit, 0); // Don't allow negative profits
+            }, 0);
+            
+            if (totalEarnings <= 0) {
+                showConfirmModal(
+                    'لا توجد أرباح للسحب',
+                    'لا توجد أرباح متاحة للسحب في الوقت الحالي. يجب أن يكون لديك طلبات مستلمة لتتمكن من سحب الأرباح.',
+                    '💰',
+                    closeConfirmModal
+                );
+                return;
+            }
+            
+            showConfirmModal(
+                'تأكيد سحب الأرباح',
+                `هل أنت متأكد من سحب ${totalEarnings.toLocaleString()} دينار؟\n\nسيتم حذف جميع الطلبات المستلمة (${deliveredOrders.length} طلب) وتصفير الأرباح الحالية. هذا الإجراء لا يمكن التراجع عنه.`,
+                '💰',
+                function() {
+                    closeConfirmModal();
+                    processWithdrawal(totalEarnings, deliveredOrders);
+                }
+            );
+        }
+
+        // Process withdrawal
+        function processWithdrawal(totalEarnings, deliveredOrders) {
+            // Create withdrawal request
+            const withdrawalRequest = {
+                username: currentUser.username,
+                amount: totalEarnings,
+                ordersCount: deliveredOrders.length,
+                status: 'قيد المراجعة',
+                dateRequested: new Date().toISOString()
+            };
+            
+            // Add withdrawal request to database
+            database.ref('withdrawals').push(withdrawalRequest)
+                .then(() => {
+                    // Mark only delivered orders as withdrawn (hide from user but keep in database for admin)
+                    // Returned orders remain visible until admin changes status to "تم الإرجاع"
+                    const updatePromises = deliveredOrders.map(order => 
+                        database.ref('orders/' + order.id).update({
+                            withdrawnByUser: true,
+                            withdrawnDate: new Date().toISOString()
+                        })
+                    );
+                    
+                    return Promise.all(updatePromises);
+                })
+                .then(() => {
+                    showSuccessModal(
+                        `تم إرسال طلب السحب بنجاح!\n\nالمبلغ: ${totalEarnings.toLocaleString()} دينار\nعدد الطلبات: ${deliveredOrders.length}\n\nسيتم مراجعة طلبك من قبل الإدارة وستحصل على إشعار عند الموافقة أو الرفض.`
+                    );
+                })
+                .catch((error) => {
+                    showConfirmModal(
+                        'خطأ في العملية',
+                        'حدث خطأ في عملية السحب: ' + error.message,
+                        '❌',
+                        closeConfirmModal
+                    );
+                });
+        }
+
+        // Handle search on Enter key
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchOrders();
+            }
+        });
+
+        // Initialize the application
+        checkSavedLogin();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9788231ba7c4d0f2',t:'MTc1Njc2NTA0MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
