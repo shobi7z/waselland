@@ -3,83 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة المستخدم</title>
+    <title>نظام إدارة الطلبات</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
         .fade-in {
-            animation: fadeIn 0.5s ease-in;
+            animation: fadeIn 0.3s ease-in;
         }
+        
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .stat-card {
-            transition: all 0.3s ease;
-        }
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        }
+        
         .sidebar-item {
             transition: all 0.3s ease;
         }
+        
         .sidebar-item:hover {
-            background-color: #f3f4f6;
+            background-color: rgba(59, 130, 246, 0.1);
             transform: translateX(-5px);
         }
+        
         .sidebar-item.active {
             background-color: #3b82f6;
             color: white;
         }
+        
         .order-card {
             transition: all 0.3s ease;
         }
+        
         .order-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Mobile responsive improvements */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+            }
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
-    
+<body class="bg-gray-50 font-sans">
     <!-- Login Section -->
-    <div id="loginSection" class="min-h-screen flex items-center justify-center px-4">
-        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+    <div id="loginSection" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 p-4">
+        <div class="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
             <div class="text-center mb-8">
-                <div class="text-6xl mb-4">👤</div>
-                <h1 class="text-3xl font-bold text-gray-900 mb-2">تسجيل الدخول</h1>
-                <p class="text-gray-600">أدخل بياناتك للوصول إلى حسابك</p>
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">نظام إدارة الطلبات</h1>
+                <p class="text-gray-600">مرحباً بك، يرجى تسجيل الدخول</p>
             </div>
             
             <form id="loginForm" class="space-y-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">اسم المستخدم</label>
-                    <input 
-                        type="text" 
-                        id="username" 
-                        required 
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                        placeholder="أدخل اسم المستخدم"
-                    >
+                    <input type="text" id="username" required 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 </div>
                 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">كلمة المرور</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        required 
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                        placeholder="أدخل كلمة المرور"
-                    >
+                    <input type="password" id="password" required 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 </div>
                 
-                <button 
-                    type="submit" 
-                    class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all font-medium text-lg"
-                >
+                <button type="submit" 
+                        class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium">
                     تسجيل الدخول
                 </button>
             </form>
@@ -87,266 +83,256 @@
     </div>
 
     <!-- Dashboard Section -->
-    <div id="dashboardSection" class="hidden">
-        <!-- Header -->
-        <header class="bg-white shadow-lg border-b-4 border-blue-500 fixed w-full top-0 z-40">
-            <div class="px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center py-6">
-                    <div class="flex items-center">
-                        <button onclick="toggleSidebar()" class="lg:hidden ml-4 p-2 rounded-md text-gray-600 hover:text-gray-900">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                            </svg>
-                        </button>
-                        <h1 class="text-3xl font-bold text-gray-900">🏠 لوحة المستخدم</h1>
-                    </div>
-                    <div class="flex items-center space-x-4 space-x-reverse">
-                        <span class="text-gray-600" id="welcomeText">مرحباً</span>
-                        <button onclick="logout()" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
-                            تسجيل الخروج
-                        </button>
-                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
-                            م
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <!-- Sidebar -->
-        <div id="sidebar" class="fixed right-0 top-20 h-full w-64 bg-white shadow-lg transform translate-x-0 transition-transform duration-300 ease-in-out z-30 lg:translate-x-0">
-            <div class="p-6">
-                <nav class="space-y-2">
-                    <a href="#" onclick="showSection('stats')" class="sidebar-item active flex items-center px-4 py-3 rounded-lg">
-                        <span class="ml-3">📊</span>
-                        الإحصائيات
-                    </a>
-                    <a href="#" onclick="showSection('orders')" class="sidebar-item flex items-center px-4 py-3 rounded-lg">
-                        <span class="ml-3">📋</span>
-                        إدارة الطلبات
-                    </a>
-                    <a href="#" onclick="showSection('addOrder')" class="sidebar-item flex items-center px-4 py-3 rounded-lg">
-                        <span class="ml-3">➕</span>
-                        إضافة طلب جديد
-                    </a>
-                    <a href="#" onclick="showSection('withdraw')" class="sidebar-item flex items-center px-4 py-3 rounded-lg">
-                        <span class="ml-3">💰</span>
-                        سحب الأرباح
-                    </a>
-                </nav>
-            </div>
+    <div id="dashboardSection" class="hidden min-h-screen bg-gray-50">
+        <!-- Mobile Header -->
+        <div class="lg:hidden bg-white shadow-sm border-b p-4 flex justify-between items-center">
+            <button id="menuToggle" onclick="toggleSidebar()" class="p-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+            <h1 class="text-xl font-bold text-gray-800">نظام إدارة الطلبات</h1>
+            <button onclick="logout()" class="p-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                </svg>
+            </button>
         </div>
 
         <!-- Overlay for mobile -->
-        <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden lg:hidden" onclick="toggleSidebar()"></div>
+        <div id="overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" onclick="toggleSidebar()"></div>
 
-        <!-- Main Content -->
-        <div class="lg:mr-64 pt-20">
-            <div class="px-4 sm:px-6 lg:px-8 py-8">
-                
-                <!-- Statistics Section -->
-                <div id="statsSection" class="section-content">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-6">📊 إحصائياتك</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                        <div class="stat-card bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 text-white">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-blue-100 text-sm">إجمالي الطلبات</p>
-                                    <p class="text-3xl font-bold" id="totalOrders">0</p>
-                                </div>
-                                <div class="text-4xl">📦</div>
-                            </div>
-                        </div>
-                        <div class="stat-card bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-green-100 text-sm">تم التسليم</p>
-                                    <p class="text-3xl font-bold" id="deliveredOrders">0</p>
-                                </div>
-                                <div class="text-4xl">✅</div>
-                            </div>
-                        </div>
-                        <div class="stat-card bg-gradient-to-r from-red-500 to-red-600 rounded-xl p-6 text-white">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-red-100 text-sm">الطلبات الراجعة</p>
-                                    <p class="text-3xl font-bold" id="returnedOrders">0</p>
-                                </div>
-                                <div class="text-4xl">↩️</div>
-                            </div>
-                        </div>
-                        <div class="stat-card bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-xl p-6 text-white">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-yellow-100 text-sm">الأرباح الحالية</p>
-                                    <p class="text-3xl font-bold" id="currentEarnings">0</p>
-                                </div>
-                                <div class="text-4xl">💰</div>
-                            </div>
-                        </div>
-                    </div>
+        <div class="flex">
+            <!-- Sidebar -->
+            <div id="sidebar" class="sidebar fixed lg:static inset-y-0 right-0 z-50 w-64 bg-white shadow-lg transform translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+                <div class="p-6 border-b">
+                    <h2 class="text-2xl font-bold text-gray-800 hidden lg:block">نظام إدارة الطلبات</h2>
+                    <p id="welcomeText" class="text-gray-600 mt-2"></p>
                 </div>
+                
+                <nav class="mt-6">
+                    <a href="#" onclick="showSection('statistics')" class="sidebar-item flex items-center px-6 py-3 text-gray-700 hover:bg-blue-50">
+                        <span class="ml-3">📊</span>
+                        الإحصائيات
+                    </a>
+                    <a href="#" onclick="showSection('addOrder')" class="sidebar-item flex items-center px-6 py-3 text-gray-700 hover:bg-blue-50">
+                        <span class="ml-3">➕</span>
+                        إضافة طلب
+                    </a>
+                    <a href="#" onclick="showSection('orders')" class="sidebar-item flex items-center px-6 py-3 text-gray-700 hover:bg-blue-50">
+                        <span class="ml-3">📋</span>
+                        الطلبات
+                    </a>
+                    <a href="#" onclick="showSection('withdrawals')" class="sidebar-item flex items-center px-6 py-3 text-gray-700 hover:bg-blue-50">
+                        <span class="ml-3">💰</span>
+                        السحوبات
+                    </a>
+                </nav>
+                
+                <div class="absolute bottom-0 w-full p-6 border-t hidden lg:block">
+                    <button onclick="logout()" class="w-full bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors">
+                        تسجيل الخروج
+                    </button>
+                </div>
+            </div>
 
-                <!-- Orders Management Section -->
-                <div id="ordersSection" class="section-content hidden">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-900">📋 إدارة الطلبات</h2>
-                        <div class="flex space-x-4 space-x-reverse">
-                            <input 
-                                type="text" 
-                                id="searchInput" 
-                                placeholder="ابحث في الطلبات..."
-                                class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            >
-                            <button onclick="searchOrders()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+            <!-- Main Content -->
+            <div class="flex-1 lg:mr-64">
+                <!-- Orders Section -->
+                <div id="ordersSection" class="section-content p-4 lg:p-8">
+                    <div class="mb-6">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">الطلبات</h3>
+                        
+                        <!-- Search -->
+                        <div class="flex flex-col sm:flex-row gap-4 mb-6">
+                            <div class="flex-1">
+                                <input type="text" id="searchInput" placeholder="البحث في الطلبات..." 
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                            <button onclick="searchOrders()" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
                                 بحث
                             </button>
                         </div>
                     </div>
                     
-                    <div id="ordersContainer" class="space-y-4">
-                        <!-- Orders will be loaded here -->
-                    </div>
-                    
-                    <div id="noOrders" class="text-center py-12 hidden">
-                        <div class="text-6xl mb-4">📭</div>
-                        <p class="text-gray-500 text-lg">لا توجد طلبات للعرض</p>
+                    <div id="ordersContainer" class="space-y-4"></div>
+                    <div id="noOrders" class="hidden text-center py-12">
+                        <div class="text-gray-400 text-6xl mb-4">📋</div>
+                        <h3 class="text-xl font-medium text-gray-600 mb-2">لا توجد طلبات</h3>
+                        <p class="text-gray-500">لم يتم العثور على أي طلبات</p>
                     </div>
                 </div>
 
                 <!-- Add Order Section -->
-                <div id="addOrderSection" class="section-content hidden">
-                    <div class="bg-white rounded-xl shadow-lg p-6">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-6">➕ إضافة طلب جديد</h2>
-                        
+                <div id="addOrderSection" class="section-content hidden p-4 lg:p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">إضافة طلب جديد</h3>
+                    
+                    <div class="bg-white rounded-lg shadow-sm p-6">
                         <form id="orderForm" class="space-y-6">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">العنوان *</label>
-                                    <input 
-                                        type="text" 
-                                        id="orderAddress" 
-                                        required 
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                        placeholder="أدخل عنوان التسليم"
-                                    >
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">رقم الطلب</label>
+                                    <input type="text" id="orderNumber" readonly 
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed">
                                 </div>
                                 
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">رقم الهاتف الأول *</label>
-                                    <input 
-                                        type="tel" 
-                                        id="orderPhone1" 
-                                        required 
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                        placeholder="أدخل رقم الهاتف الأول"
-                                    >
-                                </div>
-                                
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">رقم الهاتف الثاني</label>
-                                    <input 
-                                        type="tel" 
-                                        id="orderPhone2" 
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                        placeholder="أدخل رقم الهاتف الثاني (اختياري)"
-                                    >
-                                </div>
-                                
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">مبلغ الطلب *</label>
-                                    <input 
-                                        type="number" 
-                                        id="orderAmount" 
-                                        required 
-                                        min="1"
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                        placeholder="أدخل مبلغ الطلب بالدينار"
-                                    >
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">المبلغ (دينار عراقي) *</label>
+                                    <input type="number" id="orderAmount" required min="1500" step="100"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <p class="text-xs text-gray-500 mt-1">الحد الأدنى: 1500 دينار عراقي</p>
                                 </div>
                             </div>
                             
-                            <div class="flex justify-end">
-                                <button 
-                                    type="submit" 
-                                    class="px-8 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all font-medium"
-                                >
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">العنوان *</label>
+                                <textarea id="orderAddress" required rows="3"
+                                          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">الهاتف الأول *</label>
+                                    <input type="tel" id="orderPhone1" required 
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">الهاتف الثاني</label>
+                                    <input type="tel" id="orderPhone2" 
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <button type="submit" class="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium">
                                     إضافة الطلب
+                                </button>
+                                <button type="button" onclick="document.getElementById('orderForm').reset(); setOrderNumber();" 
+                                        class="flex-1 bg-gray-500 text-white py-3 px-6 rounded-lg hover:bg-gray-600 transition-colors font-medium">
+                                    مسح الحقول
                                 </button>
                             </div>
                         </form>
                     </div>
                 </div>
 
-                <!-- Withdraw Section -->
-                <div id="withdrawSection" class="section-content hidden">
-                    <div class="bg-white rounded-xl shadow-lg p-6">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-6">💰 سحب الأرباح</h2>
-                        
-                        <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white mb-6">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-green-100 text-sm">الأرباح المتاحة للسحب</p>
-                                    <p class="text-4xl font-bold" id="availableEarnings">0</p>
-                                    <p class="text-green-100 text-sm">دينار عراقي</p>
-                                </div>
-                                <div class="text-6xl">💰</div>
-                            </div>
+                <!-- Statistics Section -->
+                <div id="statisticsSection" class="section-content hidden p-4 lg:p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">الإحصائيات</h3>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+                            <div class="text-3xl mb-2">📋</div>
+                            <div class="text-2xl font-bold text-gray-800" id="totalOrders">0</div>
+                            <div class="text-sm text-gray-600">إجمالي الطلبات</div>
                         </div>
                         
-                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-                            <div class="flex items-start">
-                                <div class="text-yellow-600 text-xl ml-3">⚠️</div>
-                                <div>
-                                    <h4 class="font-bold text-yellow-800 mb-2">تنبيه مهم</h4>
-                                    <p class="text-yellow-700 text-sm">
-                                        عند سحب الأرباح، سيتم تصفير الأرباح الحالية وحذف جميع الطلبات المستلمة. 
-                                        تأكد من رغبتك في المتابعة قبل الضغط على زر السحب.
-                                    </p>
-                                </div>
-                            </div>
+                        <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+                            <div class="text-3xl mb-2">✅</div>
+                            <div class="text-2xl font-bold text-green-600" id="deliveredOrders">0</div>
+                            <div class="text-sm text-gray-600">طلبات مستلمة</div>
                         </div>
                         
-                        <div class="text-center mb-8">
-                            <button 
-                                onclick="withdrawEarnings()" 
-                                id="withdrawBtn"
-                                class="px-8 py-4 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 transition-all font-medium text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
+                        <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+                            <div class="text-3xl mb-2">↩️</div>
+                            <div class="text-2xl font-bold text-red-600" id="returnedOrders">0</div>
+                            <div class="text-sm text-gray-600">طلبات راجعة</div>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+                            <div class="text-3xl mb-2">💰</div>
+                            <div class="text-2xl font-bold text-blue-600" id="currentEarnings">0</div>
+                            <div class="text-sm text-gray-600">الأرباح الحالية</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h4 class="text-lg font-bold text-gray-800 mb-4">سحب الأرباح</h4>
+                        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <div>
+                                <p class="text-gray-600">الأرباح المتاحة للسحب:</p>
+                                <p class="text-2xl font-bold text-green-600"><span id="availableEarnings">0</span> دينار</p>
+                            </div>
+                            <button id="withdrawBtn" onclick="withdrawEarnings()" 
+                                    class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium">
                                 سحب الأرباح
                             </button>
                         </div>
-                        
-                        <!-- Withdrawal Requests History -->
-                        <div class="bg-gray-50 rounded-xl p-6">
-                            <h3 class="text-xl font-bold text-gray-900 mb-4">📋 تاريخ طلبات السحب</h3>
-                            <div id="withdrawalHistory" class="space-y-3">
-                                <!-- Withdrawal requests will be loaded here -->
-                            </div>
-                            <div id="noWithdrawals" class="text-center py-8 hidden">
-                                <div class="text-4xl mb-2">📭</div>
-                                <p class="text-gray-500">لا توجد طلبات سحب سابقة</p>
-                            </div>
-                        </div>
+                    </div>
+                </div>
+
+                <!-- Withdrawals Section -->
+                <div id="withdrawalsSection" class="section-content hidden p-4 lg:p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">تاريخ السحوبات</h3>
+                    
+                    <div id="withdrawalHistory" class="space-y-4"></div>
+                    <div id="noWithdrawals" class="hidden text-center py-12">
+                        <div class="text-gray-400 text-6xl mb-4">💰</div>
+                        <h3 class="text-xl font-medium text-gray-600 mb-2">لا توجد سحوبات</h3>
+                        <p class="text-gray-500">لم تقم بأي عمليات سحب حتى الآن</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Confirmation Modal -->
-    <div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-        <div class="bg-white rounded-2xl p-8 w-full max-w-md mx-4 transform transition-all">
-            <div class="text-center">
-                <div id="confirmIcon" class="text-6xl mb-4">⚠️</div>
-                <h3 id="confirmTitle" class="text-2xl font-bold text-gray-900 mb-4">تأكيد العملية</h3>
-                <p id="confirmMessage" class="text-gray-600 mb-6 leading-relaxed"></p>
-                <div class="flex space-x-4 space-x-reverse justify-center">
-                    <button onclick="closeConfirmModal()" class="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors font-medium">
+    <!-- Edit Modal -->
+    <div id="editModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+            <div class="p-6 border-b">
+                <h3 class="text-lg font-bold text-gray-800">تعديل الطلب</h3>
+            </div>
+            
+            <form id="editForm" class="p-6 space-y-4">
+                <input type="hidden" id="editOrderId">
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">العنوان</label>
+                    <textarea id="editAddress" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">الهاتف الأول</label>
+                    <input type="tel" id="editPhone1" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">الهاتف الثاني</label>
+                    <input type="tel" id="editPhone2" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">المبلغ</label>
+                    <input type="number" id="editAmount" min="1500" step="100" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+                
+                <div class="flex gap-4 pt-4">
+                    <button type="submit" class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                        حفظ التغييرات
+                    </button>
+                    <button type="button" onclick="closeEditModal()" class="flex-1 bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition-colors">
                         إلغاء
                     </button>
-                    <button id="confirmButton" class="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-medium">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+            <div class="p-6 text-center">
+                <div class="text-4xl mb-4" id="confirmIcon">❓</div>
+                <h3 class="text-lg font-bold text-gray-800 mb-2" id="confirmTitle">تأكيد العملية</h3>
+                <p class="text-gray-600 mb-6" id="confirmMessage">هل أنت متأكد؟</p>
+                
+                <div class="flex gap-4">
+                    <button id="confirmButton" class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
                         تأكيد
+                    </button>
+                    <button onclick="closeConfirmModal()" class="flex-1 bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition-colors">
+                        إلغاء
                     </button>
                 </div>
             </div>
@@ -354,55 +340,17 @@
     </div>
 
     <!-- Success Modal -->
-    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-        <div class="bg-white rounded-2xl p-8 w-full max-w-md mx-4 transform transition-all">
-            <div class="text-center">
-                <div class="text-6xl mb-4">✅</div>
-                <h3 class="text-2xl font-bold text-green-600 mb-4">تم بنجاح!</h3>
-                <p id="successMessage" class="text-gray-600 mb-6 leading-relaxed"></p>
-                <button onclick="closeSuccessModal()" class="px-8 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium">
+    <div id="successModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+            <div class="p-6 text-center">
+                <div class="text-4xl mb-4">✅</div>
+                <h3 class="text-lg font-bold text-gray-800 mb-2">تم بنجاح</h3>
+                <p class="text-gray-600 mb-6" id="successMessage">تمت العملية بنجاح</p>
+                
+                <button onclick="closeSuccessModal()" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
                     موافق
                 </button>
             </div>
-        </div>
-    </div>
-
-    <!-- Edit Order Modal -->
-    <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-        <div class="bg-white rounded-xl p-6 w-full max-w-2xl mx-4 max-h-screen overflow-y-auto">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold text-gray-900">✏️ تعديل الطلب</h3>
-                <button onclick="closeEditModal()" class="text-gray-500 hover:text-gray-700 text-2xl">×</button>
-            </div>
-            <form id="editForm" class="space-y-4">
-                <input type="hidden" id="editOrderId">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">العنوان</label>
-                        <input type="text" id="editAddress" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">رقم الهاتف الأول</label>
-                        <input type="tel" id="editPhone1" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">رقم الهاتف الثاني</label>
-                        <input type="tel" id="editPhone2" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">مبلغ الطلب</label>
-                        <input type="number" id="editAmount" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                    </div>
-                </div>
-                <div class="flex justify-end space-x-4 space-x-reverse pt-4">
-                    <button type="button" onclick="closeEditModal()" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
-                        إلغاء
-                    </button>
-                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-                        حفظ التغييرات
-                    </button>
-                </div>
-            </form>
         </div>
     </div>
 
@@ -436,7 +384,38 @@
                 showDashboard();
                 loadUserOrders();
                 loadUserWithdrawals();
+                setOrderNumber(); // Set initial order number
             }
+        }
+
+        // Generate unique order number
+        function generateOrderNumber() {
+            return Math.floor(10000000 + Math.random() * 90000000).toString();
+        }
+
+        // Check if order number exists
+        function checkOrderNumberExists(orderNumber) {
+            return database.ref('orders').orderByChild('orderNumber').equalTo(orderNumber).once('value')
+                .then(snapshot => snapshot.exists());
+        }
+
+        // Generate unique order number that doesn't exist
+        async function generateUniqueOrderNumber() {
+            let orderNumber;
+            let exists = true;
+            
+            while (exists) {
+                orderNumber = generateOrderNumber();
+                exists = await checkOrderNumberExists(orderNumber);
+            }
+            
+            return orderNumber;
+        }
+
+        // Set order number when form loads
+        async function setOrderNumber() {
+            const orderNumber = await generateUniqueOrderNumber();
+            document.getElementById('orderNumber').value = orderNumber;
         }
 
         // Handle login
@@ -474,6 +453,7 @@
                                 showDashboard();
                                 loadUserOrders();
                                 loadUserWithdrawals();
+                                setOrderNumber(); // Set initial order number
                                 return false; // Break the loop
                             }
                         });
@@ -665,7 +645,7 @@
                 <div class="order-card bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow fade-in shadow-sm">
                     <div class="flex justify-between items-start mb-4">
                         <div class="flex-1">
-                            <h4 class="font-bold text-lg text-gray-900">طلب #${order.id}</h4>
+                            <h4 class="font-bold text-lg text-gray-900">طلب #${order.orderNumber || order.id}</h4>
                             <p class="text-gray-600">تاريخ الإضافة: ${order.dateAdded ? new Date(order.dateAdded).toLocaleDateString('en-GB') : 'غير محدد'}</p>
                         </div>
                         <div class="flex space-x-2 space-x-reverse">
@@ -753,6 +733,11 @@
             
             // Add active class to clicked sidebar item
             event.target.classList.add('active');
+
+            // Hide sidebar on mobile after selection
+            if (window.innerWidth < 1024) {
+                toggleSidebar();
+            }
         }
 
         // Toggle sidebar for mobile
@@ -762,9 +747,11 @@
             
             if (sidebar.classList.contains('translate-x-full')) {
                 sidebar.classList.remove('translate-x-full');
+                sidebar.classList.add('show');
                 overlay.classList.remove('hidden');
             } else {
                 sidebar.classList.add('translate-x-full');
+                sidebar.classList.remove('show');
                 overlay.classList.add('hidden');
             }
         }
@@ -780,6 +767,7 @@
                     (order.address && order.address.toLowerCase().includes(searchTerm)) ||
                     (order.phone1 && order.phone1.includes(searchTerm)) ||
                     (order.phone2 && order.phone2.includes(searchTerm)) ||
+                    (order.orderNumber && order.orderNumber.includes(searchTerm)) ||
                     (order.id && order.id.toLowerCase().includes(searchTerm))
                 );
             }
@@ -788,20 +776,40 @@
         }
 
         // Handle add order form
-        document.getElementById('orderForm').addEventListener('submit', function(e) {
+        document.getElementById('orderForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             if (!currentUser) {
                 alert('يرجى تسجيل الدخول أولاً');
                 return;
             }
+
+            // Get form values
+            const address = document.getElementById('orderAddress').value.trim();
+            const phone1 = document.getElementById('orderPhone1').value.trim();
+            const phone2 = document.getElementById('orderPhone2').value.trim();
+            const amount = parseFloat(document.getElementById('orderAmount').value);
+            const orderNumber = document.getElementById('orderNumber').value;
+
+            // Validate required fields
+            if (!address || !phone1 || !amount || !orderNumber) {
+                alert('يرجى ملء جميع الحقول المطلوبة (العنوان، الهاتف الأول، المبلغ)');
+                return;
+            }
+
+            // Validate amount (must be >= 1500)
+            if (amount < 1500) {
+                alert('يجب أن يكون مبلغ الطلب 1500 دينار عراقي أو أكثر');
+                return;
+            }
             
             const newOrder = {
                 username: currentUser.username,
-                address: document.getElementById('orderAddress').value,
-                phone1: document.getElementById('orderPhone1').value,
-                phone2: document.getElementById('orderPhone2').value,
-                amount: document.getElementById('orderAmount').value,
+                orderNumber: orderNumber,
+                address: address,
+                phone1: phone1,
+                phone2: phone2,
+                amount: amount,
                 status: 'بانتظار المندوب',
                 dateAdded: new Date().toISOString()
             };
@@ -810,6 +818,7 @@
                 .then(() => {
                     alert('تم إضافة الطلب بنجاح');
                     document.getElementById('orderForm').reset();
+                    setOrderNumber(); // Generate new order number for next order
                     showSection('orders');
                 })
                 .catch((error) => {
@@ -856,11 +865,19 @@
             e.preventDefault();
             
             const orderId = document.getElementById('editOrderId').value;
+            const amount = parseFloat(document.getElementById('editAmount').value);
+
+            // Validate amount (must be >= 1500)
+            if (amount < 1500) {
+                alert('يجب أن يكون مبلغ الطلب 1500 دينار عراقي أو أكثر');
+                return;
+            }
+
             const updatedOrder = {
                 address: document.getElementById('editAddress').value,
                 phone1: document.getElementById('editPhone1').value,
                 phone2: document.getElementById('editPhone2').value,
-                amount: document.getElementById('editAmount').value
+                amount: amount
             };
 
             database.ref('orders/' + orderId).update(updatedOrder)
@@ -983,6 +1000,11 @@
 
         // Initialize the application
         checkSavedLogin();
+
+        // Show statistics section by default
+        setTimeout(() => {
+            showSection('statistics');
+        }, 100);
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9788231ba7c4d0f2',t:'MTc1Njc2NTA0MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9788feea24f0b5c8',t:'MTc1Njc3NDA0My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
