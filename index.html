@@ -143,9 +143,46 @@
         ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
         }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 50%;
+            transform: translateX(50%);
+            background: #f56565;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        
+        .toast.show {
+            opacity: 1;
+            transform: translateX(50%) translateY(0);
+        }
+        
+        .toast.success {
+            background: #48bb78;
+        }
+        
+        .toast.error {
+            background: #f56565;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden">
+        <div class="flex items-center">
+            <i id="toastIcon" class="fas fa-info-circle ml-2"></i>
+            <span id="toastMessage"></span>
+        </div>
+    </div>
+
     <!-- Login Section -->
     <div id="loginSection" class="min-h-screen gradient-bg flex items-center justify-center p-4">
         <div class="glass-effect rounded-2xl p-8 w-full max-w-md animate-fade-in">
@@ -545,6 +582,44 @@
         </div>
     </div>
 
+    <!-- Order Confirmation Modal -->
+    <div id="orderConfirmationModal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md animate-fade-in">
+            <div class="p-6 text-center">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-check-circle text-green-600 text-4xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">تم إضافة الطلب بنجاح!</h3>
+                <div class="bg-gray-50 rounded-xl p-4 mb-6 text-right">
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div class="font-medium text-gray-700">رقم الطلب:</div>
+                        <div class="text-gray-900" id="confOrderNumber"></div>
+                        
+                        <div class="font-medium text-gray-700">المبلغ:</div>
+                        <div class="text-gray-900" id="confOrderAmount"></div>
+                        
+                        <div class="font-medium text-gray-700">العنوان:</div>
+                        <div class="text-gray-900" id="confOrderAddress"></div>
+                        
+                        <div class="font-medium text-gray-700">الهاتف:</div>
+                        <div class="text-gray-900" id="confOrderPhone"></div>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4">
+                    <button onclick="closeOrderConfirmationModal(); showSection('orders');" class="flex-1 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white py-2 px-4 rounded-xl hover:from-indigo-600 hover:to-indigo-700 transition-all">
+                        <i class="fas fa-list ml-2"></i>
+                        عرض الطلبات
+                    </button>
+                    <button onclick="closeOrderConfirmationModal(); document.getElementById('orderForm').reset(); setOrderNumber();" class="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white py-2 px-4 rounded-xl hover:from-green-600 hover:to-green-700 transition-all">
+                        <i class="fas fa-plus ml-2"></i>
+                        طلب جديد
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Firebase configuration
         const firebaseConfig = {
@@ -566,6 +641,34 @@
         let userOrders = [];
         let filteredOrders = [];
         let userWithdrawals = [];
+
+        // Show toast notification
+        function showToast(message, type = 'error') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+            
+            toastMessage.textContent = message;
+            toast.className = 'toast';
+            
+            if (type === 'success') {
+                toast.classList.add('success');
+                toastIcon.className = 'fas fa-check-circle ml-2';
+            } else {
+                toast.classList.add('error');
+                toastIcon.className = 'fas fa-exclamation-circle ml-2';
+            }
+            
+            toast.classList.remove('hidden');
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 300);
+            }, 3000);
+        }
 
         // Check for saved login on page load
         function checkSavedLogin() {
@@ -617,7 +720,7 @@
             const password = document.getElementById('password').value;
             
             if (!username || !password) {
-                alert('يرجى إدخال اسم المستخدم وكلمة المرور');
+                showToast('يرجى إدخال اسم المستخدم وكلمة المرور');
                 return;
             }
             
@@ -650,14 +753,14 @@
                         });
                         
                         if (!userFound) {
-                            alert('كلمة المرور غير صحيحة');
+                            showToast('كلمة المرور غير صحيحة');
                         }
                     } else {
-                        alert('اسم المستخدم غير موجود');
+                        showToast('اسم المستخدم غير موجود');
                     }
                 })
                 .catch((error) => {
-                    alert('حدث خطأ في تسجيل الدخول: ' + error.message);
+                    showToast('حدث خطأ في تسجيل الدخول: ' + error.message);
                 });
         });
 
@@ -837,406 +940,424 @@
 
             if (filteredOrders.length === 0) {
                 container.innerHTML = '';
-                noOrders.classList.remove('hidden');
-                return;
-            }
+        noOrders.classList.remove('hidden');
+        return;
+    }
 
-            noOrders.classList.add('hidden');
-            container.innerHTML = filteredOrders.map(order => {
-                // Cannot edit if: delivered, handed to courier, returned, or marked as "تم الإرجاع"
-                const canEdit = order.status !== 'تم الاستلام من قبل الزبون' && 
-                               order.status !== 'تم التسليم للمندوب' && 
-                               order.status !== 'راجع' && 
-                               order.status !== 'تم الإرجاع';
-                
-                return `
-                <div class="order-card bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-all animate-fade-in shadow-lg">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex-1">
-                            <h4 class="font-bold text-lg text-gray-900 flex items-center">
-                                <i class="fas fa-shopping-bag text-indigo-600 ml-3"></i>
-                                طلب #${order.orderNumber || order.id}
-                            </h4>
-                            <p class="text-gray-600 flex items-center mt-1">
-                                <i class="fas fa-calendar text-gray-400 ml-2"></i>
-                                تاريخ الإضافة: ${order.dateAdded ? new Date(order.dateAdded).toLocaleDateString('en-GB') : 'غير محدد'}
-                            </p>
-                        </div>
-                        <div class="flex space-x-2 space-x-reverse">
-                            ${canEdit ? `
-                                <button onclick="editOrder('${order.id}')" class="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 text-sm transition-all shadow-lg hover:shadow-xl transform hover:scale-105">
-                                    <i class="fas fa-edit ml-1"></i>
-                                    تعديل
-                                </button>
-                                <button onclick="deleteOrder('${order.id}')" class="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 text-sm transition-all shadow-lg hover:shadow-xl transform hover:scale-105">
-                                    <i class="fas fa-trash ml-1"></i>
-                                    حذف
-                                </button>
-                            ` : `
-                                <span class="px-4 py-2 bg-gray-100 text-gray-600 rounded-xl text-sm">
-                                    <i class="fas fa-lock ml-1"></i>
-                                    لا يمكن التعديل
-                                </span>
-                            `}
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm mb-4">
-                        <div class="flex items-center">
-                            <i class="fas fa-map-marker-alt text-red-600 ml-2"></i>
-                            <span class="font-medium text-gray-700">العنوان:</span>
-                            <span class="text-gray-900 mr-2">${order.address || 'غير محدد'}</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-phone text-blue-600 ml-2"></i>
-                            <span class="font-medium text-gray-700">الهاتف الأول:</span>
-                            <span class="text-gray-900 mr-2">${order.phone1 || 'غير محدد'}</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-phone text-blue-600 ml-2"></i>
-                            <span class="font-medium text-gray-700">الهاتف الثاني:</span>
-                            <span class="text-gray-900 mr-2">${order.phone2 || 'غير محدد'}</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-money-bill text-green-600 ml-2"></i>
-                            <span class="font-medium text-gray-700">المبلغ:</span>
-                            <span class="text-gray-900 mr-2">${order.amount || '0'} دينار</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="font-medium text-gray-700 flex items-center">
-                            <i class="fas fa-info-circle text-gray-600 ml-2"></i>
-                            الحالة:
-                        </span>
-                        <div class="flex items-center">
-                            <span class="px-4 py-2 rounded-full text-sm font-bold ${getStatusColor(order.status)} shadow-sm border">
-                                ${getStatusIcon(order.status)} ${order.status || 'بانتظار المندوب'}
-                            </span>
-                        </div>
-                    </div>
+    noOrders.classList.add('hidden');
+    container.innerHTML = filteredOrders.map(order => {
+        // Cannot edit if: delivered, handed to courier, returned, or marked as "تم الإرجاع"
+        const canEdit = order.status !== 'تم الاستلام من قبل الزبون' && 
+                       order.status !== 'تم التسليم للمندوب' && 
+                       order.status !== 'راجع' && 
+                       order.status !== 'تم الإرجاع';
+        
+        return `
+        <div class="order-card bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-all animate-fade-in shadow-lg">
+            <div class="flex justify-between items-start mb-4">
+                <div class="flex-1">
+                    <h4 class="font-bold text-lg text-gray-900 flex items-center">
+                        <i class="fas fa-shopping-bag text-indigo-600 ml-3"></i>
+                        طلب #${order.orderNumber || order.id}
+                    </h4>
+                    <p class="text-gray-600 flex items-center mt-1">
+                        <i class="fas fa-calendar text-gray-400 ml-2"></i>
+                        تاريخ الإضافة: ${order.dateAdded ? new Date(order.dateAdded).toLocaleDateString('en-GB') : 'غير محدد'}
+                    </p>
                 </div>
-            `;
-            }).join('');
-        }
+                <div class="flex space-x-2 space-x-reverse">
+                    ${canEdit ? `
+                        <button onclick="editOrder('${order.id}')" class="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 text-sm transition-all shadow-lg hover:shadow-xl transform hover:scale-105">
+                            <i class="fas fa-edit ml-1"></i>
+                            تعديل
+                        </button>
+                        <button onclick="deleteOrder('${order.id}')" class="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 text-sm transition-all shadow-lg hover:shadow-xl transform hover:scale-105">
+                            <i class="fas fa-trash ml-1"></i>
+                            حذف
+                        </button>
+                    ` : `
+                        <span class="px-4 py-2 bg-gray-100 text-gray-600 rounded-xl text-sm">
+                            <i class="fas fa-lock ml-1"></i>
+                            لا يمكن التعديل
+                        </span>
+                    `}
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm mb-4">
+                <div class="flex items-center">
+                    <i class="fas fa-map-marker-alt text-red-600 ml-2"></i>
+                    <span class="font-medium text-gray-700">العنوان:</span>
+                    <span class="text-gray-900 mr-2">${order.address || 'غير محدد'}</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-phone text-blue-600 ml-2"></i>
+                    <span class="font-medium text-gray-700">الهاتف الأول:</span>
+                    <span class="text-gray-900 mr-2">${order.phone1 || 'غير محدد'}</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-phone text-blue-600 ml-2"></i>
+                    <span class="font-medium text-gray-700">الهاتف الثاني:</span>
+                    <span class="text-gray-900 mr-2">${order.phone2 || 'غير محدد'}</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-money-bill text-green-600 ml-2"></i>
+                    <span class="font-medium text-gray-700">المبلغ:</span>
+                    <span class="text-gray-900 mr-2">${order.amount || '0'} دينار</span>
+                </div>
+            </div>
+            <div class="flex items-center justify-between">
+                <span class="font-medium text-gray-700 flex items-center">
+                    <i class="fas fa-info-circle text-gray-600 ml-2"></i>
+                    الحالة:
+                </span>
+                <div class="flex items-center">
+                    <span class="px-4 py-2 rounded-full text-sm font-bold ${getStatusColor(order.status)} shadow-sm border">
+                        ${getStatusIcon(order.status)} ${order.status || 'بانتظار المندوب'}
+                    </span>
+                </div>
+            </div>
+        </div>
+    `;
+    }).join('');
+}
 
-        // Get status color
-        function getStatusColor(status) {
-            switch(status) {
-                case 'تم الاستلام من قبل الزبون': return 'bg-green-100 text-green-800 border-green-200';
-                case 'تم التسليم للمندوب': return 'bg-blue-100 text-blue-800 border-blue-200';
-                case 'راجع': return 'bg-red-100 text-red-800 border-red-200';
-                case 'تم الإرجاع': return 'bg-gray-100 text-gray-800 border-gray-200';
-                default: return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-            }
-        }
+// Get status color
+function getStatusColor(status) {
+    switch(status) {
+        case 'تم الاستلام من قبل الزبون': return 'bg-green-100 text-green-800 border-green-200';
+        case 'تم التسليم للمندوب': return 'bg-blue-100 text-blue-800 border-blue-200';
+        case 'راجع': return 'bg-red-100 text-red-800 border-red-200';
+        case 'تم الإرجاع': return 'bg-gray-100 text-gray-800 border-gray-200';
+        default: return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+    }
+}
 
-        // Get status icon
-        function getStatusIcon(status) {
-            switch(status) {
-                case 'تم الاستلام من قبل الزبون': return '✅';
-                case 'تم التسليم للمندوب': return '🚚';
-                case 'راجع': return '↩️';
-                case 'تم الإرجاع': return '🔄';
-                default: return '⏳';
-            }
-        }
+// Get status icon
+function getStatusIcon(status) {
+    switch(status) {
+        case 'تم الاستلام من قبل الزبون': return '✅';
+        case 'تم التسليم للمندوب': return '🚚';
+        case 'راجع': return '↩️';
+        case 'تم الإرجاع': return '🔄';
+        default: return '⏳';
+    }
+}
 
-        // Show/Hide sections
-        function showSection(section) {
-            // Hide all sections
-            document.querySelectorAll('.section-content').forEach(el => {
-                el.classList.add('hidden');
-            });
+// Show/Hide sections
+function showSection(section) {
+    // Hide all sections
+    document.querySelectorAll('.section-content').forEach(el => {
+        el.classList.add('hidden');
+    });
+    
+    // Remove active class from all sidebar items
+    document.querySelectorAll('.sidebar-item').forEach(el => {
+        el.classList.remove('active');
+    });
+    
+    // Show selected section
+    document.getElementById(section + 'Section').classList.remove('hidden');
+    
+    // Add active class to clicked sidebar item
+    event.target.closest('.sidebar-item').classList.add('active');
+
+    // Hide sidebar on mobile after selection
+    if (window.innerWidth < 1024) {
+        toggleSidebar();
+    }
+}
+
+// Toggle sidebar for mobile
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    
+    if (sidebar.classList.contains('translate-x-full')) {
+        sidebar.classList.remove('translate-x-full');
+        sidebar.classList.add('show');
+        overlay.classList.remove('hidden');
+    } else {
+        sidebar.classList.add('translate-x-full');
+        sidebar.classList.remove('show');
+        overlay.classList.add('hidden');
+    }
+}
+
+// Search orders
+function searchOrders() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+    
+    if (!searchTerm) {
+        filteredOrders = [...userOrders];
+    } else {
+        filteredOrders = userOrders.filter(order => 
+            (order.address && order.address.toLowerCase().includes(searchTerm)) ||
+            (order.phone1 && order.phone1.includes(searchTerm)) ||
+            (order.phone2 && order.phone2.includes(searchTerm)) ||
+            (order.orderNumber && order.orderNumber.includes(searchTerm)) ||
+            (order.id && order.id.toLowerCase().includes(searchTerm))
+        );
+    }
+    
+    displayOrders();
+}
+
+// Show order confirmation modal
+function showOrderConfirmationModal(orderData) {
+    document.getElementById('confOrderNumber').textContent = orderData.orderNumber;
+    document.getElementById('confOrderAmount').textContent = orderData.amount + ' دينار';
+    document.getElementById('confOrderAddress').textContent = orderData.address;
+    document.getElementById('confOrderPhone').textContent = orderData.phone1 + (orderData.phone2 ? ' / ' + orderData.phone2 : '');
+    
+    document.getElementById('orderConfirmationModal').classList.remove('hidden');
+    document.getElementById('orderConfirmationModal').classList.add('flex');
+}
+
+// Close order confirmation modal
+function closeOrderConfirmationModal() {
+    document.getElementById('orderConfirmationModal').classList.add('hidden');
+    document.getElementById('orderConfirmationModal').classList.remove('flex');
+}
+
+// Handle add order form
+document.getElementById('orderForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    if (!currentUser) {
+        showToast('يرجى تسجيل الدخول أولاً');
+        return;
+    }
+
+    // Get form values
+    const address = document.getElementById('orderAddress').value.trim();
+    const phone1 = document.getElementById('orderPhone1').value.trim();
+    const phone2 = document.getElementById('orderPhone2').value.trim();
+    const amount = parseFloat(document.getElementById('orderAmount').value);
+    const orderNumber = document.getElementById('orderNumber').value;
+
+    // Validate required fields
+    if (!address || !phone1 || !amount || !orderNumber) {
+        showToast('يرجى ملء جميع الحقول المطلوبة (العنوان، الهاتف الأول، المبلغ)');
+        return;
+    }
+
+    // Validate amount (must be >= 1500)
+    if (amount < 1500) {
+        showToast('يجب أن يكون مبلغ الطلب 1500 دينار عراقي أو أكثر');
+        return;
+    }
+    
+    const newOrder = {
+        username: currentUser.username,
+        orderNumber: orderNumber,
+        address: address,
+        phone1: phone1,
+        phone2: phone2,
+        amount: amount,
+        status: 'بانتظار المندوب',
+        dateAdded: new Date().toISOString()
+    };
+
+    database.ref('orders').push(newOrder)
+        .then(() => {
+            // Show confirmation modal with order details
+            showOrderConfirmationModal(newOrder);
             
-            // Remove active class from all sidebar items
-            document.querySelectorAll('.sidebar-item').forEach(el => {
-                el.classList.remove('active');
-            });
-            
-            // Show selected section
-            document.getElementById(section + 'Section').classList.remove('hidden');
-            
-            // Add active class to clicked sidebar item
-            event.target.closest('.sidebar-item').classList.add('active');
-
-            // Hide sidebar on mobile after selection
-            if (window.innerWidth < 1024) {
-                toggleSidebar();
-            }
-        }
-
-        // Toggle sidebar for mobile
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('overlay');
-            
-            if (sidebar.classList.contains('translate-x-full')) {
-                sidebar.classList.remove('translate-x-full');
-                sidebar.classList.add('show');
-                overlay.classList.remove('hidden');
-            } else {
-                sidebar.classList.add('translate-x-full');
-                sidebar.classList.remove('show');
-                overlay.classList.add('hidden');
-            }
-        }
-
-        // Search orders
-        function searchOrders() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
-            
-            if (!searchTerm) {
-                filteredOrders = [...userOrders];
-            } else {
-                filteredOrders = userOrders.filter(order => 
-                    (order.address && order.address.toLowerCase().includes(searchTerm)) ||
-                    (order.phone1 && order.phone1.includes(searchTerm)) ||
-                    (order.phone2 && order.phone2.includes(searchTerm)) ||
-                    (order.orderNumber && order.orderNumber.includes(searchTerm)) ||
-                    (order.id && order.id.toLowerCase().includes(searchTerm))
-                );
-            }
-            
-            displayOrders();
-        }
-
-        // Handle add order form
-        document.getElementById('orderForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            if (!currentUser) {
-                alert('يرجى تسجيل الدخول أولاً');
-                return;
-            }
-
-            // Get form values
-            const address = document.getElementById('orderAddress').value.trim();
-            const phone1 = document.getElementById('orderPhone1').value.trim();
-            const phone2 = document.getElementById('orderPhone2').value.trim();
-            const amount = parseFloat(document.getElementById('orderAmount').value);
-            const orderNumber = document.getElementById('orderNumber').value;
-
-            // Validate required fields
-            if (!address || !phone1 || !amount || !orderNumber) {
-                alert('يرجى ملء جميع الحقول المطلوبة (العنوان، الهاتف الأول، المبلغ)');
-                return;
-            }
-
-            // Validate amount (must be >= 1500)
-            if (amount < 1500) {
-                alert('يجب أن يكون مبلغ الطلب 1500 دينار عراقي أو أكثر');
-                return;
-            }
-            
-            const newOrder = {
-                username: currentUser.username,
-                orderNumber: orderNumber,
-                address: address,
-                phone1: phone1,
-                phone2: phone2,
-                amount: amount,
-                status: 'بانتظار المندوب',
-                dateAdded: new Date().toISOString()
-            };
-
-            database.ref('orders').push(newOrder)
-                .then(() => {
-                    showSuccessModal('تم إضافة الطلب بنجاح! 🎉');
-                    document.getElementById('orderForm').reset();
-                    setOrderNumber(); // Generate new order number for next order
-                    showSection('orders');
-                })
-                .catch((error) => {
-                    alert('حدث خطأ في إضافة الطلب: ' + error.message);
-                });
+            // Reset form and generate new order number
+            document.getElementById('orderForm').reset();
+            setOrderNumber();
+        })
+        .catch((error) => {
+            showToast('حدث خطأ في إضافة الطلب: ' + error.message);
         });
+});
 
-        // Edit order
-        function editOrder(orderId) {
-            const order = userOrders.find(o => o.id === orderId);
-            if (!order) return;
+// Edit order
+function editOrder(orderId) {
+    const order = userOrders.find(o => o.id === orderId);
+    if (!order) return;
 
-            document.getElementById('editOrderId').value = orderId;
-            document.getElementById('editAddress').value = order.address || '';
-            document.getElementById('editPhone1').value = order.phone1 || '';
-            document.getElementById('editPhone2').value = order.phone2 || '';
-            document.getElementById('editAmount').value = order.amount || '';
+    document.getElementById('editOrderId').value = orderId;
+    document.getElementById('editAddress').value = order.address || '';
+    document.getElementById('editPhone1').value = order.phone1 || '';
+    document.getElementById('editPhone2').value = order.phone2 || '';
+    document.getElementById('editAmount').value = order.amount || '';
 
-            document.getElementById('editModal').classList.remove('hidden');
-            document.getElementById('editModal').classList.add('flex');
-        }
+    document.getElementById('editModal').classList.remove('hidden');
+    document.getElementById('editModal').classList.add('flex');
+}
 
-        // Close edit modal
-        function closeEditModal() {
-            document.getElementById('editModal').classList.add('hidden');
-            document.getElementById('editModal').classList.remove('flex');
-        }
+// Close edit modal
+function closeEditModal() {
+    document.getElementById('editModal').classList.add('hidden');
+    document.getElementById('editModal').classList.remove('flex');
+}
 
-        // Delete order
-        function deleteOrder(orderId) {
-            showConfirmModal(
-                'حذف الطلب',
-                'هل أنت متأكد من حذف هذا الطلب؟ لا يمكن التراجع عن هذا الإجراء.',
-                '🗑️',
-                function() {
-                    database.ref('orders/' + orderId).remove()
-                        .then(() => {
-                            closeConfirmModal();
-                            showSuccessModal('تم حذف الطلب بنجاح! ✅');
-                        })
-                        .catch((error) => {
-                            closeConfirmModal();
-                            alert('حدث خطأ في حذف الطلب: ' + error.message);
-                        });
-                }
-            );
-        }
-
-        // Handle edit form submission
-        document.getElementById('editForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const orderId = document.getElementById('editOrderId').value;
-            const amount = parseFloat(document.getElementById('editAmount').value);
-
-            // Validate amount (must be >= 1500)
-            if (amount < 1500) {
-                alert('يجب أن يكون مبلغ الطلب 1500 دينار عراقي أو أكثر');
-                return;
-            }
-
-            const updatedOrder = {
-                address: document.getElementById('editAddress').value,
-                phone1: document.getElementById('editPhone1').value,
-                phone2: document.getElementById('editPhone2').value,
-                amount: amount
-            };
-
-            database.ref('orders/' + orderId).update(updatedOrder)
+// Delete order
+function deleteOrder(orderId) {
+    showConfirmModal(
+        'حذف الطلب',
+        'هل أنت متأكد من حذف هذا الطلب؟ لا يمكن التراجع عن هذا الإجراء.',
+        '🗑️',
+        function() {
+            database.ref('orders/' + orderId).remove()
                 .then(() => {
-                    closeEditModal();
-                    showSuccessModal('تم تحديث الطلب بنجاح! ✅');
-                })
-                .catch((error) => {
-                    alert('حدث خطأ في تحديث الطلب: ' + error.message);
-                });
-        });
-
-        // Show confirmation modal
-        function showConfirmModal(title, message, icon, onConfirm) {
-            document.getElementById('confirmTitle').textContent = title;
-            document.getElementById('confirmMessage').textContent = message;
-            document.getElementById('confirmIcon').textContent = icon;
-            document.getElementById('confirmButton').onclick = onConfirm;
-            document.getElementById('confirmModal').classList.remove('hidden');
-            document.getElementById('confirmModal').classList.add('flex');
-        }
-
-        // Close confirmation modal
-        function closeConfirmModal() {
-            document.getElementById('confirmModal').classList.add('hidden');
-            document.getElementById('confirmModal').classList.remove('flex');
-        }
-
-        // Show success modal
-        function showSuccessModal(message) {
-            document.getElementById('successMessage').textContent = message;
-            document.getElementById('successModal').classList.remove('hidden');
-            document.getElementById('successModal').classList.add('flex');
-        }
-
-        // Close success modal
-        function closeSuccessModal() {
-            document.getElementById('successModal').classList.add('hidden');
-            document.getElementById('successModal').classList.remove('flex');
-        }
-
-        // Withdraw earnings
-        function withdrawEarnings() {
-            if (!currentUser) return;
-            
-            const deliveredOrders = userOrders.filter(order => order.status === 'تم الاستلام من قبل الزبون');
-            const totalEarnings = deliveredOrders.reduce((total, order) => {
-                const orderAmount = parseFloat(order.amount) || 0;
-                const profit = orderAmount - 1500; // Deduct 1500 from each order
-                return total + Math.max(profit, 0); // Don't allow negative profits
-            }, 0);
-            
-            if (totalEarnings <= 0) {
-                showConfirmModal(
-                    'لا توجد أرباح للسحب',
-                    'لا توجد أرباح متاحة للسحب في الوقت الحالي. يجب أن يكون لديك طلبات مستلمة لتتمكن من سحب الأرباح.',
-                    '💰',
-                    closeConfirmModal
-                );
-                return;
-            }
-            
-            showConfirmModal(
-                'تأكيد سحب الأرباح',
-                `هل أنت متأكد من سحب ${totalEarnings.toLocaleString()} دينار؟\n\nسيتم حذف جميع الطلبات المستلمة (${deliveredOrders.length} طلب) وتصفير الأرباح الحالية. هذا الإجراء لا يمكن التراجع عنه.`,
-                '💰',
-                function() {
                     closeConfirmModal();
-                    processWithdrawal(totalEarnings, deliveredOrders);
-                }
-            );
-        }
-
-        // Process withdrawal
-        function processWithdrawal(totalEarnings, deliveredOrders) {
-            // Create withdrawal request
-            const withdrawalRequest = {
-                username: currentUser.username,
-                amount: totalEarnings,
-                ordersCount: deliveredOrders.length,
-                status: 'قيد المراجعة',
-                dateRequested: new Date().toISOString()
-            };
-            
-            // Add withdrawal request to database
-            database.ref('withdrawals').push(withdrawalRequest)
-                .then(() => {
-                    // Mark only delivered orders as withdrawn (hide from user but keep in database for admin)
-                    // Returned orders remain visible until admin changes status to "تم الإرجاع"
-                    const updatePromises = deliveredOrders.map(order => 
-                        database.ref('orders/' + order.id).update({
-                            withdrawnByUser: true,
-                            withdrawnDate: new Date().toISOString()
-                        })
-                    );
-                    
-                    return Promise.all(updatePromises);
-                })
-                .then(() => {
-                    showSuccessModal(
-                        `تم إرسال طلب السحب بنجاح! 🎉\n\nالمبلغ: ${totalEarnings.toLocaleString()} دينار\nعدد الطلبات: ${deliveredOrders.length}\n\nسيتم مراجعة طلبك من قبل الإدارة وستحصل على إشعار عند الموافقة أو الرفض.`
-                    );
+                    showSuccessModal('تم حذف الطلب بنجاح! ✅');
                 })
                 .catch((error) => {
-                    showConfirmModal(
-                        'خطأ في العملية',
-                        'حدث خطأ في عملية السحب: ' + error.message,
-                        '❌',
-                        closeConfirmModal
-                    );
+                    closeConfirmModal();
+                    showToast('حدث خطأ في حذف الطلب: ' + error.message);
                 });
         }
+    );
+}
 
-        // Handle search on Enter key
-        document.getElementById('searchInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                searchOrders();
-            }
+// Handle edit form submission
+document.getElementById('editForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const orderId = document.getElementById('editOrderId').value;
+    const amount = parseFloat(document.getElementById('editAmount').value);
+
+    // Validate amount (must be >= 1500)
+    if (amount < 1500) {
+        showToast('يجب أن يكون مبلغ الطلب 1500 دينار عراقي أو أكثر');
+        return;
+    }
+
+    const updatedOrder = {
+        address: document.getElementById('editAddress').value,
+        phone1: document.getElementById('editPhone1').value,
+        phone2: document.getElementById('editPhone2').value,
+        amount: amount
+    };
+
+    database.ref('orders/' + orderId).update(updatedOrder)
+        .then(() => {
+            closeEditModal();
+            showSuccessModal('تم تحديث الطلب بنجاح! ✅');
+        })
+        .catch((error) => {
+            showToast('حدث خطأ في تحديث الطلب: ' + error.message);
         });
+});
 
-        // Initialize the application
-        checkSavedLogin();
+// Show confirmation modal
+function showConfirmModal(title, message, icon, onConfirm) {
+    document.getElementById('confirmTitle').textContent = title;
+    document.getElementById('confirmMessage').textContent = message;
+    document.getElementById('confirmIcon').textContent = icon;
+    document.getElementById('confirmButton').onclick = onConfirm;
+    document.getElementById('confirmModal').classList.remove('hidden');
+    document.getElementById('confirmModal').classList.add('flex');
+}
 
-        // Show statistics section by default
-        setTimeout(() => {
-            showSection('statistics');
-        }, 100);
-    </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97891031f125e345',t:'MTc1Njc3NDc1MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+// Close confirmation modal
+function closeConfirmModal() {
+    document.getElementById('confirmModal').classList.add('hidden');
+    document.getElementById('confirmModal').classList.remove('flex');
+}
+
+// Show success modal
+function showSuccessModal(message) {
+    document.getElementById('successMessage').textContent = message;
+    document.getElementById('successModal').classList.remove('hidden');
+    document.getElementById('successModal').classList.add('flex');
+}
+
+// Close success modal
+function closeSuccessModal() {
+    document.getElementById('successModal').classList.add('hidden');
+    document.getElementById('successModal').classList.remove('flex');
+}
+
+// Withdraw earnings
+function withdrawEarnings() {
+    if (!currentUser) return;
+    
+    const deliveredOrders = userOrders.filter(order => order.status === 'تم الاستلام من قبل الزبون');
+    const totalEarnings = deliveredOrders.reduce((total, order) => {
+        const orderAmount = parseFloat(order.amount) || 0;
+        const profit = orderAmount - 1500; // Deduct 1500 from each order
+        return total + Math.max(profit, 0); // Don't allow negative profits
+    }, 0);
+    
+    if (totalEarnings <= 0) {
+        showConfirmModal(
+            'لا توجد أرباح للسحب',
+            'لا توجد أرباح متاحة للسحب في الوقت الحالي. يجب أن يكون لديك طلبات مستلمة لتتمكن من سحب الأرباح.',
+            '💰',
+            closeConfirmModal
+        );
+        return;
+    }
+    
+    showConfirmModal(
+        'تأكيد سحب الأرباح',
+        `هل أنت متأكد من سحب ${totalEarnings.toLocaleString()} دينار؟\n\nسيتم حذف جميع الطلبات المستلمة (${deliveredOrders.length} طلب) وتصفير الأرباح الحالية. هذا الإجراء لا يمكن التراجع عنه.`,
+        '💰',
+        function() {
+            closeConfirmModal();
+            processWithdrawal(totalEarnings, deliveredOrders);
+        }
+    );
+}
+
+// Process withdrawal
+function processWithdrawal(totalEarnings, deliveredOrders) {
+    // Create withdrawal request
+    const withdrawalRequest = {
+        username: currentUser.username,
+        amount: totalEarnings,
+        ordersCount: deliveredOrders.length,
+        status: 'قيد المراجعة',
+        dateRequested: new Date().toISOString()
+    };
+    
+    // Add withdrawal request to database
+    database.ref('withdrawals').push(withdrawalRequest)
+        .then(() => {
+            // Mark only delivered orders as withdrawn (hide from user but keep in database for admin)
+            // Returned orders remain visible until admin changes status to "تم الإرجاع"
+            const updatePromises = deliveredOrders.map(order => 
+                database.ref('orders/' + order.id).update({
+                    withdrawnByUser: true,
+                    withdrawnDate: new Date().toISOString()
+                })
+            );
+            
+            return Promise.all(updatePromises);
+        })
+        .then(() => {
+            showSuccessModal(
+                `تم إرسال طلب السحب بنجاح! 🎉\n\nالمبلغ: ${totalEarnings.toLocaleString()} دينار\nعدد الطلبات: ${deliveredOrders.length}\n\nسيتم مراجعة طلبك من قبل الإدارة وستحصل على إشعار عند الموافقة أو الرفض.`
+            );
+        })
+        .catch((error) => {
+            showConfirmModal(
+                'خطأ في العملية',
+                'حدث خطأ في عملية السحب: ' + error.message,
+                '❌',
+                closeConfirmModal
+            );
+        });
+}
+
+// Handle search on Enter key
+document.getElementById('searchInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        searchOrders();
+    }
+});
+
+// Initialize the application
+checkSavedLogin();
+
+// Show statistics section by default
+setTimeout(() => {
+    showSection('statistics');
+}, 100);
+</script>
+</body>
 </html>
-
